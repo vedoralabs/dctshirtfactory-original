@@ -3,12 +3,12 @@ import { esc, show, val, isTbc, waLink, icon, imgSize } from "./util.mjs";
 
 export const NAV = [
   ["Products", "/#products"],
-  ["Fabrics", "/#fabrics"],
+  ["Fabrics", "/fabrics"],
   ["Process", "/#process"],
-  ["Our Work", "/#work"],
+  ["Our Work", "/work"],
   ["Reviews", "/#reviews"],
-  ["FAQ", "/#faq"],
-  ["Contact", "/#contact"],
+  ["FAQ", "/faq"],
+  ["Contact", "/contact"],
 ];
 
 const year = new Date().getFullYear();
@@ -44,7 +44,7 @@ ${jsonLd.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</sc
 </head>`;
 }
 
-function header() {
+function header(current) {
   const [lw, lh] = imgSize("logo-light.png");
   return `
 <a class="skip" href="#main">Skip to content</a>
@@ -52,14 +52,15 @@ function header() {
   <div class="wrap hdr__in">
     <a class="hdr__logo" href="/" aria-label="D Creations — home"><img src="/img/logo-light.png" alt="D Creations" width="${lw}" height="${lh}"></a>
     <nav class="hdr__nav" aria-label="Main">
-      ${NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
+      ${NAV.map(([l, h]) => `<a href="${h}"${h === current ? ' class="is-current" aria-current="page"' : ""}>${l}</a>`).join("")}
     </nav>
-    <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/#quote">Get Quote</a>
+    <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/quote">Get Quote</a>
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu" data-burger><span></span><span></span></button>
   </div>
   <div class="mnav" id="mnav" data-mnav hidden>
     <nav aria-label="Mobile">
-      ${NAV.map(([l, h], i) => `<a href="${h}" style="--i:${i}">${l}</a>`).join("")}
+      ${NAV.map(([l, h], i) => `<a href="${h}" style="--i:${i}"${h === current ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
+      <a href="/quote" style="--i:${NAV.length}" class="mnav__quote">Get a quote</a>
     </nav>
     <div class="mnav__foot">
       <a class="btn btn--accent" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp us</a>
@@ -92,7 +93,8 @@ export function footer() {
     <nav class="ftr__col" aria-label="Quick links">
       <h2>Quick links</h2>
       ${NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
-      <a href="/#quote">Get a quote</a>
+      <a href="/about">About us</a>
+      <a href="/quote">Get a quote</a>
     </nav>
     <nav class="ftr__col" aria-label="Product categories">
       <h2>Categories</h2>
@@ -114,7 +116,7 @@ export function footer() {
 </footer>`;
 }
 
-function actionBars(quoteHref = "/#quote") {
+function actionBars(quoteHref = "/quote") {
   return `
 <a class="wa-float" data-magnetic href="${waLink()}" target="_blank" rel="noopener" aria-label="Chat with D Creations on WhatsApp">${icon.whatsapp}<span>Chat with us</span></a>
 <nav class="mbar" aria-label="Quick actions">
@@ -162,11 +164,11 @@ export const orgSchema = () => {
   return o;
 };
 
-export function page({ title, description, path, body, jsonLd = [], preload = "", preview, quoteHref, data }) {
+export function page({ title, description, path, body, jsonLd = [], preload = "", preview, quoteHref, data, current }) {
   return `${head({ title, description, path, jsonLd, preload })}
 <body${preview ? ' class="is-preview"' : ""}>
 ${previewBanner(preview)}
-${header()}
+${header(current)}
 <main id="main">
 ${body}
 </main>

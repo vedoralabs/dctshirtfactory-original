@@ -727,3 +727,115 @@ address { font-style: normal; }
 @media (max-width: 999px) {
   main > .section:not(.who), main > .how, main > .cta, .ftr { content-visibility: auto; contain-intrinsic-size: auto 900px; }
 }
+
+/* 8. STANDALONE PAGES & HOMEPAGE TEASERS -------------------------------------- */
+.page-crumbs { padding-top: calc(var(--hdr-h) + 1.25rem); }
+.page-crumbs + .section { padding-top: clamp(1.75rem, 1rem + 3vw, 3.5rem); }
+.sec-head__aside .btn { margin-top: var(--s-4); }
+.mnav__quote { color: var(--c-accent); }
+.mnav nav a[aria-current="page"] { color: var(--c-accent); }
+
+/* Fabric tiles (home) */
+.ftiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-3); }
+@media (min-width: 640px) { .ftiles { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1000px) { .ftiles { grid-template-columns: repeat(6, 1fr); } .ftiles li:nth-child(n+7) { grid-column: span 1; } }
+.ftiles li:last-child:nth-child(odd) { grid-column: span 2; }
+@media (min-width: 640px) { .ftiles li:last-child:nth-child(odd) { grid-column: auto; } }
+.ftile { position: relative; display: block; aspect-ratio: 1; border-radius: var(--r-md); overflow: hidden; text-decoration: none; border: 1px solid var(--c-line); isolation: isolate; }
+.ftiles li:last-child:nth-child(odd) .ftile { aspect-ratio: 2 / 1; }
+@media (min-width: 640px) { .ftiles li:last-child:nth-child(odd) .ftile { aspect-ratio: 1; } }
+.ftile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); z-index: -1; }
+.ftile::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 35%, rgba(11,11,12,.85)); }
+.ftile__t { position: absolute; left: 0.9rem; right: 0.9rem; bottom: 0.8rem; display: grid; }
+.ftile__t strong { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem); text-transform: uppercase; line-height: 1; }
+.ftile__t small { color: rgba(243,238,230,.75); font-size: var(--fs-xs); margin-top: 0.2rem; }
+.ftile:hover img { transform: scale(1.12); }
+.ftile:hover { border-color: rgba(255,90,31,.6); }
+
+/* Work teaser (home) */
+.wteaser { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-3); }
+@media (min-width: 900px) { .wteaser { grid-template-columns: repeat(4, 1fr); } }
+.wteaser .work__btn { aspect-ratio: 3 / 4; }
+
+/* Story teaser (home) */
+.steaser { background: var(--c-bg-2); }
+.steaser__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); align-items: center; }
+@media (min-width: 1000px) { .steaser__grid { grid-template-columns: 1.1fr 1fr; } }
+.steaser .lead { margin-block: var(--s-5); }
+.steaser .bts__hubs { margin-top: 0; }
+
+/* Quote teaser (home) */
+.qb__q { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.7rem, 1.3rem + 1.5vw, 2.4rem); text-transform: uppercase; line-height: 1.05; margin: var(--s-3) 0 var(--s-4); }
+a.opt--card { text-decoration: none; color: inherit; }
+a.opt--card:hover { border-color: var(--c-accent); }
+a.opt--card:hover .opt__t { background: var(--c-accent); color: var(--c-accent-ink); }
+.faq__more { margin-top: var(--s-5); }
+
+/* Fabric comparison table (/fabrics) */
+.ftable { background: var(--c-bg-2); }
+.tscroll { overflow-x: auto; border: 1px solid var(--c-line); border-radius: var(--r-md); -webkit-overflow-scrolling: touch; }
+.cmp { width: 100%; min-width: 760px; border-collapse: collapse; font-size: var(--fs-sm); }
+.cmp th, .cmp td { text-align: left; vertical-align: top; padding: 0.9rem 1rem; border-bottom: 1px solid var(--c-line); }
+.cmp thead th { position: sticky; top: 0; background: var(--c-surface); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-muted); }
+.cmp tbody th { white-space: nowrap; }
+.cmp tbody th a { display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; font-weight: 600; min-height: 32px; }
+.cmp tbody th a:hover { color: var(--c-accent); }
+.cmp td { color: rgba(243,238,230,.85); }
+.cmp tbody tr:last-child > * { border-bottom: 0; }
+.cmp .fab__chip { width: 20px; height: 20px; }
+.fab__note a { color: var(--c-accent); }
+
+/* Per-product FAQs (/faq) */
+.pfaqs__grid { display: grid; gap: var(--s-6); }
+@media (min-width: 1000px) { .pfaqs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--s-6) var(--s-7); } }
+.pfaqs__group h3 { margin-bottom: var(--s-2); }
+.pfaqs__group h3 a { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--f-display); font-weight: 400; font-size: 1.6rem; text-transform: uppercase; text-decoration: none; }
+.pfaqs__group h3 a:hover { color: var(--c-accent); }
+.pfaqs__group .faq__item summary { font-size: var(--fs-base); }
+
+/* 9. PHONE REFINEMENTS ------------------------------------------------------------ */
+@media (max-width: 639px) {
+  /* thumb-sized targets */
+  .who__links a, .ftr__col a, .ftr__col p { min-height: 44px; }
+  .slider__dots button { width: 36px; height: 44px; }
+  .chip { min-height: 44px; }
+  /* tighter, shorter stacks */
+  .who__tile { padding: 1.25rem; display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; align-items: center; }
+  .who__ico { margin: 0; width: 44px; height: 44px; grid-row: span 2; }
+  .who__tile h3 { font-size: 1.5rem; }
+  .who__tile p { grid-column: 2; font-size: var(--fs-sm); }
+  .who__links { grid-column: 1 / -1; margin-top: var(--s-3); }
+  .pcard { min-height: 300px; }
+  .pcard--1 { min-height: 360px; }
+  .fab__swatch { aspect-ratio: 16 / 10; }
+  .fab__specs > div { grid-template-columns: 7.5rem 1fr; }
+  .how__step { padding: 1.25rem; }
+  .how__n { font-size: 3.5rem; }
+  .how__photo { aspect-ratio: 21 / 9; }
+  .work__filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding: 0 var(--gutter) 0.25rem; scrollbar-width: none; }
+  .work__filters::-webkit-scrollbar { display: none; }
+  .work__filters .chip { flex: none; }
+  .tcard blockquote { font-size: var(--fs-md); }
+  .qb { padding: 1.1rem; border-radius: var(--r-md); }
+  .stats__value { font-size: 2.6rem; }
+  .cta__title { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+  .specs th { width: 40%; }
+  .gal__hint { display: none; }
+  .hero__ctas .btn--lg { font-size: 1rem; padding-inline: 1.1rem; }
+  .contact__map { min-height: 260px; }
+}
+
+/* Fabric comparison: one card per fabric on phones instead of a sideways-scrolling table */
+@media (max-width: 699px) {
+  .tscroll { overflow: visible; border: 0; border-radius: 0; }
+  .cmp { min-width: 0; }
+  .cmp thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .cmp, .cmp tbody, .cmp tr, .cmp th, .cmp td { display: block; }
+  .cmp tbody { display: grid; gap: var(--s-3); }
+  .cmp tr { border: 1px solid var(--c-line); border-radius: var(--r-md); background: var(--c-bg); padding: 0.4rem 1rem 0.6rem; }
+  .cmp tbody th { padding: 0.6rem 0; border-bottom: 1px solid var(--c-line); white-space: normal; }
+  .cmp tbody th a { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; text-transform: uppercase; }
+  .cmp td { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--c-line); }
+  .cmp td::before { content: attr(data-label); color: var(--c-muted); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; padding-top: 0.15rem; }
+  .cmp tr > td:last-child { border-bottom: 0; }
+}

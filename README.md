@@ -18,7 +18,8 @@ There are no npm dependencies. Node 18 or newer runs the build. GSAP 3.12.5, Scr
 | Path | What |
 |---|---|
 | `src/data.mjs` | All business facts and content: products, fabrics, FAQ, stats, testimonials, contact. **Edit this file first.** |
-| `src/home.mjs` | Homepage sections (16) |
+| `src/home.mjs` | Homepage sections and teasers, plus the full sections reused by the standalone pages |
+| `src/pages.mjs` | Standalone pages: `/fabrics`, `/work`, `/about`, `/quote`, `/faq`, `/contact` |
 | `src/product.mjs` | Product page template, used for all 7 categories |
 | `src/layout.mjs` | `<head>`/SEO/schema, header, footer, floating WhatsApp, mobile action bar, lightbox |
 | `src/textures.mjs` | SVG fabric textures used until real macro photos arrive |

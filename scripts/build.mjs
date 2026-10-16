@@ -6,6 +6,7 @@ import * as data from "../src/data.mjs";
 import { page, orgSchema } from "../src/layout.mjs";
 import { home, homeData } from "../src/home.mjs";
 import { productPage, productSchema, breadcrumbSchema } from "../src/product.mjs";
+import { pages, pageBody } from "../src/pages.mjs";
 import { imgSize, icon } from "../src/util.mjs";
 import { fabricTexture } from "../src/textures.mjs";
 
@@ -78,9 +79,36 @@ for (const p of data.products) {
       description: p.description,
       path: `/products/${p.slug}`,
       preview,
-      quoteHref: `/?product=${p.slug}#quote`,
+      quoteHref: `/quote?product=${p.slug}`,
       jsonLd: [productSchema(p), breadcrumbSchema(p), orgSchema()],
       body: productPage(p),
+    })
+  );
+}
+
+// ---- standalone pages (fabrics, work, about, quote, faq, contact) -----------
+for (const pg of pages) {
+  write(
+    `${pg.path.slice(1)}.html`,
+    page({
+      title: pg.title,
+      description: pg.description,
+      path: pg.path,
+      preview,
+      current: pg.path,
+      data: pg.data ? homeData() : undefined,
+      jsonLd: [
+        orgSchema(),
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${data.site.url}/` },
+            { "@type": "ListItem", position: 2, name: pg.name, item: `${data.site.url}${pg.path}` },
+          ],
+        },
+      ],
+      body: pageBody(pg),
     })
   );
 }
@@ -110,7 +138,7 @@ write(
 
 // ---- sitemap / robots / manifest ---------------------------------------------
 const today = new Date().toISOString().slice(0, 10);
-const urls = ["/", ...data.products.map((p) => `/products/${p.slug}`)];
+const urls = ["/", ...pages.map((p) => p.path), ...data.products.map((p) => `/products/${p.slug}`)];
 write(
   "sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>

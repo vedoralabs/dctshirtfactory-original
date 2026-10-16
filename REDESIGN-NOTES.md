@@ -11,6 +11,20 @@
 | 7 | No FAQ | Accordion FAQ with 8 questions: MOQ, delivery time, sample and cost, payment terms, design help, bulk discounts, pan-India shipping and re-orders. Each product page adds 3 product-specific questions. |
 | 8 | Thin footer, no year | The full footer has brand and blurb, GST, socials, quick links, all 7 categories, full contact details and maps, an auto-updating © year (set at build time and refreshed in the browser), and a "Website by Vedora Labs" credit. |
 
+## Site structure (updated 2026-10-16)
+The homepage tells the story: hero, audiences, products, why us, stats, process, reviews and a final CTA. The deep sections now have their own pages, each with a short teaser on the homepage:
+
+| Page | Contents | Homepage teaser |
+|---|---|---|
+| `/fabrics` | Interactive guide, plus a side-by-side comparison (cards on phones) | 11 swatch tiles that open the matching fabric |
+| `/work` | Filterable portfolio + lightbox | 4 photos |
+| `/about` | Behind the scenes, the two-hub story, stats, why us | Two-hubs band |
+| `/quote` | 6-step WhatsApp quote builder (`?product=` pre-selects) | Step 1 product tiles that open the builder at step 2 |
+| `/faq` | General FAQ plus every product's FAQs | Top 4 questions |
+| `/contact` | All channels, hours, map | Final CTA band and footer |
+
+Result: the homepage HTML went from 122 KB to 75 KB and from ~1,600 to ~980 elements. The main gain is SEO and shareable links (for example sending `/quote` on WhatsApp). Raw speed changes little, because the homepage was already scoring 99 on mobile.
+
 ## Beyond the brief
 - **Smart Quote Builder:** six steps (product, fabric filtered to that product, quantity, branding, deadline, details). It auto-advances on single-choice steps, previews the message live, and sends one neat WhatsApp message.
 - **"How We Work":** a pinned horizontal-scroll timeline on desktop, which becomes a stacked list on mobile.

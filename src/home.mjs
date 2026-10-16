@@ -115,7 +115,7 @@ function productGrid() {
 </section>`;
 }
 
-function why() {
+export function why() {
   const icons = { check: icon.shield, sample: icon.sample, factory: icon.factory, fabric: icon.fabric, clock: icon.clockFast, pen: icon.pen };
   return `
 <section class="section why" id="why" aria-labelledby="why-title">
@@ -124,7 +124,7 @@ function why() {
       <p class="eyebrow">Why D Creations</p>
       <h2 class="display" id="why-title" data-split>Factory direct. <em>Zero guesswork.</em></h2>
       <p class="lead">You deal with the people who actually make your clothes. No middlemen, no surprises between the sample and the bulk.</p>
-      <a class="btn btn--accent" data-magnetic href="#quote">Start your quote ${icon.arrow}</a>
+      <a class="btn btn--accent" data-magnetic href="/quote">Start your quote ${icon.arrow}</a>
     </header>
     <ol class="why__list">
       ${benefits
@@ -141,7 +141,7 @@ function why() {
 </section>`;
 }
 
-function statsBand() {
+export function statsBand() {
   return `
 <section class="stats" aria-label="D Creations in numbers">
   <div class="wrap stats__grid">
@@ -170,7 +170,7 @@ const tier = (t) => {
 const meter = (n) =>
   `<span class="meter" role="img" aria-label="${n} out of 5">${[1, 2, 3, 4, 5].map((i) => `<i${i <= n ? ' class="on"' : ""}></i>`).join("")}</span>`;
 
-function fabricGuide() {
+export function fabricGuide() {
   return `
 <section class="section fabrics" id="fabrics" aria-labelledby="fabrics-title">
   <div class="wrap">
@@ -246,7 +246,7 @@ function process() {
 </section>`;
 }
 
-function work() {
+export function work() {
   const cats = [...new Set(portfolio.map((w) => w.cat))];
   return `
 <section class="section work" id="work" aria-labelledby="work-title">
@@ -280,7 +280,7 @@ function work() {
 </section>`;
 }
 
-function behind() {
+export function behind() {
   return `
 <section class="section bts" id="story" aria-labelledby="bts-title">
   <div class="wrap bts__grid">
@@ -349,7 +349,7 @@ function reviews() {
 </section>`;
 }
 
-function quote() {
+export function quote() {
   const qty = ["25–50", "50–100", "100–250", "250–500", "500–1,000", "1,000+"];
   const when = ["Urgent (under 2 weeks)", "2–4 weeks", "1–2 months", "Flexible"];
   return `
@@ -458,7 +458,7 @@ export const homeFaqItems = () => {
   return faqs.map(([q, a]) => [q, a(v)]);
 };
 
-function faq() {
+export function faq(items = homeFaqItems(), more = "") {
   return `
 <section class="section faqs" id="faq" aria-labelledby="faq-title">
   <div class="wrap faqs__grid">
@@ -468,7 +468,7 @@ function faq() {
       <p class="lead">Something else on your mind? Ask us on WhatsApp — a real person replies.</p>
       <a class="btn btn--line" href="${waLink("Hi D Creations! I have a question: ")}" target="_blank" rel="noopener">${icon.whatsapp} Ask a question</a>
     </header>
-    ${faqList(homeFaqItems())}
+    <div>${faqList(items)}${more}</div>
   </div>
 </section>`;
 }
@@ -488,7 +488,7 @@ export function ctaBand(title = `Ready to build your team's look? <em>Let's talk
 </section>`;
 }
 
-function contact() {
+export function contact() {
   const a = site.address;
   return `
 <section class="section contact" id="contact" aria-labelledby="contact-title">
@@ -513,8 +513,113 @@ function contact() {
 </section>`;
 }
 
+// ---- Homepage teasers (the full sections live on their own pages) ----------
+
+function fabricTeaser() {
+  return `
+<section class="section fteaser" id="fabrics" aria-labelledby="fabrics-title">
+  <div class="wrap">
+    <header class="sec-head sec-head--row" data-reveal>
+      <div>
+        <p class="eyebrow">Fabric guide</p>
+        <h2 class="display" id="fabrics-title" data-split>Lacoste? Dotknit? <em>Here's what they feel like.</em></h2>
+      </div>
+      <div class="sec-head__aside">
+        <p>11 fabrics, explained in plain words: how each one feels, how heavy it is and what it's best for.</p>
+        <a class="btn btn--line" href="/fabrics">Open the fabric guide ${icon.arrow}</a>
+      </div>
+    </header>
+    <ul class="ftiles">
+      ${fabrics
+        .map(
+          (f, i) => `<li data-reveal style="--d:${(i % 6) * 50}ms"><a class="ftile" href="/fabrics#fabric-${f.key}"><img src="/img/tx/${f.key}.svg" alt="" width="400" height="400" loading="lazy" decoding="async"><span class="ftile__t"><strong>${esc(f.name.split(" (")[0])}</strong><small>${esc(f.bestFor.split(",")[0])}</small></span></a></li>`
+        )
+        .join("")}
+    </ul>
+  </div>
+</section>`;
+}
+
+function workTeaser() {
+  return `
+<section class="section work" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <header class="sec-head sec-head--row" data-reveal>
+      <div>
+        <p class="eyebrow">Our work</p>
+        <h2 class="display" id="work-title" data-split>Made here. <em>Worn everywhere.</em></h2>
+      </div>
+      <div class="sec-head__aside">
+        <p>Uniforms, race tees, team kits and batch jackets we've made for schools, companies and clubs.</p>
+        <a class="btn btn--line" href="/work">See all our work ${icon.arrow}</a>
+      </div>
+    </header>
+    <ul class="wteaser">
+      ${portfolio
+        .slice(0, 4)
+        .map(
+          (w) => `<li data-reveal><a class="work__btn" href="/work">${img(w.img, `${w.title} — ${byKey[w.cat].name}`, { sizes: "(min-width: 900px) 25vw, 50vw" })}<span class="work__cap"><strong>${esc(w.title)}</strong><span>${esc(byKey[w.cat].name)}</span></span>${slotTag(w.slot)}</a></li>`
+        )
+        .join("")}
+    </ul>
+  </div>
+</section>`;
+}
+
+function storyTeaser() {
+  return `
+<section class="section steaser" id="story" aria-labelledby="story-title">
+  <div class="wrap steaser__grid">
+    <div data-reveal>
+      <p class="eyebrow">Our story</p>
+      <h2 class="display" id="story-title" data-split>Made in Mangalore <em>&amp; Tiruppur.</em></h2>
+      <p class="lead">Two cities, one standard. Meet us and feel the fabrics in Mangalore; we scale up production in Tiruppur, India's knitwear capital.</p>
+      <a class="btn btn--line" href="/about">Behind the scenes ${icon.arrow}</a>
+    </div>
+    <div class="bts__hubs" data-reveal>
+      <div class="hub"><span class="hub__k">Hub 01</span><h3>Mangalore</h3><p>Design, sampling, customer service and finishing.</p></div>
+      <div class="hub"><span class="hub__k">Hub 02</span><h3>Tiruppur</h3><p>Fabric sourcing and high-volume production.</p></div>
+    </div>
+  </div>
+</section>`;
+}
+
+function quoteTeaser() {
+  return `
+<section class="section quote" id="quote" aria-labelledby="quote-title">
+  <div class="wrap quote__grid">
+    <header class="quote__head" data-reveal>
+      <p class="eyebrow">Smart quote builder</p>
+      <h2 class="display" id="quote-title" data-split>Your quote in <em>60 seconds.</em></h2>
+      <p class="lead">Pick what you need. A few quick taps later you'll have a neat WhatsApp message ready to send.</p>
+      <ul class="quote__perks">
+        <li>${icon.check} No obligation, no spam</li>
+        <li>${icon.check} Not sure about something? Skip it</li>
+        <li>${icon.check} Free mock-up with every quote</li>
+      </ul>
+    </header>
+    <div class="qb" data-reveal>
+      <p class="qb__count"><span>1</span> / 6 · Product</p>
+      <h3 class="qb__q">What do you need?</h3>
+      <div class="opts opts--cards">
+        ${products
+          .map(
+            (p) => `<a class="opt opt--card" href="/quote?product=${p.slug}"><span class="opt__img">${img(p.images[0], "", { sizes: "120px", widths: [480] })}</span><span class="opt__t">${esc(p.name)}</span></a>`
+          )
+          .join("")}
+        <a class="opt opt--card opt--plain" href="/quote?product=mixed"><span class="opt__t">A mix / not sure yet</span></a>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function faqTeaser() {
+  return faq(homeFaqItems().slice(0, 4), `<p class="faq__more"><a class="btn btn--line" href="/faq">All questions ${icon.arrow}</a></p>`);
+}
+
 export function home() {
-  return [hero(), marquee(), who(), productGrid(), why(), statsBand(), fabricGuide(), process(), work(), behind(), reviews(), quote(), faq(), ctaBand(), contact()].join("\n");
+  return [hero(), marquee(), who(), productGrid(), why(), statsBand(), fabricTeaser(), process(), workTeaser(), storyTeaser(), reviews(), quoteTeaser(), faqTeaser(), ctaBand()].join("\n");
 }
 
 export const homeData = () => ({

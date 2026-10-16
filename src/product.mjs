@@ -16,7 +16,7 @@ const fabricLinks = (list) =>
   list
     .map((name) => {
       const k = fabricKey(name);
-      return k ? `<a href="/#fabric-${k}">${esc(name)}</a>` : esc(name);
+      return k ? `<a href="/fabrics#fabric-${k}">${esc(name)}</a>` : esc(name);
     })
     .join(", ");
 
@@ -96,7 +96,7 @@ export function productPage(p) {
       </div>
       <div class="pp__ctas">
         <a class="btn btn--accent btn--lg" data-magnetic href="${waLink(msg)}" target="_blank" rel="noopener">${icon.whatsapp} Customise this on WhatsApp</a>
-        <a class="btn btn--ghost btn--lg" href="/?product=${p.slug}#quote">Build a detailed quote ${icon.arrow}</a>
+        <a class="btn btn--ghost btn--lg" href="/quote?product=${p.slug}">Build a detailed quote ${icon.arrow}</a>
       </div>
       <ul class="pp__trust">
         <li>${icon.sample} Sample before bulk</li>
@@ -143,7 +143,7 @@ export function productPage(p) {
       <header class="sec-head">
         <p class="eyebrow">Questions</p>
         <h2 class="display" id="pp-faq-title">About ${esc(p.name.toLowerCase())}</h2>
-        <a class="btn btn--line" href="/#faq">All FAQs ${icon.arrow}</a>
+        <a class="btn btn--line" href="/faq">All FAQs ${icon.arrow}</a>
       </header>
       ${faqList(faqs, "pfaq")}
     </div>

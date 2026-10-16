@@ -16,6 +16,8 @@
   const pbar = $("[data-preview-bar]");
   if (pbar) {
     try { if (sessionStorage.getItem("dc-preview-hidden")) pbar.hidden = true; } catch {}
+    // on phones, tuck the note away after a few seconds so it never blocks content
+    if (innerWidth < 900 && !pbar.hidden) setTimeout(() => (pbar.hidden = true), 7000);
     $("[data-preview-close]", pbar)?.addEventListener("click", () => {
       pbar.hidden = true;
       try { sessionStorage.setItem("dc-preview-hidden", "1"); } catch {}
@@ -162,7 +164,7 @@
         else if (e.key === "End") { e.preventDefault(); select(list[list.length - 1]); }
       });
     });
-    // deep link: /#fabric-lacoste
+    // deep link: /fabrics#fabric-lacoste
     const fromHash = () => {
       const m = location.hash.match(/^#fabric-(.+)$/);
       const t = m && document.getElementById(`tab-${m[1]}`);
@@ -399,7 +401,7 @@
     // Pre-select a product from ?product=slug (links from product pages)
     const pre = new URLSearchParams(location.search).get("product");
     const radio = pre && $(`input[name=product][value="${CSS.escape(pre)}"]`, qb);
-    if (radio) { radio.checked = true; show(1, false); setTimeout(() => scrollToEl($("#quote")), 300); }
+    if (radio) { radio.checked = true; show(1, false); }
     else show(0, false);
   }
 
