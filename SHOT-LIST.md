@@ -2,7 +2,7 @@
 
 The current product images are studio mock-ups. Real photos of your own factory, people and orders are what will make the site feel genuine. Phone photos are fine if they're well lit. Shoot in daylight or under bright, even light, and keep the lens clean.
 
-**General rules:** shoot landscape (16:9) for the hero video and wide shots, and portrait (3:4) for products and people. Avoid other brands' logos. Get written permission before showing a client's logo or their students or staff.
+**General rules:** no other brands' logos anywhere in frame. Written consent from anyone recognisable, and guardian consent for children. Shoot landscape (16:9) for the hero video and wide shots, and portrait (3:4) for products and people.
 
 ## 1. Hero video (most important)
 One 12–20 second, muted, slow loop. 4–6 clips of 2–4 seconds each, slow-motion if your phone has it:
@@ -28,7 +28,7 @@ One 12–20 second, muted, slow loop. 4–6 clips of 2–4 seconds each, slow-mo
 - [ ] Labelled cartons ready to ship
 
 ## 4. Fabric macro close-ups (11 photos)
-Fill the frame with the fabric itself, in soft side light so the texture shows: Lacoste, Honeycomb, Spun Honeycomb, Selina, Mirror, Lycra, Fleece, Mars, Dotknit, Airtex, PC Matty. Also note each fabric's real **GSM** and **price tier** for the Fabric Guide.
+Fill the frame with the fabric itself, in soft side light so the texture shows, with a colour reference card. Take one macro and one draped/edge view per fabric: piqué, honeycomb, spun honeycomb, lightweight smooth, smooth-finish, stretch, fleece, matte-finish, dot-textured, open mesh, matty-weave. Record supplier, composition, GSM and width for each (kept internally; shown only once confirmed).
 
 ## 5. Per product (7 categories × 3–4 photos)
 For each of School Uniforms, Marathon/Event Tees, Corporate Tees & Polos, Trackpants & Shorts, Gym Wear & Cycling Jerseys, Hoodies & Varsity, and Sublimation:
@@ -42,7 +42,5 @@ Real delivered orders: a school line-up, marathon runners at the start line, a c
 
 ## 7. Trust items
 - [ ] Client logos (with permission), as SVG or PNG on a transparent background
-- [ ] Screenshot of the Google Business profile showing the rating and review count
 - [ ] Confirm: GSTIN, registered business name, full address, PIN code, email, business hours
 - [ ] Confirm the real numbers: pieces delivered, happy clients, years in business, monthly capacity
-- [ ] Confirm per product: MOQ, starting price, GSM range, turnaround; plus sample cost and payment terms

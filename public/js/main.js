@@ -12,18 +12,6 @@
   /* ---------- year ---------- */
   $$("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 
-  /* ---------- preview note ---------- */
-  const pbar = $("[data-preview-bar]");
-  if (pbar) {
-    try { if (sessionStorage.getItem("dc-preview-hidden")) pbar.hidden = true; } catch {}
-    // on phones, tuck the note away after a few seconds so it never blocks content
-    if (innerWidth < 900 && !pbar.hidden) setTimeout(() => (pbar.hidden = true), 7000);
-    $("[data-preview-close]", pbar)?.addEventListener("click", () => {
-      pbar.hidden = true;
-      try { sessionStorage.setItem("dc-preview-hidden", "1"); } catch {}
-    });
-  }
-
   /* ---------- header: solid on scroll, mobile menu ---------- */
   const hdr = $("[data-hdr]");
   const onScroll = () => hdr?.classList.toggle("is-solid", scrollY > 40 || !$(".hero"));
@@ -164,7 +152,7 @@
         else if (e.key === "End") { e.preventDefault(); select(list[list.length - 1]); }
       });
     });
-    // deep link: /fabrics#fabric-lacoste
+    // deep link: /fabrics#fabric-<key>
     const fromHash = () => {
       const m = location.hash.match(/^#fabric-(.+)$/);
       const t = m && document.getElementById(`tab-${m[1]}`);
@@ -259,19 +247,12 @@
     new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); sync(); } }, { rootMargin: "300px" }).observe(slider);
     $("[data-slider-prev]", slider).addEventListener("click", () => go(current() - 1));
     $("[data-slider-next]", slider).addEventListener("click", () => go(current() + 1));
-    let paused = reduced;
-    ["pointerenter", "focusin", "touchstart"].forEach((ev) => slider.addEventListener(ev, () => (paused = true), { passive: true }));
-    slider.addEventListener("pointerleave", () => (paused = reduced));
-    setInterval(() => {
-      if (paused || document.hidden) return;
-      const r = slider.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) return;
-      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-      go(atEnd ? 0 : current() + 1);
-    }, 6000);
   }
 
   /* ---------- quote builder ---------- */
+  // Composes an enquiry on the visitor's device and hands it to WhatsApp.
+  // No prices or estimates. Nothing is stored. We never claim it was "sent":
+  // only the visitor pressing Send in WhatsApp sends it.
   const qb = $("[data-qb]");
   if (qb) {
     const steps = $$(".qb__step", qb);
@@ -279,18 +260,23 @@
     const next = $("[data-qb-next]", qb);
     const send = $("[data-qb-send]", qb);
     const err = $("[data-qb-err]", qb);
+    const note = $("[data-qb-note]", qb);
+    const status = $("[data-qb-status]", qb);
     const fabricBox = $("[data-qb-fabrics]", qb);
     const preview = $("[data-qb-preview]", qb);
+    const params = new URLSearchParams(location.search);
+    const preFabric = (data.fabrics || []).find((f) => f.key === params.get("fabric"))?.name || "";
+    const NOT_SURE = "Not sure, please advise";
     let step = 0;
 
-    const allFabrics = [...new Set((data.products || []).flatMap((p) => p.fabrics))];
+    const allFabrics = (data.fabrics || []).map((f) => f.name);
     const renderFabrics = () => {
-      const slug = qb.product?.value;
-      const p = (data.products || []).find((x) => x.slug === slug);
-      const chosen = qb.fabric?.value;
-      const list = p ? p.fabrics : allFabrics;
+      const p = (data.products || []).find((x) => x.slug === value("product"));
+      const chosen = value("fabric") || preFabric;
+      const list = p ? [...p.fabrics] : [...allFabrics];
+      if (preFabric && !list.includes(preFabric)) list.unshift(preFabric);
       fabricBox.innerHTML = "";
-      [...list, "Help me choose"].forEach((f) => {
+      [...list, NOT_SURE].forEach((f) => {
         const l = document.createElement("label");
         l.className = "opt";
         const i = document.createElement("input");
@@ -306,49 +292,49 @@
     const value = (name) => {
       const els = qb.elements[name];
       if (!els) return "";
-      if (els instanceof RadioNodeList) {
-        const vals = [...els].filter((e) => e.checked).map((e) => e.value);
-        return vals.join(", ");
-      }
+      if (els instanceof RadioNodeList) return [...els].filter((e) => e.checked).map((e) => e.value).join(", ");
       return els.type === "checkbox" ? (els.checked ? els.value : "") : els.value.trim();
     };
     const productName = () => {
       const v = value("product");
       return v === "mixed" ? "A mix / not sure yet" : (data.products || []).find((p) => p.slug === v)?.name || "";
     };
+    // Owner's template (brief §7.2). Empty optional fields are left out.
     const message = () => {
       const date = value("date") ? new Date(value("date")).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "";
+      const qty = value("qtyExact") ? `${value("qtyExact")} pieces` : value("qty");
       const lines = [
-        "Hi D Creations! I'd like a quote:",
-        "",
-        `• Product: ${productName() || "—"}`,
-        `• Fabric: ${value("fabric") || "Help me choose"}`,
-        `• Quantity: ${value("qtyExact") ? `${value("qtyExact")} pcs` : value("qty") || "Not sure yet"}`,
-        `• Branding: ${value("print") || "Not sure — suggest one"}`,
-        `• Needed by: ${[value("when"), date].filter(Boolean).join(" — ") || "Flexible"}`,
-        "",
+        "Hello D Creations (DCT Shirt Factory), I would like a quotation.",
+        `Product: ${productName() || "-"}`,
+        `Quantity: ${qty || "Not sure yet"}`,
+        value("fabric") && `Fabric: ${value("fabric")}`,
+        value("print") && `Customisation: ${value("print")}`,
+        value("city") && `Delivery city: ${value("city")}`,
+        date && `Required by: ${date}`,
+        value("sizes") && `Sizes / colours: ${value("sizes")}`,
+        value("notes") && `Notes: ${value("notes")}`,
         `Name: ${value("name")}`,
         `Phone: ${value("phone")}`,
+        value("email") && `Email: ${value("email")}`,
+        value("org") && `Organisation: ${value("org")}`,
+        "Please contact me to discuss the specifications.",
       ];
-      if (value("org")) lines.push(`Organisation: ${value("org")}`);
-      if (value("city")) lines.push(`City: ${value("city")}`);
-      if (value("notes")) lines.push(`Notes: ${value("notes")}`);
-      lines.push("", "(Sent from the website quote builder)");
-      return lines.join("\n");
+      return lines.filter(Boolean).join("\n");
     };
 
+    const last = steps.length - 1;
     const show = (i, focus = true) => {
-      step = Math.max(0, Math.min(steps.length - 1, i));
+      step = Math.max(0, Math.min(last, i));
       steps.forEach((s, k) => s.classList.toggle("is-active", k === step));
       $("[data-qb-step]", qb).textContent = step + 1;
       $("[data-qb-label]", qb).textContent = steps[step].dataset.label;
       $("[data-qb-bar]", qb).style.width = `${((step + 1) / steps.length) * 100}%`;
       back.hidden = step === 0;
-      next.hidden = step === steps.length - 1;
-      send.hidden = step !== steps.length - 1;
+      next.hidden = step === last;
+      send.hidden = note.hidden = step !== last;
       err.textContent = "";
       if (step === 1) renderFabrics();
-      if (step === steps.length - 1) preview.textContent = message();
+      if (step === last) preview.textContent = message();
       if (focus) {
         const legend = $("legend", steps[step]);
         legend.tabIndex = -1;
@@ -358,17 +344,20 @@
       }
     };
 
+    const invalid = (el, bad) => { el.setAttribute("aria-invalid", String(bad)); return bad; };
     const validate = () => {
-      if (step === 0 && !value("product")) return "Pick a product (or “A mix / not sure yet”).";
-      if (step === steps.length - 1) {
-        const name = qb.elements.name;
-        const phone = qb.elements.phone;
-        name.setAttribute("aria-invalid", String(!name.value.trim()));
+      if (step === 0 && !value("product")) return "Please pick a product, or choose “A mix / not sure yet”.";
+      if (step === 2) {
+        const q = qb.elements.qtyExact;
+        if (q.value && invalid(q, !(Number(q.value) >= 1))) { q.focus(); return "Please enter a quantity of 1 or more."; }
+      }
+      if (step === last) {
+        const { name, phone, email, consent } = qb.elements;
         const digits = phone.value.replace(/\D/g, "");
-        const okPhone = digits.length >= 10 && digits.length <= 13;
-        phone.setAttribute("aria-invalid", String(!okPhone));
-        if (!name.value.trim()) { name.focus(); return "Please add your name."; }
-        if (!okPhone) { phone.focus(); return "Please add a valid phone / WhatsApp number."; }
+        if (invalid(name, !name.value.trim())) { name.focus(); return "Please add your name."; }
+        if (invalid(phone, digits.length < 10 || digits.length > 13)) { phone.focus(); return "Please add a valid phone / WhatsApp number (10 digits)."; }
+        if (email.value && invalid(email, !email.checkValidity())) { email.focus(); return "Please check the email address, or leave it empty."; }
+        if (!consent.checked) { consent.focus(); return "Please tick the box so we can contact you about your enquiry."; }
       }
       return "";
     };
@@ -379,31 +368,68 @@
       show(step + 1);
     });
     back.addEventListener("click", () => show(step - 1));
-    // Auto-advance on single-choice steps for a snappy feel
+    // Auto-advance on single-choice steps
     qb.addEventListener("change", (e) => {
-      if (["product", "fabric", "qty", "when"].includes(e.target.name) && e.target.type === "radio") {
+      if (["product", "fabric", "qty"].includes(e.target.name) && e.target.type === "radio") {
         if (e.target.name === "qty") qb.elements.qtyExact.value = "";
         setTimeout(() => show(step + 1), 220);
       }
     });
-    qb.addEventListener("input", () => { if (step === steps.length - 1) preview.textContent = message(); });
+    qb.addEventListener("input", (e) => {
+      e.target.removeAttribute?.("aria-invalid");
+      if (step === last) preview.textContent = message();
+    });
     qb.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && e.target.tagName === "INPUT" && step < steps.length - 1) { e.preventDefault(); next.click(); }
+      if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target.type !== "checkbox" && step < last) { e.preventDefault(); next.click(); }
     });
     qb.addEventListener("submit", (e) => {
       e.preventDefault();
       const m = validate();
       if (m) return (err.textContent = m);
       const url = `https://wa.me/${data.wa}?text=${encodeURIComponent(message())}`;
-      window.open(url, "_blank", "noopener") || (location.href = url);
+      const win = window.open(url, "_blank", "noopener");
+      status.hidden = false;
+      status.innerHTML = "";
+      const p = document.createElement("p");
+      p.innerHTML = win === null
+        ? "We couldn't open WhatsApp automatically. "
+        : "<strong>WhatsApp has opened with your enquiry.</strong> It is not sent until you press Send in WhatsApp. ";
+      const a = document.createElement("a");
+      a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = win === null ? "Open WhatsApp" : "WhatsApp didn't open? Try again";
+      const call = document.createElement("span");
+      call.innerHTML = ` · or call <a href="tel:+918136867309">+91 81368 67309</a>`;
+      p.append(a, call);
+      status.append(p);
+      status.focus?.();
     });
 
-    // Pre-select a product from ?product=slug (links from product pages)
-    const pre = new URLSearchParams(location.search).get("product");
-    const radio = pre && $(`input[name=product][value="${CSS.escape(pre)}"]`, qb);
+    // Pre-select from ?product=slug / ?fabric=key (links from product and fabric pages)
+    const radio = params.get("product") && $(`input[name=product][value="${CSS.escape(params.get("product"))}"]`, qb);
     if (radio) { radio.checked = true; show(1, false); }
     else show(0, false);
   }
+
+  /* ---------- Instagram: official embed only after the visitor asks ---------- */
+  $$("[data-ig-load]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const item = b.closest("[data-ig]");
+      const bq = document.createElement("blockquote");
+      bq.className = "instagram-media";
+      bq.dataset.instgrmPermalink = item.dataset.ig;
+      bq.dataset.instgrmVersion = "14";
+      const a = document.createElement("a");
+      a.href = item.dataset.ig; a.textContent = "View this post on Instagram";
+      bq.append(a);
+      b.replaceWith(bq);
+      if (window.instgrm) window.instgrm.Embeds.process();
+      else {
+        const s = document.createElement("script");
+        s.src = "https://www.instagram.com/embed.js"; s.async = true;
+        document.body.append(s);
+      }
+    })
+  );
 
   /* ---------- product gallery: thumbs, hover zoom, lightbox ---------- */
   const gal = $("[data-gal]");
@@ -445,11 +471,10 @@
       f.referrerPolicy = "no-referrer-when-downgrade";
       map.prepend(f);
       $("[data-map-load]", map)?.remove();
+      $(".contact__mapnote", map)?.remove();
     };
     $("[data-map-load]", map)?.addEventListener("click", load);
-    new IntersectionObserver((ents, io) => {
-      if (ents[0].isIntersecting) { io.disconnect(); setTimeout(load, 400); }
-    }, { rootMargin: "200px" }).observe(map);
+    // Google Maps loads only when the visitor asks (it can set cookies).
   }
 
   /* ---------- magnetic buttons ---------- */

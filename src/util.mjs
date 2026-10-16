@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { site } from "./data.mjs";
+import { site, waGreeting } from "./data.mjs";
 
 const manifest = JSON.parse(
   readFileSync(new URL("../public/img/manifest.json", import.meta.url), "utf8")
@@ -12,22 +12,23 @@ export const esc = (s) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-export const isTbc = (x) => Boolean(x && typeof x === "object" && x.__tbc);
-export const val = (x) => (isTbc(x) ? x.value : x);
-
-/** Render a value; placeholders get a marker the preview CSS can show. */
-export const show = (x, fmt = (v) => esc(v)) =>
-  isTbc(x)
-    ? `<span class="tbc" title="Placeholder — to be confirmed by D Creations">${fmt(x.value)}</span>`
-    : fmt(x);
-
-export const inr = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
-
-export const waLink = (text = site.defaultMessage) =>
+/** WhatsApp deep link. Messages never contain prices or estimates. */
+export const waLink = (text = `${waGreeting} Please contact me to discuss my requirement.`) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
-export const productMessage = (p) =>
-  `Hi D Creations! I'm interested in ${p.short}. Please share price, MOQ and fabric options. (Sent from ${site.url.replace("https://", "")}/products/${p.slug})`;
+/** The owner's quotation template (brief §7.2), with known fields filled in. */
+export const quoteMessage = ({ product = "", fabric = "" } = {}) =>
+  [
+    waGreeting,
+    product && `Product: ${product}.`,
+    fabric && `Fabric: ${fabric}.`,
+    "Quantity: ",
+    "Delivery city: ",
+    "Required by: ",
+    "Please contact me to discuss the specifications.",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
 /**
  * Responsive <img>. `base` is a name from public/img (e.g. "school-set").
@@ -47,9 +48,6 @@ export function img(base, alt, { sizes = "(min-width: 900px) 50vw, 100vw", eager
 }
 
 export const imgSize = (file) => manifest[file];
-
-/** Labelled photo slot, e.g. "[PHOTO: cutting table]". Visible in preview mode. */
-export const slotTag = (label) => `<span class="slot-tag">${esc(label)}</span>`;
 
 const I = (d, extra = "") =>
   `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"${extra}>${d}</svg>`;

@@ -1,7 +1,9 @@
-// Builds the static site into dist/.  Usage:
-//   node scripts/build.mjs           -> build, list any placeholders still in use
-//   node scripts/build.mjs --strict  -> fail if any placeholder (tbc) remains
+// Builds the static site into dist/, then scans it for prohibited content.
+//   node scripts/build.mjs           -> build + content check; lists owner inputs still pending
+//   node scripts/build.mjs --strict  -> also fail while owner inputs are pending (go-live gate)
 import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import * as data from "../src/data.mjs";
 import { page, orgSchema } from "../src/layout.mjs";
 import { home, homeData } from "../src/home.mjs";
@@ -14,25 +16,13 @@ const ROOT = new URL("../", import.meta.url);
 const DIST = new URL("dist/", ROOT);
 const strict = process.argv.includes("--strict");
 
-// ---- find every placeholder still in the data --------------------------
-const pending = [];
-(function walk(node, path) {
-  if (node && typeof node === "object") {
-    if (node.__tbc) return pending.push(`${path} = ${JSON.stringify(node.value)}`);
-    for (const [k, v] of Object.entries(node)) walk(v, path ? `${path}.${k}` : k);
-  }
-})(
-  Object.fromEntries(Object.entries(data).filter(([k]) => k !== "tbc")),
-  ""
-);
-const preview = pending.length > 0;
-
-if (preview) {
-  console.log(`\n⚠  ${pending.length} placeholder value(s) still need confirming by D Creations:`);
-  for (const p of pending) console.log("   -", p);
-  console.log("   (edit src/data.mjs — replace tbc(x) with the confirmed value)\n");
+if (data.pending.length) {
+  console.log(`
+Owner inputs still pending (${data.pending.length}). Details in OWNER-INPUTS.md:`);
+  for (const p of data.pending) console.log("   -", p);
+  console.log("");
   if (strict) {
-    console.error("✖ --strict: refusing to build with placeholders.");
+    console.error("✖ --strict: not ready for launch while owner inputs are pending.");
     process.exit(1);
   }
 }
@@ -60,7 +50,6 @@ write(
       "D Creations makes custom school uniforms, marathon & event t-shirts, corporate polos, sublimation jerseys, gym wear and hoodies in bulk. Sample before bulk, pan-India delivery. Get a WhatsApp quote.",
     path: "/",
     preload: heroPreload,
-    preview,
     jsonLd: [
       orgSchema(),
       { "@context": "https://schema.org", "@type": "WebSite", name: "D Creations", url: data.site.url },
@@ -78,7 +67,6 @@ for (const p of data.products) {
       title: p.title,
       description: p.description,
       path: `/products/${p.slug}`,
-      preview,
       quoteHref: `/quote?product=${p.slug}`,
       jsonLd: [productSchema(p), breadcrumbSchema(p), orgSchema()],
       body: productPage(p),
@@ -94,7 +82,6 @@ for (const pg of pages) {
       title: pg.title,
       description: pg.description,
       path: pg.path,
-      preview,
       current: pg.path,
       data: pg.data ? homeData() : undefined,
       jsonLd: [
@@ -120,7 +107,6 @@ write(
     title: "Page not found | D Creations",
     description: "This page doesn't exist. Browse D Creations custom apparel or message us on WhatsApp.",
     path: "/404",
-    preview,
     body: `
 <section class="nf">
   <div class="wrap">
@@ -164,4 +150,11 @@ write(
   )
 );
 
-console.log(`✔ Built ${urls.length + 1} pages into dist/${preview ? " (preview mode)" : ""}`);
+console.log(`✔ Built ${urls.length + 1} pages into dist/`);
+
+// Prohibited-content regression check (prices, brand names, placeholders...).
+try {
+  execFileSync(process.execPath, [fileURLToPath(new URL("check-content.mjs", import.meta.url))], { stdio: "inherit" });
+} catch {
+  process.exit(1);
+}

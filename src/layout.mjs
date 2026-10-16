@@ -1,12 +1,12 @@
 import { site, products } from "./data.mjs";
-import { esc, show, val, isTbc, waLink, icon, imgSize } from "./util.mjs";
+import { esc, waLink, icon, imgSize } from "./util.mjs";
 
 export const NAV = [
   ["Products", "/#products"],
   ["Fabrics", "/fabrics"],
   ["Process", "/#process"],
-  ["Our Work", "/work"],
-  ["Reviews", "/#reviews"],
+  ["Gallery", "/work"],
+  ["About", "/about"],
   ["FAQ", "/faq"],
   ["Contact", "/contact"],
 ];
@@ -22,7 +22,8 @@ function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${url}">
+${site.indexable ? "" : `<meta name="robots" content="noindex">
+`}<link rel="canonical" href="${url}">
 <meta name="theme-color" content="#0b0b0c">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D Creations">
@@ -54,7 +55,7 @@ function header(current) {
     <nav class="hdr__nav" aria-label="Main">
       ${NAV.map(([l, h]) => `<a href="${h}"${h === current ? ' class="is-current" aria-current="page"' : ""}>${l}</a>`).join("")}
     </nav>
-    <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/quote">Get Quote</a>
+    <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/quote">Get a quote</a>
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu" data-burger><span></span><span></span></button>
   </div>
   <div class="mnav" id="mnav" data-mnav hidden>
@@ -70,20 +71,13 @@ function header(current) {
 </header>`;
 }
 
-function previewBanner(active) {
-  if (!active) return "";
-  return `<div class="preview-bar" role="note" data-preview-bar><p><strong>Preview:</strong> dotted-underlined figures and [PHOTO] labels are placeholders awaiting confirmation.</p><button type="button" data-preview-close aria-label="Hide preview note">${icon.close}</button></div>`;
-}
-
 export function footer() {
-  const addr = site.address;
   return `
 <footer class="ftr">
   <div class="wrap ftr__grid">
     <div class="ftr__brand">
       <a href="/" class="ftr__logo" aria-label="D Creations — home"><img src="/img/logo-light.png" alt="D Creations" width="273" height="135" loading="lazy"></a>
-      <p>Custom apparel manufacturer for schools, companies, teams and events. Designed with you, sampled for you, made in Mangalore &amp; Tiruppur.</p>
-      <p class="ftr__gst">${icon.shield}<span>GST-registered business · GSTIN ${show(site.gstin)}</span></p>
+      <p>Custom T-shirt and apparel manufacturer for schools, companies, teams and events. ${site.locations.replace("&", "&amp;")}.</p>
       <div class="ftr__social">
         <a href="${site.instagram}" target="_blank" rel="noopener" aria-label="Instagram ${site.instagramHandle}">${icon.instagram}</a>
         <a href="${waLink()}" target="_blank" rel="noopener" aria-label="WhatsApp">${icon.whatsapp}</a>
@@ -93,8 +87,8 @@ export function footer() {
     <nav class="ftr__col" aria-label="Quick links">
       <h2>Quick links</h2>
       ${NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
-      <a href="/about">About us</a>
-      <a href="/quote">Get a quote</a>
+      <a href="/quote">Request a quote</a>
+      <a href="/privacy">Privacy notice</a>
     </nav>
     <nav class="ftr__col" aria-label="Product categories">
       <h2>Categories</h2>
@@ -104,9 +98,9 @@ export function footer() {
       <h2>Contact</h2>
       <a href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp ${site.phoneDisplay}</a>
       <a href="tel:${site.phoneHref}">${icon.phone} Call ${site.phoneDisplay}</a>
-      <a href="mailto:${val(site.email)}">${icon.mail} ${show(site.email)}</a>
-      <a href="${site.mapsUrl}" target="_blank" rel="noopener">${icon.pin} <span>${show(addr.street)}, ${addr.locality} ${show(addr.postalCode)}, ${addr.region}</span></a>
-      <p>${icon.clock} ${show(site.hours)}</p>
+      <a href="${site.instagram}" target="_blank" rel="noopener">${icon.instagram} ${site.instagramHandle}</a>
+      <a href="${site.mapsUrl}" target="_blank" rel="noopener">${icon.pin} ${site.locality}, ${site.region}</a>
+      <a class="ftr__quote" href="/quote">Request a custom quote ${icon.arrow}</a>
     </div>
   </div>
   <div class="wrap ftr__bottom">
@@ -122,7 +116,7 @@ function actionBars(quoteHref = "/quote") {
 <nav class="mbar" aria-label="Quick actions">
   <a href="tel:${site.phoneHref}">${icon.phone}<span>Call</span></a>
   <a class="mbar__wa" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp}<span>WhatsApp</span></a>
-  <a href="${quoteHref}">${icon.grid}<span>Get Quote</span></a>
+  <a href="${quoteHref}">${icon.grid}<span>Get a quote</span></a>
 </nav>
 <dialog class="lb" data-lightbox aria-label="Image viewer">
   <button class="lb__close" type="button" data-lb-close aria-label="Close">${icon.close}</button>
@@ -135,11 +129,12 @@ function actionBars(quoteHref = "/quote") {
 export const orgSchema = () => {
   const o = {
     "@context": "https://schema.org",
-    "@type": ["ClothingStore", "LocalBusiness"],
+    "@type": "LocalBusiness",
     "@id": `${site.url}/#business`,
     name: site.name,
+    alternateName: site.altName,
     description:
-      "Custom apparel manufacturer in Mangalore & Tiruppur: school uniforms, marathon and event t-shirts, corporate polos, sublimation jerseys, gym wear, trackpants, hoodies and varsity jackets.",
+      "Custom T-shirt and apparel manufacturer: school uniforms, event T-shirts, corporate polos, sublimation jerseys, gym wear, trackpants and hoodies.",
     url: site.url,
     logo: `${site.url}/img/icon-512.png`,
     image: `${site.url}/img/og-image.jpg`,
@@ -148,26 +143,18 @@ export const orgSchema = () => {
     geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
     hasMap: site.mapsUrl,
     areaServed: { "@type": "Country", name: "India" },
-    priceRange: "₹₹",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: site.address.locality,
-      addressRegion: site.address.region,
-      addressCountry: site.address.country,
-    },
+    address: { "@type": "PostalAddress", addressLocality: site.locality, addressRegion: site.region, addressCountry: "IN" },
   };
-  // Only publish confirmed facts to search engines.
-  if (!isTbc(site.address.street)) o.address.streetAddress = site.address.street;
-  if (!isTbc(site.address.postalCode)) o.address.postalCode = site.address.postalCode;
-  if (!isTbc(site.email)) o.email = site.email;
-  if (!isTbc(site.hoursSchema)) o.openingHours = site.hoursSchema;
+  // Only confirmed facts. No prices, ratings or reviews.
+  if (site.street) o.address.streetAddress = site.street;
+  if (site.postalCode) o.address.postalCode = site.postalCode;
+  if (site.email) o.email = site.email;
   return o;
 };
 
-export function page({ title, description, path, body, jsonLd = [], preload = "", preview, quoteHref, data, current }) {
+export function page({ title, description, path, body, jsonLd = [], preload = "", quoteHref, data, current }) {
   return `${head({ title, description, path, jsonLd, preload })}
-<body${preview ? ' class="is-preview"' : ""}>
-${previewBanner(preview)}
+<body>
 ${header(current)}
 <main id="main">
 ${body}

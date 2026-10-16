@@ -27,25 +27,26 @@ There are no npm dependencies. Node 18 or newer runs the build. GSAP 3.12.5, Scr
 | `public/js/main.js` | Interactions: quote builder, fabric tabs, filters, lightbox, slider, counters, motion |
 | `assets/` | Original source photos. `scripts/make-images.py` turns them into WebP in `public/img/` |
 | `SHOT-LIST.md` | Photos and videos the client needs to shoot |
+| `OWNER-INPUTS.md` | Everything the owner must confirm before launch |
+| `docs/content-rights-register.csv` | Internal asset / permission log (not published) |
+| `scripts/check-content.mjs` | Prohibited-content scan run by every build |
 | `REDESIGN-NOTES.md` | How each pain point was solved |
 
-## Placeholders ("preview mode")
+## Content rules (owner brief, 16 Oct 2026)
 
-Anything D Creations hasn't confirmed is wrapped in `tbc(...)` in `src/data.mjs`. That covers MOQ, prices, GSM, turnaround, stats, address, email, hours, GSTIN, Google rating and star counts. While any `tbc()` value remains:
-
-- the page shows a small dismissible "Preview" note,
-- each placeholder value gets a dotted orange underline,
-- photo slots show their `[PHOTO: …]` labels,
-- unconfirmed facts are left out of the structured data (schema.org), so search engines never see guessed prices or addresses.
-
-To confirm a fact, replace `tbc("50 pcs")` with `"50 pcs"`. When nothing is left, preview mode switches off by itself.
+- **No prices anywhere**: no rupee figures, price tiers, "from" prices or Offer schema. Every enquiry goes to the owner for a quotation.
+- **No brand-like fabric names** (e.g. Lacoste, Lycra). Fabrics use generic construction names.
+- **No unverified facts.** Anything not confirmed is `null` in `src/data.mjs` and simply not shown. Open items are listed in `pending` and in `OWNER-INPUTS.md`. `npm run build:strict` fails while any remain.
+- **Product images are AI design concepts** and are labelled "Design concept". The asset log is `docs/content-rights-register.csv`, which is internal and never published.
+- `npm run build` ends with `scripts/check-content.mjs`. It scans every built file and **fails the build** on currency symbols, price wording, brand-like fabric names, placeholder text, GSTIN/rating claims and similar. Run against the earlier live site, it flags 6 kinds of violation.
+- The site is `noindex` until the production domain is confirmed (`site.indexable`).
 
 ## Swapping in real photos
 
 1. Put the photo in `assets/`, add it to `IMAGES` in `scripts/make-images.py`, then run `npm run images`.
-2. Use its base name in `src/data.mjs`, either in a product's `images`, in `portfolio[].img`, or in a fabric's texture.
+2. Use its base name in `src/data.mjs`, in a product's `images` or in `concepts[].img`. Only logo-free images, and real photos only with permission (log them in `docs/content-rights-register.csv`).
 3. Hero video: drop `public/video/hero.mp4` (H.264, muted, 12–20 s, under 4 MB) and uncomment the `<video>` block in `hero()` in `src/home.mjs`.
-4. Client logos: add SVG/PNG files to `public/img/clients/` and list them in `clientLogos`.
+4. Named clients: only with written approval. Add them to `clients` with `approvedBy` and `approvedOn`; the section stays hidden otherwise. Instagram: add owner-approved post URLs to `instagramPosts`. They load only when the visitor clicks.
 
 ## Deploy
 

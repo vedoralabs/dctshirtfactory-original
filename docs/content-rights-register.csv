@@ -1,0 +1,22 @@
+asset_id,filename_or_url,category,creator_source,ai_generated,license_proof,client_permission,model_guardian_consent,source_post_url,approved_public_caption,factual_claims_tied_to_asset,approver,approval_date,review_expiry_date,status_notes
+IMG-001,assets/product-school-uniform-2.jpg -> school-set,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a (no people),,"School polo & shorts set: design concept",none,,,,In use. Logo-free. Confirm source/licence.
+IMG-002,assets/product-marathon.jpg -> marathon-galaxy,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"Printed event jersey: design concept",none,,,,In use. Logo-free. Confirm source/licence.
+IMG-003,assets/product-corporate-seperate.jpg -> corporate-black,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"Corporate polo: design concept",none,,,,In use. Logo-free.
+IMG-004,assets/product-gym.jpg -> gym-compression,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a (mannequin),,"Compression top: design concept",none,,,,In use. Logo-free.
+IMG-005,assets/product-sublimation.jpg -> sublimation-art,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"All-over print tee: design concept",none,,,,In use. Abstract print; check it isn't copied from a known design.
+IMG-006,assets/product-sublimation-seperate.jpg -> sublimation-sleeve,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"Printed-sleeve jersey: design concept",none,,,,In use. Logo-free.
+IMG-007,assets/product-trackpants.jpg -> shorts-navy,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"Training shorts: design concept",none,,,,In use. Logo-free.
+IMG-008,assets/product-hoodies.jpg (cropped) -> hoodie-beige,product concept,Original repo (creator unknown),likely yes,MISSING,n/a,n/a,,"Pullover hoodie: design concept",none,,,,In use as crop only; varsity jacket with lettering/face patch cut out.
+IMG-009,assets/hero-placeholder.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: small chest logos and a branded-looking sneaker.
+IMG-010,assets/product-marathon-seperate.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: chest logo text.
+IMG-011,assets/product-marathon-2.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: printed text and runner icon.
+IMG-012,assets/product-corporate.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: printed text.
+IMG-013,assets/product-school-uniform-seperate.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: crest emblem.
+IMG-014,assets/product-school-uniform.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: third-party brand logo.
+IMG-015,assets/product-hoodies-seperate.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: emblem on varsity jacket.
+IMG-016,assets/product-trackpants-seperate.jpg,product concept,Original repo,likely yes,MISSING,n/a,n/a,,,,,,,NOT USED: small logo mark on joggers.
+IMG-017,public/img/hero-1..4 (graded crops of IMG-005/003/004/002),hero,Derived,likely yes,see sources,n/a,n/a,,,none,,,,In use (decorative; empty alt).
+IMG-018,dist/img/tx/*.svg (fabric textures),illustration,Generated in code (src/textures.mjs),no (procedural),own work,n/a,n/a,,"Illustrative texture, not a photo of the actual fabric",none,,,,In use. Labelled as illustrative.
+IMG-019,assets/DC LOGO.jpeg,brand,Owner,unknown,owner's mark,n/a,n/a,,,,,,,In use. Confirm it is the current official logo.
+TXT-001,testimonials (4),review,Original dctshirtfactory.co.in site,no,unknown,needs permission,n/a,,,quotes attributed to named people,,,,In use without ratings. Confirm source and permission.
+IG-001..006,see OWNER-INPUTS.md §5,social,@dctshirtfactory,unknown,owner account,unknown,unknown (may show people),listed,,,,,,NOT USED: awaiting owner selection and content review.

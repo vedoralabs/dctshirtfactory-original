@@ -1,4 +1,19 @@
-# Redesign notes: how each pain point was solved
+# Redesign notes
+
+> **Update, 16 Oct 2026 (owner brief "DCT_Website_Brief.pdf").** The brief overrides parts of the first redesign below. Under its rules:
+> - all prices, price tiers and Offer schema are removed;
+> - fabric names are generic (no Lacoste or Lycra);
+> - unverified facts are removed rather than shown as placeholders (stats, GSTIN, MOQ, turnaround, GSM, Google rating, star ratings, "verified customer");
+> - images with logos or text were dropped, and the remaining images are labelled "Design concept";
+> - "Our Work" became a concept **Gallery**, and real work is shown via Instagram;
+> - the client-logo marquee became a static "We make for" sector row, and the client section is permission-gated (hidden until approved);
+> - the quote flow follows the brief's template, has a consent checkbox, a no-JavaScript WhatsApp form and an honest "not sent until you press Send" status;
+> - the map and Instagram embeds load only on click; there's a new /privacy page; the site is noindex until the domain is confirmed;
+> - every build runs a prohibited-content scan.
+>
+> Open items: `OWNER-INPUTS.md`. Mentions of prices, MOQ, stats or preview mode further down describe the **first version** only.
+
+## How each pain point was solved (first version)
 
 | # | Pain point | Solution |
 |---|---|---|

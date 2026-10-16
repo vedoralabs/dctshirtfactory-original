@@ -13,23 +13,27 @@ OUT = ROOT / "public" / "img"
 OUT.mkdir(parents=True, exist_ok=True)
 
 # source file -> output base name
+# source file -> output base name.
+# Only images with NO logos, text or brand-like marks may be listed here
+# (owner brief, 16 Oct 2026). Excluded for marks: hero-placeholder (chest logos,
+# sneaker), product-marathon-seperate (chest logo), product-marathon-2 (text + icon),
+# product-corporate (text), product-school-uniform-seperate (crest),
+# product-hoodies-seperate (emblem), product-trackpants-seperate (logo mark),
+# product-school-uniform (brand logo).
 IMAGES = {
     "product-school-uniform-2.jpg": "school-set",
-    "product-school-uniform-seperate.jpg": "school-polo",
-    "product-marathon-2.jpg": "marathon-green",
-    "product-marathon-seperate.jpg": "marathon-jersey",
     "product-marathon.jpg": "marathon-galaxy",
-    "product-corporate.jpg": "corporate-white",
     "product-corporate-seperate.jpg": "corporate-black",
     "product-gym.jpg": "gym-compression",
-    "product-hoodies.jpg": "hoodie-varsity",
-    "product-hoodies-seperate.jpg": "hoodie-grey",
     "product-sublimation.jpg": "sublimation-art",
     "product-sublimation-seperate.jpg": "sublimation-sleeve",
-    "product-trackpants-seperate.jpg": "trackpants-set",
     "product-trackpants.jpg": "shorts-navy",
-    "hero-placeholder.jpg": "flatlay",
 }
+# Crops that remove marked garments from an otherwise usable image:
+# (source, (left, top, right, bottom), output base name)
+CROPS = [
+    ("product-hoodies.jpg", (0, 110, 590, 1150), "hoodie-beige"),  # hoodie only, varsity jacket cut out
+]
 WIDTHS = (480, 960)
 
 
@@ -59,10 +63,14 @@ for src, name in IMAGES.items():
     im = ImageOps.exif_transpose(Image.open(SRC / src)).convert("RGB")
     for w in WIDTHS:
         save(im, name, w)
+for src, box, name in CROPS:
+    im = ImageOps.exif_transpose(Image.open(SRC / src)).convert("RGB").crop(box)
+    for w in WIDTHS:
+        save(im, name, w)
 
 # Hero frames: graded, wide crops
-HERO = ["hero-placeholder.jpg", "product-marathon-seperate.jpg",
-        "product-sublimation.jpg", "product-hoodies.jpg"]
+HERO = ["product-sublimation.jpg", "product-corporate-seperate.jpg",
+        "product-gym.jpg", "product-marathon.jpg"]
 for i, src in enumerate(HERO, 1):
     im = Image.open(SRC / src).convert("RGB")
     # crop to 16:10-ish around centre
@@ -100,7 +108,7 @@ icon.resize((180, 180), Image.LANCZOS).save(OUT / "apple-touch-icon.png", optimi
 icon.resize((48, 48), Image.LANCZOS).save(ROOT / "public" / "favicon.ico")
 
 # Open Graph card 1200x630
-og = Image.open(SRC / "hero-placeholder.jpg").convert("RGB")
+og = Image.open(SRC / "product-sublimation.jpg").convert("RGB")
 og = ImageOps.fit(og, (1200, 630), Image.LANCZOS)
 og = grade(og)
 shade = Image.new("RGBA", og.size, (11, 11, 12, 0))
@@ -120,7 +128,7 @@ except OSError:
     font = small = ImageFont.load_default()
 d.text((70, 250), "CUSTOM APPAREL,", font=font, fill=(243, 238, 230))
 d.text((70, 335), "MADE FOR YOUR TEAM.", font=font, fill=(255, 90, 31))
-d.text((70, 450), "Uniforms • Jerseys • Polos • Hoodies — Mangalore & Tiruppur", font=small, fill=(200, 194, 186))
+d.text((70, 450), "T-shirts, polos, uniforms, jerseys — Mangalore & Tiruppur", font=small, fill=(200, 194, 186))
 og.convert("RGB").save(OUT / "og-image.jpg", quality=85)
 print("done:", len(list(OUT.iterdir())), "files")
 

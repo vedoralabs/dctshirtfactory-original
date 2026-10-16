@@ -11,22 +11,6 @@
 960,
 1278
 ],
-"corporate-white-480.webp": [
-480,
-480
-],
-"corporate-white-960.webp": [
-960,
-960
-],
-"flatlay-480.webp": [
-480,
-269
-],
-"flatlay-960.webp": [
-960,
-538
-],
 "gym-compression-480.webp": [
 480,
 480
@@ -36,8 +20,8 @@
 960
 ],
 "hero-1-1600.webp": [
-1434,
-896
+1200,
+750
 ],
 "hero-1-800.webp": [
 800,
@@ -67,21 +51,13 @@
 800,
 500
 ],
-"hoodie-grey-480.webp": [
+"hoodie-beige-480.webp": [
 480,
-639
+846
 ],
-"hoodie-grey-960.webp": [
-960,
-1278
-],
-"hoodie-varsity-480.webp": [
-480,
-480
-],
-"hoodie-varsity-960.webp": [
-960,
-960
+"hoodie-beige-960.webp": [
+590,
+1040
 ],
 "icon-512.png": [
 512,
@@ -103,33 +79,9 @@
 960,
 960
 ],
-"marathon-green-480.webp": [
-480,
-480
-],
-"marathon-green-960.webp": [
-960,
-960
-],
-"marathon-jersey-480.webp": [
-480,
-639
-],
-"marathon-jersey-960.webp": [
-960,
-1278
-],
 "og-image.jpg": [
 1200,
 630
-],
-"school-polo-480.webp": [
-480,
-639
-],
-"school-polo-960.webp": [
-960,
-1278
 ],
 "school-set-480.webp": [
 480,
@@ -160,14 +112,6 @@
 639
 ],
 "sublimation-sleeve-960.webp": [
-960,
-1278
-],
-"trackpants-set-480.webp": [
-480,
-639
-],
-"trackpants-set-960.webp": [
 960,
 1278
 ]
