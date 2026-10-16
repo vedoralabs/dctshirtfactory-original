@@ -1,0 +1,13 @@
+{
+  "name": "dctshirtfactory",
+  "private": true,
+  "type": "module",
+  "description": "D Creations (dctshirtfactory.co.in) website — static, generated from src/data.mjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:strict": "node scripts/build.mjs --strict",
+    "images": "python scripts/make-images.py",
+    "serve": "npx -y serve@14.2.4 dist -l 4173"
+  },
+  "engines": { "node": ">=18" }
+}
