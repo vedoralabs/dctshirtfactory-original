@@ -56,7 +56,7 @@ Old-site fabric names **not shown** because their meaning is unclear (confirm wh
 ## 6. Media
 - [ ] Real production, process and factory photos/video (see SHOT-LIST.md), with consent from anyone identifiable (guardian consent for minors)
 - [ ] Source and licence of the existing product images in `assets/`. They appear AI-generated, creator unknown; see `docs/content-rights-register.csv`.
-- [ ] Approval to generate new logo-free AI concept images (several views per product), using the prompt pack in the brief
+- [ ] Review the 9 new AI concept images (generated 16 Oct 2026, logo-free, see `assets/generated/` and the GEN rows in the register). In particular, check that the blue/white team jersey doesn't resemble a local team's kit, and confirm the Runway plan's commercial-use terms.
 
 ## 7. Legal review (recommended)
 - [ ] Generic fabric names, client mentions, testimonials and the privacy notice. No website can be guaranteed free of legal risk; these are the items worth a counsel check.

@@ -11,6 +11,22 @@
 960,
 1278
 ],
+"cycling-jersey-teal-480.webp": [
+480,
+643
+],
+"cycling-jersey-teal-960.webp": [
+896,
+1200
+],
+"event-tee-orange-480.webp": [
+480,
+643
+],
+"event-tee-orange-960.webp": [
+896,
+1200
+],
 "gym-compression-480.webp": [
 480,
 480
@@ -20,32 +36,32 @@
 960
 ],
 "hero-1-1600.webp": [
-1200,
-750
+896,
+560
 ],
 "hero-1-800.webp": [
 800,
 500
 ],
 "hero-2-1600.webp": [
-1040,
-650
+896,
+560
 ],
 "hero-2-800.webp": [
 800,
 500
 ],
 "hero-3-1600.webp": [
-1200,
-750
+896,
+560
 ],
 "hero-3-800.webp": [
 800,
 500
 ],
 "hero-4-1600.webp": [
-1200,
-750
+896,
+560
 ],
 "hero-4-800.webp": [
 800,
@@ -58,6 +74,14 @@
 "hoodie-beige-960.webp": [
 590,
 1040
+],
+"hoodie-charcoal-480.webp": [
+480,
+643
+],
+"hoodie-charcoal-960.webp": [
+896,
+1200
 ],
 "icon-512.png": [
 512,
@@ -82,6 +106,22 @@
 "og-image.jpg": [
 1200,
 630
+],
+"polo-navy-480.webp": [
+480,
+643
+],
+"polo-navy-960.webp": [
+896,
+1200
+],
+"school-polo-white-480.webp": [
+480,
+643
+],
+"school-polo-white-960.webp": [
+896,
+1200
 ],
 "school-set-480.webp": [
 480,
@@ -114,5 +154,37 @@
 "sublimation-sleeve-960.webp": [
 960,
 1278
+],
+"sublimation-wave-480.webp": [
+480,
+643
+],
+"sublimation-wave-960.webp": [
+896,
+1200
+],
+"team-jersey-480.webp": [
+480,
+358
+],
+"team-jersey-960.webp": [
+960,
+717
+],
+"trackpants-navy-480.webp": [
+480,
+643
+],
+"trackpants-navy-960.webp": [
+896,
+1200
+],
+"varsity-cream-480.webp": [
+480,
+643
+],
+"varsity-cream-960.webp": [
+896,
+1200
 ]
 }

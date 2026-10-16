@@ -28,6 +28,17 @@ IMAGES = {
     "product-sublimation.jpg": "sublimation-art",
     "product-sublimation-seperate.jpg": "sublimation-sleeve",
     "product-trackpants.jpg": "shorts-navy",
+    # Generated 16 Oct 2026 (Runway, logo-free prompts from the owner's brief;
+    # each image inspected for marks/text). Logged in docs/content-rights-register.csv.
+    "generated/concept-polo-navy-34.png": "polo-navy",
+    "generated/concept-hoodie-charcoal-34.png": "hoodie-charcoal",
+    "generated/concept-varsity-cream-34.png": "varsity-cream",
+    "generated/concept-school-polo-front.png": "school-polo-white",
+    "generated/concept-event-tee-orange.png": "event-tee-orange",
+    "generated/concept-trackpants-navy-flat.png": "trackpants-navy",
+    "generated/concept-cycling-jersey-teal.png": "cycling-jersey-teal",
+    "generated/concept-sublimation-wave.png": "sublimation-wave",
+    "generated/concept-team-jersey-front-back.png": "team-jersey",
 }
 # Crops that remove marked garments from an otherwise usable image:
 # (source, (left, top, right, bottom), output base name)
@@ -69,8 +80,8 @@ for src, box, name in CROPS:
         save(im, name, w)
 
 # Hero frames: graded, wide crops
-HERO = ["product-sublimation.jpg", "product-corporate-seperate.jpg",
-        "product-gym.jpg", "product-marathon.jpg"]
+HERO = ["generated/concept-sublimation-wave.png", "generated/concept-polo-navy-34.png",
+        "generated/concept-hoodie-charcoal-34.png", "generated/concept-cycling-jersey-teal.png"]
 for i, src in enumerate(HERO, 1):
     im = Image.open(SRC / src).convert("RGB")
     # crop to 16:10-ish around centre
