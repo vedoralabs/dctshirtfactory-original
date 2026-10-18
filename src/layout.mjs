@@ -1,4 +1,4 @@
-import { site, products } from "./data.mjs";
+import { site, products, addresses } from "./data.mjs";
 import { esc, waLink, icon, imgSize } from "./util.mjs";
 
 export const NAV = [
@@ -102,7 +102,9 @@ export function footer() {
       <a href="tel:${site.phoneHref}">${icon.phone} Call ${site.phoneDisplay}</a>
       <a href="mailto:${site.email}">${icon.mail} ${site.email}</a>
       <a href="${site.instagram}" target="_blank" rel="noopener">${icon.instagram} ${site.instagramHandle}</a>
-      <a href="${site.mapsUrl}" target="_blank" rel="noopener">${icon.pin} ${site.locality}, ${site.region}</a>
+      ${addresses
+        .map((a) => `<p class="ftr__addr">${icon.pin}<span><strong>${esc(a.name)}</strong><br>${a.lines.map(esc).join("<br>")}</span></p>`)
+        .join("")}
       <a class="ftr__quote" href="/quote">Request a custom quote ${icon.arrow}</a>
     </div>
   </div>

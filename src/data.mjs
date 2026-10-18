@@ -14,7 +14,7 @@
 
 export const site = {
   name: "D Creations",
-  altName: "DCT Shirt Factory",
+  altName: "DC T-Shirt Factory", // as printed in the owner's catalogue
   // Intended production domain. Not yet pointed at this build, so pages are noindex.
   url: "https://dctshirtfactory.co.in",
   indexable: false,
@@ -28,15 +28,24 @@ export const site = {
   locality: "Mangalore",
   region: "Karnataka",
   locations: "Mangalore & Tiruppur",
+  // NOTE: the owner's catalogue prints "dcreationstripur@gmail.com" (t-r-i-p-u-r).
+  // Kept as confirmed by the user on 2026-10-18 until the owner settles which is right.
+  email: "dcreationstirpur@gmail.com",
+  // Mangalore address from the owner's printed catalogue.
+  street: "1st Floor, Jean Complex, Kankanady",
+  postalCode: "575002",
   // Not yet confirmed by the owner → not shown anywhere:
-  email: "dcreationstirpur@gmail.com", // confirmed by the user 2026-10-18
-  street: null,
-  postalCode: null,
   hours: null,
   gstin: null,
 };
 
-export const waGreeting = "Hello D Creations (DCT Shirt Factory), I would like a quotation.";
+// Both units, exactly as printed in the owner's catalogue (Oct 2026).
+export const addresses = [
+  { name: "DC T-Shirt Factory", city: "Mangalore", lines: ["1st Floor, Jean Complex, Kankanady", "Mangalore, Karnataka 575002"], maps: true },
+  { name: "D Creations", city: "Tiruppur", lines: ["8/29J, A.V.P Layout, Gandhi Nagar PO", "Chettipalayam, Tiruppur, Tamil Nadu 641603"] },
+];
+
+export const waGreeting = "Hello D Creations (DC T-Shirt Factory), I would like a quotation.";
 
 // Sizes and customisation methods come from the owner's project brief.
 export const sizes = "Kids to 5XL";
@@ -78,7 +87,7 @@ export const fabrics = [
     usedFor: "Hoodies, sweatshirts, jackets" },
   { key: "matte", name: "Matte-finish knit", supplierName: "Mars", texture: "matte", tint: "#40364f",
     feel: "A knit with a flat, non-shiny finish.",
-    usedFor: "School uniforms, everyday tees" },
+    usedFor: "School uniforms, corporate tees, everyday tees" },
   { key: "dot-textured", name: "Dot-textured knit", supplierName: "Dotknit", texture: "dots", tint: "#2f5a2f",
     feel: "A knit with a fine dotted surface texture.",
     usedFor: "Event tees, sports days, sublimation jerseys" },
@@ -131,7 +140,7 @@ export const products = [
     teaser: "Polos and tees for teams, events and promotions.",
     pitch: "Polos and branded tees for staff uniforms, events and promotions, with woven labels, embroidery and printed branding.",
     images: ["polo-navy", "corporate-black"],
-    fabrics: ["pique", "smooth-finish", "open-mesh", "matty"],
+    fabrics: ["pique", "matte", "smooth-finish", "open-mesh", "matty"],
     branding: ["embroidery", "screen", "dtf"],
     useCases: ["Corporate uniforms", "Promotional merch", "Retail-ready branded apparel"],
     audience: ["corporates", "events"],
@@ -225,8 +234,8 @@ export const steps = [
 
 // From the owner's original website. Source/permission still to be confirmed
 // (see OWNER-INPUTS.md). Shown without ratings or "verified" labels.
+// A fourth review ("…in affordable price") is left out: no price wording on the site.
 export const testimonials = [
-  { name: "Naveen R Goshal", text: "Super quality cloth in affordable price." },
   { name: "Mahesh", text: "Good quality clothes, well maintained office, and I liked their service when customers walk into the office." },
   { name: "Sathwik Shetty", text: "Great quality jersey! The material feels premium, the print is sharp, and the fit is perfect. Really happy with the final product. Recommended!" },
   { name: "Prajwal Pai", text: "Good quality fabrics and in time delivery." },
@@ -269,10 +278,11 @@ export const faqs = [
 export const pending = [
   "Quote destination: WhatsApp only, or also email/CRM? (currently WhatsApp)",
   "Production domain + redirect plan (site is noindex until then)",
-  "Legal trading name, GSTIN, street address, PIN, business hours",
+  "Email spelling: catalogue says dcreationstripur@, site uses dcreationstirpur@",
+  "GSTIN, business hours",
   "Fabric names/specs verified against physical samples (and macro photos)",
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
-  "Source + permission for the 4 testimonials",
+  "Source + permission for the 3 testimonials",
   "Approved Instagram posts/Reels to feature",
   "Named clients with written approval (if any)",
   "Real product, process and factory photos/video",

@@ -8,7 +8,7 @@ const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
 
 const RULES = [
   ["currency symbol", /₹|\bINR\b|\bRs\.?\s?\d/],
-  ["price wording", /\bprice[ -]?(tier|range|from|list)\b|\bfrom ₹|starting (at|from)|per[- ]piece|budget[- ]friendly|mid-range|slab-wise|priceRange|"price"|lowPrice|AggregateOffer|"offers"/i],
+  ["price wording", /\bprice[ -]?(tier|range|from|list)\b|\bfrom ₹|starting (at|from)|per[- ]piece|budget[- ]friendly|affordable|cheap|lowest|best price|discount|wholesale rate|mid-range|slab-wise|priceRange|"price"|lowPrice|AggregateOffer|"offers"/i],
   ["brand-like fabric name", /lacoste|lycra/i],
   ["placeholder text", /\[(PHOTO|VIDEO|HERO VIDEO|MACRO PHOTO)|XXXX|\bplaceholder\b(?!=)|to be confirmed|\btbc\b|lorem/i],
   ["unverified claim", /GSTIN|GST invoice|verified customer|google reviews|\b\d{2,3},000\+?\s*(pieces|pcs)|happy clients|years of making|pieces \/ month/i],

@@ -1,6 +1,6 @@
 import {
   site, products, fabrics, audiences, benefits, steps, testimonials, concepts,
-  clients, instagramPosts, faqs, printMethods, sizes,
+  clients, instagramPosts, faqs, printMethods, sizes, addresses,
 } from "./data.mjs";
 import { esc, waLink, img, icon, audienceIcon } from "./util.mjs";
 
@@ -291,7 +291,9 @@ export function aboutStory() {
     <div class="bts__copy" data-reveal>
       <p class="eyebrow">About us</p>
       <h2 class="display" id="bts-title" data-split>Made in Mangalore <em>&amp; Tiruppur.</em></h2>
-      <p class="lead">D Creations (DCT Shirt Factory) makes custom T-shirts and apparel: school uniforms, sportswear, corporate polos, hoodies and sublimation jerseys. We combine skilled craftsmanship with modern production techniques to deliver apparel that lasts. Small runs and bulk orders welcome.</p>
+      <p class="lead">D Creations (DC T-Shirt Factory) manufactures quality T-shirts and custom apparel: school uniforms, sportswear, corporate polos, hoodies, varsity jackets and sublimation jerseys. With our own manufacturing setup, we keep full control over quality.</p>
+      <p>As a true custom apparel company, we welcome every customisation request, however unique, and work to your requirement and timeline from concept to delivery. Small runs and bulk orders welcome.</p>
+      <p class="about__units">Kankanady, Mangalore · Chettipalayam, Tiruppur. <a href="/contact">See both addresses</a></p>
     </div>
     <ul class="about__pillars" data-reveal>
       <li><h3>Quality first</h3><p>Checks at every stage: fabric, stitching, finishing and packing.</p></li>
@@ -434,7 +436,7 @@ export function quote() {
       <form class="qb qb--basic" action="https://wa.me/${site.whatsapp}" method="get" target="_blank">
         <p class="qb__q">Send your enquiry on WhatsApp</p>
         <label class="field"><span>Edit the message, then continue in WhatsApp</span>
-          <textarea name="text" rows="9">Hello D Creations (DCT Shirt Factory), I would like a quotation.
+          <textarea name="text" rows="9">Hello D Creations (DC T-Shirt Factory), I would like a quotation.
 Product:
 Quantity:
 Fabric (optional):
@@ -472,7 +474,7 @@ export function faq(items = faqs, more = "") {
       <p class="eyebrow">FAQ</p>
       <h2 class="display" id="faq-title" data-split>Good questions. <em>Straight answers.</em></h2>
       <p class="lead">Something else on your mind? Ask us on WhatsApp.</p>
-      <a class="btn btn--line" href="${waLink("Hello D Creations (DCT Shirt Factory), I have a question: ")}" target="_blank" rel="noopener">${icon.whatsapp} Ask a question</a>
+      <a class="btn btn--line" href="${waLink("Hello D Creations (DC T-Shirt Factory), I have a question: ")}" target="_blank" rel="noopener">${icon.whatsapp} Ask a question</a>
     </header>
     <div>${faqList(items)}${more}</div>
   </div>
@@ -506,7 +508,14 @@ export function contact() {
         <li><a href="tel:${site.phoneHref}"><span class="contact__ico">${icon.phone}</span><span><small>Call</small>${site.phoneDisplay}</span></a></li>
         <li><a href="mailto:${site.email}"><span class="contact__ico">${icon.mail}</span><span><small>Email</small>${site.email}</span></a></li>
         <li><a href="${site.instagram}" target="_blank" rel="noopener"><span class="contact__ico">${icon.instagram}</span><span><small>Instagram</small>${site.instagramHandle}</span></a></li>
-        <li><a href="${site.mapsUrl}" target="_blank" rel="noopener"><span class="contact__ico">${icon.pin}</span><span><small>Location</small>${site.locality}, ${site.region}: open in Google Maps</span></a></li>
+        ${addresses
+          .map((a) => {
+            const body = `<span class="contact__ico">${icon.pin}</span><span><small>${esc(a.city)} · ${esc(a.name)}</small><address>${a.lines.map(esc).join("<br>")}</address>${a.maps ? `<span class="contact__go">Open in Google Maps</span>` : ""}</span>`;
+            return a.maps
+              ? `<li><a href="${site.mapsUrl}" target="_blank" rel="noopener">${body}</a></li>`
+              : `<li><div>${body}</div></li>`;
+          })
+          .join("")}
       </ul>
       <p class="contact__more"><a class="btn btn--accent" href="/quote">Request a custom quote ${icon.arrow}</a></p>
     </div>

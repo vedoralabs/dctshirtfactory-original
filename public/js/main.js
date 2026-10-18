@@ -304,7 +304,7 @@
       const date = value("date") ? new Date(value("date")).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "";
       const qty = value("qtyExact") ? `${value("qtyExact")} pieces` : value("qty");
       const lines = [
-        "Hello D Creations (DCT Shirt Factory), I would like a quotation.",
+        "Hello D Creations (DC T-Shirt Factory), I would like a quotation.",
         `Product: ${productName() || "-"}`,
         `Quantity: ${qty || "Not sure yet"}`,
         value("fabric") && `Fabric: ${value("fabric")}`,

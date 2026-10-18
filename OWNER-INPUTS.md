@@ -3,10 +3,11 @@
 Under the owner's brief (16 Oct 2026), anything unverified is **left off the site**. It isn't shown as a placeholder. Each item below unlocks content once confirmed. Fill in the matching field in `src/data.mjs` and remove the line from `pending` there. `npm run build:strict` fails until `pending` is empty.
 
 ## 1. Business identity
-- [ ] Legal trading name (D Creations / DCT Shirt Factory: which goes on the site?)
+- [x] Trading names from the catalogue: DC T-Shirt Factory (Mangalore) and D Creations (Tiruppur)
 - [ ] GSTIN. The site no longer mentions GST at all.
-- [x] Email: dcreationstirpur@gmail.com (confirmed 18 Oct 2026, live on the site)
-- [ ] Street address + PIN, business hours (currently: WhatsApp, phone, email, Instagram, Maps link)
+- [ ] **Email spelling conflict:** the site uses dcreationstirpur@gmail.com (confirmed 18 Oct 2026), but the printed catalogue says **dcreationstripur@gmail.com**. Which one receives mail?
+- [x] Addresses from the catalogue, now on the contact page and footer: 1st Floor, Jean Complex, Kankanady, Mangalore 575002, and 8/29J, A.V.P Layout, Gandhi Nagar PO, Chettipalayam, Tiruppur 641603
+- [ ] Business hours
 - [ ] Which steps are in-house vs outsourced, and what happens in Mangalore vs Tiruppur (the site now just says "Mangalore & Tiruppur", as the original site did)
 - [ ] Production domain. dctshirtfactory.co.in still serves the old site. All pages are **noindex** until the domain is pointed here (`site.indexable` in `src/data.mjs`).
 
@@ -32,7 +33,9 @@ For each fabric: physical sample → confirm the public name, then supply compos
 | Open mesh knit | Airtex | ☐ |
 | Matty-weave knit | PC Matty | ☐ |
 
-Old-site fabric names **not shown** because their meaning is unclear (confirm what they are): Jacquard, Spandex, Hydra, Spectra, NJS, Nirmal, Loopnet, Superpoly, Cuba 300.
+Old-site fabric names **not shown** because their meaning is unclear (confirm what they are): Jacquard, Spandex, Hydra, Spectra, NJS, Nirmal, Loopnet, Superpoly, Cuba 300, PP, Fine (from the catalogue). "Adidas Selina" in the catalogue is a brand name and will never be shown.
+
+Per-product fabric lists were checked against the catalogue (Oct 2026); Corporate now also lists the matte-finish knit ("Mars 200").
 
 ## 4. Services & claims
 - [ ] Customisation methods actually offered: screen printing, DTF, sublimation, embroidery, patches (from the project brief; please confirm each)
@@ -42,7 +45,7 @@ Old-site fabric names **not shown** because their meaning is unclear (confirm wh
 - [ ] If you want them shown: MOQ, turnaround, sample charges, payment terms, delivery coverage, years in business, capacity, order counts. Each needs evidence. **Prices will never be shown.**
 
 ## 5. Proof
-- [ ] The 4 testimonials (Naveen R Goshal, Mahesh, Sathwik Shetty, Prajwal Pai): where they came from (Google? in person?) and permission to show them. The star ratings and "Verified customer" labels have been removed.
+- [ ] The 3 testimonials shown (Naveen R Goshal's "affordable price" review was removed: no price wording) (Mahesh, Sathwik Shetty, Prajwal Pai): where they came from (Google? in person?) and permission to show them. The star ratings and "Verified customer" labels have been removed.
 - [ ] Google rating / review count. Removed. The site links to the Google Maps listing only.
 - [ ] Named clients for "Our clients & collaborations": the name, the work done, written approval (who, when) and the logo file. The section stays hidden until at least one is approved.
 - [ ] Instagram posts/Reels to feature. Candidates found on the public profile (not yet reviewed for faces, logos or music):

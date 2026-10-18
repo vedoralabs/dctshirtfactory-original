@@ -92,7 +92,7 @@ export const pages = [
   {
     path: "/about",
     name: "About us",
-    title: "About D Creations (DCT Shirt Factory) | Mangalore & Tiruppur",
+    title: "About D Creations (DC T-Shirt Factory) | Mangalore & Tiruppur",
     description: "D Creations makes custom T-shirts and apparel: school uniforms, sportswear, corporate polos, hoodies and sublimation jerseys. Small runs and bulk orders welcome.",
     body: () => promote(aboutStory()) + why() + instagram() + ctaBand(),
   },

@@ -910,3 +910,11 @@ html:not(.js) [data-qb] { display: none; }
 
 /* 5 process steps on desktop (no photo slots) */
 @media (min-width: 1000px) { .how:not(.is-h) .how__track { grid-template-columns: repeat(5, 1fr); } .how.is-h .how__step { width: min(26rem, 30vw); justify-content: flex-end; min-height: 22rem; } }
+
+/* Addresses (from the owner's catalogue) */
+.contact__list address { font-style: normal; line-height: 1.45; }
+.contact__go { display: block; margin-top: 0.25rem; font-size: var(--fs-xs); color: var(--c-accent); }
+.ftr__col p.ftr__addr { align-items: flex-start; line-height: 1.45; font-size: var(--fs-sm, 0.875rem); padding: 0.25rem 0; }
+.ftr__addr svg { flex: none; margin-top: 0.2rem; }
+.ftr__addr strong { color: var(--c-ink, #f3eee6); font-weight: 600; }
+.about__units { margin-top: var(--s-4); color: var(--c-muted); font-size: var(--fs-sm, 0.875rem); }
