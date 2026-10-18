@@ -306,7 +306,7 @@ export const clients = [
     name: "Balipu Run Club",
     place: "Mangalore",
     type: "Run club",
-    work: "Custom apparel for the club's runs.",
+    work: "Running T-shirts for the club.",
     when: null,
     product: "marathon-tshirt",
     approvedBy: "Vedora Labs, confirmed as a client on the owner's behalf",

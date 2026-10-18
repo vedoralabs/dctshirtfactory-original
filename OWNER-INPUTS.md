@@ -53,7 +53,7 @@ Per-product fabric lists were checked against the catalogue (Oct 2026); Corporat
   - Mangaluru Beach Festival Marathon: official jersey (23 Dec 2025)
   - Udupi Marathon: official jerseys, 7 Dec 2025 (7 Dec 2025)
   Owner to confirm these, add older clients not visible on Instagram, and ideally get each organiser's written OK (and logo file, if logos are wanted).
-  - Balipu Run Club (Mangalore): added 18 Oct 2026 on Vedora Labs' confirmation that they are a client. Owner to confirm what was made (the site just says "custom apparel for the club's runs"). Their Reels are @balipuclub's content, so none is embedded.
+  - Balipu Run Club (Mangalore): added 18 Oct 2026 on Vedora Labs' confirmation that they are a client. Work: running T-shirts (confirmed by Vedora Labs). Their Reels are @balipuclub's content, so none is embedded.
 - [ ] Instagram posts/Reels to feature. Candidates found on the public profile (not yet reviewed for faces, logos or music):
   - https://www.instagram.com/dctshirtfactory/reel/DXpKLNeiWF1/ (27 Apr 2026)
   - https://www.instagram.com/dctshirtfactory/p/DTjnk7kks_r/ (15 Jan 2026)
