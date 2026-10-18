@@ -87,7 +87,14 @@ export const pages = [
     name: "Gallery",
     title: "Gallery: Custom Apparel Design Concepts | D Creations",
     description: "Design concepts showing the custom T-shirts, polos, uniforms, jerseys and hoodies D Creations makes. See real work on Instagram.",
-    body: () => promote(work()) + clientsSection() + instagram() + ctaBand(),
+    body: () => promote(work()) + instagram() + ctaBand(),
+  },
+  {
+    path: "/clients",
+    name: "Clients",
+    title: "Clients & Collaborations: Event Jerseys & Tees | D Creations",
+    description: "Hackfest at NMAMIT, NITTE Walkathon, the Mangaluru Beach Festival Marathon and the Udupi Marathon: events that have worn kits made by DC T-Shirt Factory.",
+    body: () => promote(clientsSection({ full: true })) + ctaBand(),
   },
   {
     path: "/about",

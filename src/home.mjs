@@ -243,19 +243,57 @@ export function work() {
 }
 
 /** Shown only when the owner has approved named clients in writing. */
-export function clientsSection() {
-  const ok = clients.filter((c) => c.name && c.work && c.approvedBy && c.approvedOn);
+const igPost = /^https:\/\/www\.instagram\.com\/dctshirtfactory\/(p|reel)\//;
+
+/** Clients that pass the gate: owner's own public post(s) naming them, or written approval. */
+export const shownClients = () =>
+  clients.filter(
+    (c) => c.name && c.work && ((c.sources || []).some((s) => igPost.test(s.url)) || (c.approvedBy && c.approvedOn))
+  );
+
+/**
+ * Clients & collaborations. `full` (the /clients page) adds the owner's Instagram
+ * posts as click-to-load embeds; the homepage version links through to it.
+ */
+export function clientsSection({ full = false } = {}) {
+  const ok = shownClients();
   if (!ok.length) return "";
+  const card = (c, i) => {
+    const sources = (c.sources || []).filter((s) => igPost.test(s.url));
+    const meta = [c.type, c.place, c.when].filter(Boolean).map(esc).join(" · ");
+    return `
+      <li class="client" data-reveal>
+        <span class="client__n" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+        <p class="client__meta">${meta}</p>
+        <h3 class="client__name">${esc(c.name)}</h3>
+        <p class="client__work">${esc(c.work)}</p>
+        ${
+          full && sources.length
+            ? `<div class="client__posts">${sources
+                .map(
+                  (s) => `<div class="ig__item" data-ig="${esc(s.url)}"><button type="button" class="ig__load" data-ig-load>${icon.instagram}<span>Our post, ${esc(s.date)}</span><small>Loads content from Instagram</small></button><a class="ig__fallback" href="${esc(s.url)}" target="_blank" rel="noopener">Open on Instagram ${icon.arrow}</a></div>`
+                )
+                .join("")}</div>`
+            : sources.length
+            ? `<a class="client__src" href="${esc(sources[0].url)}" target="_blank" rel="noopener">${icon.instagram} See the post</a>`
+            : ""
+        }
+        ${full && c.product ? `<a class="client__ask" href="/quote?product=${esc(c.product)}">Plan a similar order ${icon.arrow}</a>` : ""}
+      </li>`;
+  };
   return `
-<section class="section clients" aria-labelledby="clients-title">
+<section class="section clients${full ? " clients--full" : ""}" id="clients" aria-labelledby="clients-title">
   <div class="wrap">
-    <header class="sec-head" data-reveal>
-      <p class="eyebrow">Our clients &amp; collaborations</p>
-      <h2 class="display display--sm" id="clients-title">Teams we've worked with</h2>
+    <header class="sec-head${full ? "" : " sec-head--row"}" data-reveal>
+      <div>
+        <p class="eyebrow">Our clients &amp; collaborations</p>
+        <h2 class="display${full ? "" : " display--sm"}" id="clients-title" data-split>Made for <em>events people run in.</em></h2>
+        <p class="lead">Colleges, walkathons and marathons that have worn kits made by DC T-Shirt Factory, as shared on our Instagram.</p>
+      </div>
+      ${full ? "" : `<a class="btn btn--line" href="/clients">All clients ${icon.arrow}</a>`}
     </header>
-    <ul class="clients__grid">
-      ${ok.map((c) => `<li class="client">${c.logo ? `<img src="/img/${c.logo}" alt="${esc(c.name)}" loading="lazy" height="48">` : `<strong>${esc(c.name)}</strong>`}<span>${esc(c.work)}</span></li>`).join("")}
-    </ul>
+    <ol class="clients__grid">${ok.map(card).join("")}</ol>
+    ${full ? `<p class="clients__note">Event names are listed as described in our own Instagram posts. Logos and event photos belong to their owners and are not reproduced here.</p>` : ""}
   </div>
 </section>`;
 }

@@ -47,7 +47,13 @@ Per-product fabric lists were checked against the catalogue (Oct 2026); Corporat
 ## 5. Proof
 - [ ] The 3 testimonials shown (Naveen R Goshal's "affordable price" review was removed: no price wording) (Mahesh, Sathwik Shetty, Prajwal Pai): where they came from (Google? in person?) and permission to show them. The star ratings and "Verified customer" labels have been removed.
 - [ ] Google rating / review count. Removed. The site links to the Google Maps listing only.
-- [ ] Named clients for "Our clients & collaborations": the name, the work done, written approval (who, when) and the logo file. The section stays hidden until at least one is approved.
+- [ ] **Clients page (/clients, live 18 Oct 2026).** Built from the owner's own public Instagram captions, text only, no logos or event photos copied:
+  - Hackfest, NMAM Institute of Technology: official event T-shirts (posts 4 Dec 2025, 27 Apr 2026)
+  - NITTE Walkathon 2025: jerseys and caps (29 Dec 2025)
+  - Mangaluru Beach Festival Marathon: official jersey (23 Dec 2025)
+  - Udupi Marathon: official jerseys, 7 Dec 2025 (7 Dec 2025)
+  Owner to confirm these, add older clients not visible on Instagram, and ideally get each organiser's written OK (and logo file, if logos are wanted).
+  - Not listed: Balipu Run Club (Mangalore) appears in collab Reels on the profile, but no caption says DC made their kit. Confirm if they are a client.
 - [ ] Instagram posts/Reels to feature. Candidates found on the public profile (not yet reviewed for faces, logos or music):
   - https://www.instagram.com/dctshirtfactory/reel/DXpKLNeiWF1/ (27 Apr 2026)
   - https://www.instagram.com/dctshirtfactory/p/DTjnk7kks_r/ (15 Jan 2026)

@@ -255,10 +255,53 @@ export const concepts = [
   { img: "sublimation-art", cat: "sublimation-tshirt", title: "Illustrated print tee" },
 ];
 
-// Permission-gated. A client appears only when every field is filled in,
-// backed by the owner's written approval (see docs/content-rights-register.csv).
-// e.g. { name: "…", work: "Staff polos", logo: "clients/x.svg", approvedBy: "…", approvedOn: "2026-…" }
-export const clients = [];
+// Gated. A client appears only when it has a name, the work done, and either
+//  - `sources`: the owner's own public @dctshirtfactory posts that name the client, or
+//  - the owner's written approval (`approvedBy` + `approvedOn`).
+// Text only, worded as in the owner's caption. No client logos or event photos are
+// copied onto the site; the owner's posts load as official Instagram embeds on click.
+// Clients' own written OK is still recommended (see OWNER-INPUTS.md §5).
+export const clients = [
+  {
+    name: "Hackfest, NMAM Institute of Technology",
+    place: "Nitte",
+    type: "College tech event",
+    work: "Official event T-shirts: custom navy and olive tees for the 50-hour hackathon.",
+    when: "2025",
+    product: "marathon-tshirt",
+    sources: [
+      { url: "https://www.instagram.com/dctshirtfactory/p/DR2M0ewksRO/", date: "4 Dec 2025" },
+      { url: "https://www.instagram.com/dctshirtfactory/reel/DXpKLNeiWF1/", date: "27 Apr 2026" },
+    ],
+  },
+  {
+    name: "NITTE Walkathon 2025",
+    place: null,
+    type: "Walkathon",
+    work: "Custom jerseys and caps for the walk's “Protect Our Oceans” theme.",
+    when: "2025",
+    product: "marathon-tshirt",
+    sources: [{ url: "https://www.instagram.com/dctshirtfactory/p/DS2qn9MkpCf/", date: "29 Dec 2025" }],
+  },
+  {
+    name: "Mangaluru Beach Festival Marathon",
+    place: "Mangaluru",
+    type: "Marathon",
+    work: "The official marathon jersey.",
+    when: "Dec 2025",
+    product: "marathon-tshirt",
+    sources: [{ url: "https://www.instagram.com/dctshirtfactory/reel/DSnKTuNkvu3/", date: "23 Dec 2025" }],
+  },
+  {
+    name: "Udupi Marathon",
+    place: "Udupi",
+    type: "Marathon",
+    work: "The official blue and white jerseys for the 7 December run.",
+    when: "Dec 2025",
+    product: "marathon-tshirt",
+    sources: [{ url: "https://www.instagram.com/dctshirtfactory/p/DR_PKHGknNX/", date: "7 Dec 2025" }],
+  },
+];
 
 // Owner-selected Instagram posts/Reels (official URLs). Empty → a profile link only.
 // Candidates found on the public profile (awaiting owner selection) are listed in OWNER-INPUTS.md.
@@ -284,7 +327,7 @@ export const pending = [
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
   "Source + permission for the 3 testimonials",
   "Approved Instagram posts/Reels to feature",
-  "Named clients with written approval (if any)",
+  "Clients page: owner to confirm the 4 events listed from Instagram, and any older clients",
   "Real product, process and factory photos/video",
   "FAQ answers and benefit statements sign-off",
   "Privacy notice sign-off",

@@ -5,6 +5,7 @@ export const NAV = [
   ["Products", "/#products"],
   ["Fabrics", "/fabrics"],
   ["Process", "/#process"],
+  ["Clients", "/clients"],
   ["Gallery", "/work"],
   ["About", "/about"],
   ["FAQ", "/faq"],
