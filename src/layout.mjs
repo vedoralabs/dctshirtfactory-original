@@ -58,7 +58,10 @@ function header(current) {
     <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/quote">Get a quote</a>
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu" data-burger><span></span><span></span></button>
   </div>
-  <div class="mnav" id="mnav" data-mnav hidden>
+</header>
+<!-- Sibling of the header, not inside it: the header's backdrop-filter would
+     otherwise become the containing block and clip this fixed overlay. -->
+<div class="mnav" id="mnav" data-mnav hidden>
     <nav aria-label="Mobile">
       ${NAV.map(([l, h], i) => `<a href="${h}" style="--i:${i}"${h === current ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
       <a href="/quote" style="--i:${NAV.length}" class="mnav__quote">Get a quote</a>
@@ -67,8 +70,7 @@ function header(current) {
       <a class="btn btn--accent" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp us</a>
       <a class="btn btn--ghost" href="tel:${site.phoneHref}">${icon.phone} ${site.phoneDisplay}</a>
     </div>
-  </div>
-</header>`;
+</div>`;
 }
 
 export function footer() {
