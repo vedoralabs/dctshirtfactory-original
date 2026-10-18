@@ -98,6 +98,7 @@ export function footer() {
       <h2>Contact</h2>
       <a href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp ${site.phoneDisplay}</a>
       <a href="tel:${site.phoneHref}">${icon.phone} Call ${site.phoneDisplay}</a>
+      <a href="mailto:${site.email}">${icon.mail} ${site.email}</a>
       <a href="${site.instagram}" target="_blank" rel="noopener">${icon.instagram} ${site.instagramHandle}</a>
       <a href="${site.mapsUrl}" target="_blank" rel="noopener">${icon.pin} ${site.locality}, ${site.region}</a>
       <a class="ftr__quote" href="/quote">Request a custom quote ${icon.arrow}</a>

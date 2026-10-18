@@ -351,7 +351,7 @@ export function quote() {
         <li>${icon.check} Not sure about something? Skip it</li>
         <li>${icon.check} Artwork can be attached in WhatsApp</li>
       </ul>
-      <p class="quote__alt">Prefer to talk? <a href="tel:${site.phoneHref}">Call ${site.phoneDisplay}</a></p>
+      <p class="quote__alt">Prefer to talk? <a href="tel:${site.phoneHref}">Call ${site.phoneDisplay}</a> or email <a href="mailto:${site.email}?subject=${encodeURIComponent("Quotation request")}">${site.email}</a></p>
     </header>
 
     <form class="qb" data-qb novalidate>
@@ -504,6 +504,7 @@ export function contact() {
       <ul class="contact__list">
         <li><a href="${waLink()}" target="_blank" rel="noopener"><span class="contact__ico">${icon.whatsapp}</span><span><small>WhatsApp</small>${site.phoneDisplay}</span></a></li>
         <li><a href="tel:${site.phoneHref}"><span class="contact__ico">${icon.phone}</span><span><small>Call</small>${site.phoneDisplay}</span></a></li>
+        <li><a href="mailto:${site.email}"><span class="contact__ico">${icon.mail}</span><span><small>Email</small>${site.email}</span></a></li>
         <li><a href="${site.instagram}" target="_blank" rel="noopener"><span class="contact__ico">${icon.instagram}</span><span><small>Instagram</small>${site.instagramHandle}</span></a></li>
         <li><a href="${site.mapsUrl}" target="_blank" rel="noopener"><span class="contact__ico">${icon.pin}</span><span><small>Location</small>${site.locality}, ${site.region}: open in Google Maps</span></a></li>
       </ul>

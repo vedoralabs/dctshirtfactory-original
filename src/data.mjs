@@ -29,7 +29,7 @@ export const site = {
   region: "Karnataka",
   locations: "Mangalore & Tiruppur",
   // Not yet confirmed by the owner → not shown anywhere:
-  email: null,
+  email: "dcreationstirpur@gmail.com", // confirmed by the user 2026-10-18
   street: null,
   postalCode: null,
   hours: null,
@@ -269,7 +269,7 @@ export const faqs = [
 export const pending = [
   "Quote destination: WhatsApp only, or also email/CRM? (currently WhatsApp)",
   "Production domain + redirect plan (site is noindex until then)",
-  "Legal trading name, GSTIN, street address, PIN, email, business hours",
+  "Legal trading name, GSTIN, street address, PIN, business hours",
   "Fabric names/specs verified against physical samples (and macro photos)",
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
   "Source + permission for the 4 testimonials",

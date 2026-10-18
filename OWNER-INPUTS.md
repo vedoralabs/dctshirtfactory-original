@@ -5,7 +5,8 @@ Under the owner's brief (16 Oct 2026), anything unverified is **left off the sit
 ## 1. Business identity
 - [ ] Legal trading name (D Creations / DCT Shirt Factory: which goes on the site?)
 - [ ] GSTIN. The site no longer mentions GST at all.
-- [ ] Street address + PIN, email, business hours (currently: WhatsApp, phone, Instagram, Maps link only)
+- [x] Email: dcreationstirpur@gmail.com (confirmed 18 Oct 2026, live on the site)
+- [ ] Street address + PIN, business hours (currently: WhatsApp, phone, email, Instagram, Maps link)
 - [ ] Which steps are in-house vs outsourced, and what happens in Mangalore vs Tiruppur (the site now just says "Mangalore & Tiruppur", as the original site did)
 - [ ] Production domain. dctshirtfactory.co.in still serves the old site. All pages are **noindex** until the domain is pointed here (`site.indexable` in `src/data.mjs`).
 

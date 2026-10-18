@@ -68,7 +68,7 @@ function privacy() {
     <p>This website is hosted by Vercel, which may keep standard technical logs (such as IP address and pages requested) to operate and secure the service. This site uses no analytics or advertising trackers.</p>
 
     <h2>Your choices</h2>
-    <p>To ask about, correct or delete information you've sent us, contact us on WhatsApp or call <a href="tel:${site.phoneHref}">${site.phoneDisplay}</a>.</p>
+    <p>To ask about, correct or delete information you've sent us, contact us on WhatsApp, call <a href="tel:${site.phoneHref}">${site.phoneDisplay}</a> or email <a href="mailto:${site.email}">${site.email}</a>.</p>
   </div>
 </section>`;
 }
