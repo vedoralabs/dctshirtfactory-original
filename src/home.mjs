@@ -288,12 +288,12 @@ export function clientsSection({ full = false } = {}) {
       <div>
         <p class="eyebrow">Our clients &amp; collaborations</p>
         <h2 class="display${full ? "" : " display--sm"}" id="clients-title" data-split>Made for <em>events people run in.</em></h2>
-        <p class="lead">Colleges, walkathons and marathons that have worn kits made by DC T-Shirt Factory, as shared on our Instagram.</p>
+        <p class="lead">Colleges, walkathons, marathons and run clubs that have worn kits made by DC T-Shirt Factory.</p>
       </div>
       ${full ? "" : `<a class="btn btn--line" href="/clients">All clients ${icon.arrow}</a>`}
     </header>
     <ol class="clients__grid">${ok.map(card).join("")}</ol>
-    ${full ? `<p class="clients__note">Event names are listed as described in our own Instagram posts. Logos and event photos belong to their owners and are not reproduced here.</p>` : ""}
+    ${full ? `<p class="clients__note">Clients are listed as described in our own Instagram posts or confirmed by us. Logos and event photos belong to their owners and are not reproduced here.</p>` : ""}
   </div>
 </section>`;
 }

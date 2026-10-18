@@ -93,7 +93,7 @@ export const pages = [
     path: "/clients",
     name: "Clients",
     title: "Clients & Collaborations: Event Jerseys & Tees | D Creations",
-    description: "Hackfest at NMAMIT, NITTE Walkathon, the Mangaluru Beach Festival Marathon and the Udupi Marathon: events that have worn kits made by DC T-Shirt Factory.",
+    description: "Hackfest at NMAMIT, NITTE Walkathon, the Mangaluru Beach Festival Marathon, the Udupi Marathon and Balipu Run Club: events and clubs that have worn kits made by DC T-Shirt Factory.",
     body: () => promote(clientsSection({ full: true })) + ctaBand(),
   },
   {

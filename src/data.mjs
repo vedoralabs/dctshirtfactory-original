@@ -301,6 +301,17 @@ export const clients = [
     product: "marathon-tshirt",
     sources: [{ url: "https://www.instagram.com/dctshirtfactory/p/DR_PKHGknNX/", date: "7 Dec 2025" }],
   },
+  {
+    // Their Reels on the profile are @balipuclub's own content, so none is embedded here.
+    name: "Balipu Run Club",
+    place: "Mangalore",
+    type: "Run club",
+    work: "Custom apparel for the club's runs.",
+    when: null,
+    product: "marathon-tshirt",
+    approvedBy: "Vedora Labs, confirmed as a client on the owner's behalf",
+    approvedOn: "2026-10-18",
+  },
 ];
 
 // Owner-selected Instagram posts/Reels (official URLs). Empty → a profile link only.
