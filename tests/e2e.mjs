@@ -75,7 +75,7 @@ for (const w of WIDTHS) {
 }
 
 // ---- entry sequence ----
-await check("intro: first visit plays the title sequence, nav reachable, settles by ~3.8 s", async () => {
+await check("intro: first visit plays the title sequence, nav reachable, settles by ~4.8 s", async () => {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const p = await open(ctx, "/", { wait: "commit" });
   await p.waitForSelector(".hero__title");
@@ -84,7 +84,7 @@ await check("intro: first visit plays the title sequence, nav reachable, settles
   ok(await p.isVisible(".intro"), "title sequence overlay not shown");
   // any tap ends it, so the nav is one interaction away; the link itself stays in the DOM
   ok(await p.$(".hdr__nav a[href='/clothing']"), "nav missing");
-  await p.waitForTimeout(3900);
+  await p.waitForTimeout(4900);
   const op = await p.$eval(".hero__ctas", (e) => getComputedStyle(e).opacity);
   ok(op === "1", `CTAs opacity ${op} after the sequence`);
   ok(await p.evaluate(() => document.documentElement.classList.contains("intro-done")), "not marked done");
@@ -140,9 +140,9 @@ await check("intro: slow or failing hero image never delays the sequence", async
     });
     const p = await ctx.newPage();
     await p.goto(BASE + "/", { waitUntil: "commit" });
-    await p.waitForTimeout(3900);
+    await p.waitForTimeout(4900);
     const op = await p.$eval(".hero__ctas", (e) => getComputedStyle(e).opacity);
-    ok(op === "1", `${mode}: CTAs opacity ${op} at 3.9 s`);
+    ok(op === "1", `${mode}: CTAs opacity ${op} at 4.9 s`);
     await ctx.close();
   }
 });

@@ -46,18 +46,18 @@ Timeline for `intro-play`, a full-screen title sequence on a fixed overlay (`.in
 
 | Beat | Time | What happens |
 |---|---|---|
-| Thread | 0.15–0.7 s | Black frame. A lime thread draws across the middle under the kicker line. |
-| Title cards | 0.7–1.43 s | FABRIC. → PRINT. → STITCH. cut in on the thread, about 240 ms each (STITCH in lime) |
-| Weave | 1.3–1.95 s | Ten fabric strips slide in from alternating sides (35 ms stagger) into a full-screen lime knit |
-| Statement | 1.75–2.9 s | MADE TO ORDER. rises out of the fabric, holds, then lifts away |
-| Pull | 2.45–3.3 s | Strips pull out the way they came, revealing the homepage. The overlay is hidden at 3.3 s. |
-| Settle | 2.55–3.8 s | The header is uncovered as the strips leave (no fade, so it is never semi-transparent). Headline lines rise, rule draws, frame shutter + knit panel show the garment, copy and CTAs settle |
+| Thread | 0.15–0.8 s | Black frame. A lime thread draws across the middle under the kicker line. |
+| Title cards | 0.8–1.94 s | FABRIC. → PRINT. → STITCH. → DISPATCH. cut in on the thread, 300 ms each (DISPATCH in lime) |
+| Weave | 1.85–2.73 s | Ten fabric strips slide in from alternating sides (35 ms stagger) into a full-screen lime knit |
+| Statement | 2.35–3.99 s | MADE TO ORDER. rises out of the fabric, holds, then lifts away |
+| Pull | 3.47–4.45 s | Strips pull out the way they came, revealing the homepage. The overlay is hidden at 4.45 s. |
+| Settle | 3.5–4.75 s | The header is uncovered as the strips leave (no fade, so it is never semi-transparent). Headline lines rise, rule draws, frame shutter + knit panel show the garment, copy and CTAs settle |
 
 The repeat-visit, low-power and reduced-motion paths skip the overlay entirely.
 
 How it stays safe:
 - It's all CSS, so nothing waits on JavaScript, the hero image or fonts. A slow or failed image still finishes on time (tested).
-- The page never locks scrolling. The overlay covers the page for up to 3.3 s, but one tap or key press removes it, so nav and contact are one interaction away.
+- The page never locks scrolling. The overlay covers the page for up to 4.45 s, but one tap or key press removes it, so nav and contact are one interaction away.
 - "Skip intro" is visible during the sequence. Any key, tap, wheel or touch-move also finishes it at once: `main.js` calls `finish()` on every hero animation through `document.getAnimations()`.
 - The tests cover first visit, repeat visit, skip, key press, reduced motion, slow image, failed image and following a link mid-sequence (`tests/e2e.mjs`).
 

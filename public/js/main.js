@@ -32,7 +32,7 @@
     events.forEach((e) => addEventListener(e, finish, { capture: true, passive: true }));
     $("[data-intro-skip]")?.addEventListener("click", finish);
     // Done naturally: release the listeners.
-    setTimeout(() => { root.classList.add("intro-done"); off(); }, 3800);
+    setTimeout(() => { root.classList.add("intro-done"); off(); }, 4800);
   }
 
   /* ---------- header: solid on scroll ---------- */

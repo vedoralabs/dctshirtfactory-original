@@ -36,7 +36,7 @@ function hero() {
   <div class="intro__strips">${Array.from({ length: 10 }, (_, i) => `<span style="--i:${i}"></span>`).join("")}</div>
   <p class="intro__kicker">Custom apparel manufacturing · ${site.locations.replace("&", "&amp;")}</p>
   <span class="intro__thread"></span>
-  <div class="intro__cards"><span>Fabric.</span><span>Print.</span><span>Stitch.</span></div>
+  <div class="intro__cards"><span>Fabric.</span><span>Print.</span><span>Stitch.</span><span>Dispatch.</span></div>
   <p class="intro__word"><span class="ln"><span>Made to</span></span><span class="ln"><span>order.</span></span></p>
   </div>
 </div>
