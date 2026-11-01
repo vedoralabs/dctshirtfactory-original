@@ -51,7 +51,7 @@ Timeline for `intro-play`, a full-screen title sequence on a fixed overlay (`.in
 | Weave | 1.3–1.95 s | Ten fabric strips slide in from alternating sides (35 ms stagger) into a full-screen lime knit |
 | Statement | 1.75–2.9 s | MADE TO ORDER. rises out of the fabric, holds, then lifts away |
 | Pull | 2.45–3.3 s | Strips pull out the way they came, revealing the homepage. The overlay is hidden at 3.3 s. |
-| Settle | 2.55–3.8 s | Header fades in, headline lines rise, rule draws, frame shutter + knit panel show the garment, copy and CTAs settle |
+| Settle | 2.55–3.8 s | The header is uncovered as the strips leave (no fade, so it is never semi-transparent). Headline lines rise, rule draws, frame shutter + knit panel show the garment, copy and CTAs settle |
 
 The repeat-visit, low-power and reduced-motion paths skip the overlay entirely.
 
