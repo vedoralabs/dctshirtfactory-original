@@ -7,7 +7,12 @@
     "build": "node scripts/build.mjs",
     "build:strict": "node scripts/build.mjs --strict",
     "images": "python scripts/make-images.py",
-    "serve": "npx -y serve@14.2.4 dist -l 4173"
+    "lint": "node --check public/js/main.js && node scripts/validate-data.mjs",
+    "test": "node --test tests/unit.test.mjs",
+    "test:e2e": "node tests/e2e.mjs",
+    "serve": "node tests/server.mjs"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  }
 }

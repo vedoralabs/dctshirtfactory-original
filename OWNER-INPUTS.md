@@ -3,6 +3,8 @@
 Under the owner's brief (16 Oct 2026), anything unverified is **left off the site**. It isn't shown as a placeholder. Each item below unlocks content once confirmed. Fill in the matching field in `src/data.mjs` and remove the line from `pending` there. `npm run build:strict` fails until `pending` is empty.
 
 ## 1. Business identity
+- [ ] Preferred public name: "D Creations", "DC T-Shirt Factory" or "DCT Shirt Factory" (the site uses D Creations, with DC T-Shirt Factory as the Mangalore unit)
+- [ ] Logo as SVG or a high-resolution transparent PNG (the site uses a tracing of `assets/DC LOGO.jpeg`)
 - [x] Trading names from the catalogue: DC T-Shirt Factory (Mangalore) and D Creations (Tiruppur)
 - [ ] GSTIN. The site no longer mentions GST at all.
 - [ ] **Email spelling conflict:** the site uses dcreationstirpur@gmail.com (confirmed 18 Oct 2026), but the printed catalogue says **dcreationstripur@gmail.com**. Which one receives mail?
@@ -12,42 +14,31 @@ Under the owner's brief (16 Oct 2026), anything unverified is **left off the sit
 - [ ] Production domain. dctshirtfactory.co.in still serves the old site. All pages are **noindex** until the domain is pointed here (`site.indexable` in `src/data.mjs`).
 
 ## 2. Quote handling
-- [ ] Destination: WhatsApp only (current), or also email/CRM? An email/CRM route needs a small backend with server-side validation and spam protection.
+- [ ] Destination: WhatsApp only (current: the enquiry form builds a message and opens WhatsApp; nothing is stored or emailed), or also email/CRM? An email/CRM route needs a small backend with server-side validation and spam protection.
 - [ ] Who answers enquiries and how quickly. Not stated on the site until confirmed.
 - [ ] Sign-off on the privacy notice at /privacy. It describes the current set-up: no storage, WhatsApp hand-off, click-to-load map.
 
-## 3. Fabrics
-For each fabric: physical sample → confirm the public name, then supply composition / GSM / macro photo if you want those shown.
+## 3. Fabrics (updated Nov 2026: exact names from the implementation brief)
+The site now shows the 24 fabric names exactly as DCT lists them, under the category lists in the brief. Each fabric appears **once** in `src/data.mjs`, and its categories are worked out from the category lists. No descriptions, GSM, composition, performance or care details are shown. Textures are drawn illustrations, labelled as such.
 
-| Public name on site | Name used on old site | Confirm construction? |
-|---|---|---|
-| Piqué knit | Lacoste / Pique | ☐ |
-| Honeycomb knit | Honeycomb | ☐ |
-| Spun honeycomb knit | Spun Honeycomb | ☐ |
-| Lightweight smooth knit | Selina | ☐ |
-| Smooth-finish knit | Mirror (200 / 150X) | ☐ |
-| Stretch knit | Lycra / NS Lycra | ☐ |
-| Fleece knit | Fleece | ☐ |
-| Matte-finish knit | Mars | ☐ |
-| Dot-textured knit | Dotknit | ☐ |
-| Open mesh knit | Airtex | ☐ |
-| Matty-weave knit | PC Matty | ☐ |
-
-Old-site fabric names **not shown** because their meaning is unclear (confirm what they are): Jacquard, Spandex, Hydra, Spectra, NJS, Nirmal, Loopnet, Superpoly, Cuba 300, PP, Fine (from the catalogue). "Adidas Selina" in the catalogue is a brand name and will never be shown.
-
-Per-product fabric lists were checked against the catalogue (Oct 2026); Corporate now also lists the matte-finish knit ("Mars 200").
+- [ ] Confirm availability, spelling and category mapping for each: Lacoste, Pique, Honeycomb, Spun Honeycomb, Mars, Mars Premium, Mars 200, NJS, Nirmal, Superpoly, Dotknit, Airtex, PC Matty, Selina, Jacquard, Lycra, Spandex, NS Lycra, Fine, Mirror 200, Mirror 150X, Hydra 170, Spectra 250/300, Cuba 300
+- [ ] **Trade names:** Lacoste and Lycra are also registered trademarks. The site uses them as DCT does, as fabric trade names (approved by Vedora Labs, Nov 2026). The October brief had asked for generic names, so please confirm DCT is comfortable showing them.
+- [ ] Are Hoodies & Varsity Jackets and Sublimation T-Shirts still active? Both are kept from the original site, and their fabric lists are empty until confirmed. The catalogue mentions Fleece, Loopnet and PP.
+- [ ] Optional per fabric, to show later: a short description, verified specifications (`verifiedProperties`) and a macro photo
+- [ ] Real macro photos of each fabric, to replace the illustrative textures
 
 ## 4. Services & claims
 - [ ] Customisation methods actually offered: screen printing, DTF, sublimation, embroidery, patches (from the project brief; please confirm each)
 - [ ] Sizes "Kids to 5XL" (from the project brief)
 - [ ] Benefit statements (`benefits` in `src/data.mjs`). These repeat the original website, so please re-confirm.
 - [ ] FAQ answers (`faqs`). They deliberately avoid times, charges and terms.
+- [ ] Lead times, minimum order quantities, service area and certifications. None is stated until confirmed.
 - [ ] If you want them shown: MOQ, turnaround, sample charges, payment terms, delivery coverage, years in business, capacity, order counts. Each needs evidence. **Prices will never be shown.**
 
 ## 5. Proof
 - [ ] The 3 testimonials shown (Naveen R Goshal's "affordable price" review was removed: no price wording) (Mahesh, Sathwik Shetty, Prajwal Pai): where they came from (Google? in person?) and permission to show them. The star ratings and "Verified customer" labels have been removed.
 - [ ] Google rating / review count. Removed. The site links to the Google Maps listing only.
-- [ ] **Clients page (/clients, live 18 Oct 2026).** Built from the owner's own public Instagram captions, text only, no logos or event photos copied:
+- [ ] **Clients (now on /work; /clients redirects there).** Built from the owner's own public Instagram captions, text only, no logos or event photos copied:
   - Hackfest, NMAM Institute of Technology: official event T-shirts (posts 4 Dec 2025, 27 Apr 2026)
   - NITTE Walkathon 2025: jerseys and caps (29 Dec 2025)
   - Mangaluru Beach Festival Marathon: official jersey (23 Dec 2025)

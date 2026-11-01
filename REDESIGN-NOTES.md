@@ -1,5 +1,18 @@
 # Redesign notes
 
+> **Update, Nov 2026 (DCT implementation brief).** The current state is described in `README.md`, `docs/MOTION.md` and `docs/HANDOVER.md`. In short:
+> - New identity: graphite, warm off-white, electric lime, with signal orange used sparingly. Sharp geometry and oversized section numbers.
+> - The homepage opens with a CSS-only, skippable entry sequence.
+> - New IA: Clothing (archive + 7 category pages at `/clothing/<slug>`), Fabrics (24-fabric library), Manufacturing, Our Work, About, Contact (form + channels).
+> - Category and fabric names are exact, from the brief, in one normalized data source with validation.
+> - The 6-step quote wizard became a short enquiry form with field-level validation and an honest WhatsApp handoff.
+> - Lenis smooth scrolling and the film grain were removed. GSAP stays for the desktop pinned process and parallax only.
+> - Unit and browser test suites were added.
+>
+> Everything below describes earlier versions.
+
+# Redesign notes
+
 > **Update, 16 Oct 2026 (owner brief "DCT_Website_Brief.pdf").** The brief overrides parts of the first redesign below. Under its rules:
 > - all prices, price tiers and Offer schema are removed;
 > - fabric names are generic (no Lacoste or Lycra);

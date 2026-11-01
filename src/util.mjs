@@ -17,14 +17,12 @@ export const waLink = (text = `${waGreeting} Please contact me to discuss my req
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
 /** The owner's quotation template (brief §7.2), with known fields filled in. */
-export const quoteMessage = ({ product = "", fabric = "" } = {}) =>
+export const quoteMessage = ({ category = "", fabric = "" } = {}) =>
   [
     waGreeting,
-    product && `Product: ${product}.`,
-    fabric && `Fabric: ${fabric}.`,
+    category && `Category: ${category}`,
+    fabric && `Fabric: ${fabric}`,
     "Quantity: ",
-    "Delivery city: ",
-    "Required by: ",
     "Please contact me to discuss the specifications.",
   ]
     .filter(Boolean)

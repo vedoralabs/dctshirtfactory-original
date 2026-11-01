@@ -1,6 +1,7 @@
 // Illustrative fabric textures drawn as SVG, used in the Fabric Guide until
 // real macro photos of each fabric are supplied (see SHOT-LIST.md).
-// Each returns a complete <svg> string filled with the fabric's tint.
+// Each returns a complete <svg> string filled with the fabric's tint. No SVG filters:
+// they rasterize on the main thread and stalled first paint on phones.
 
 const shade = (hex, amt) => {
   const n = parseInt(hex.slice(1), 16);
@@ -19,16 +20,14 @@ const wrap = (id, tint, size, body, extra = "") => `
       <stop offset=".6" stop-color="#fff" stop-opacity="0"/>
       <stop offset="1" stop-color="#000" stop-opacity=".45"/>
     </radialGradient>
-    <filter id="${id}-grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0"/></filter>
   </defs>
   <rect width="400" height="400" fill="${tint}"/>
   ${extra}
   <rect width="400" height="400" fill="url(#${id})"/>
-  <rect width="400" height="400" filter="url(#${id}-grain)" opacity=".5"/>
   <rect width="400" height="400" fill="url(#${id}-light)"/>
 </svg>`;
 
-const patterns = {
+export const patterns = {
   pique: (id, t) =>
     wrap(id, t, [12, 12], `
       <path d="M6 0 L12 6 L6 12 L0 6Z" fill="${shade(t, 0.06)}"/>
@@ -41,10 +40,21 @@ const patterns = {
     wrap(id, t, [16, 27.7], `
       <path d="M8 0 L16 4.6 L16 13.9 L8 18.5 L0 13.9 L0 4.6Z M8 18.5 L8 27.7" fill="none" stroke="${shade(t, -0.08)}" stroke-width="2.4" stroke-linejoin="round" opacity=".7"/>`),
   smooth: (id, t) =>
-    wrap(id, t, [4, 4], `<path d="M0 2 H4" stroke="${shade(t, 0.04)}" stroke-width=".8"/>`),
+    wrap(id, t, [5, 5], `<path d="M0 2.5 H5" stroke="${shade(t, 0.08)}" stroke-width="1.2"/>`),
   sheen: (id, t) =>
     wrap(id, t, [3, 3], `<path d="M0 1.5 H3" stroke="${shade(t, -0.05)}" stroke-width=".7"/>`,
       `<linearGradient id="${id}-s" x1="0" y1="0" x2="1" y2="1"><stop offset=".25" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".28"/><stop offset=".55" stop-color="#fff" stop-opacity=".05"/><stop offset=".72" stop-color="#fff" stop-opacity=".2"/><stop offset=".9" stop-color="#fff" stop-opacity="0"/></linearGradient><rect width="400" height="400" fill="url(#${id}-s)"/>`),
+  // knit loops: rows of small Vs, the face of a plain jersey knit
+  jersey: (id, t) =>
+    wrap(id, t, [10, 9], `
+      <path d="M0 0 L5 8 L10 0" fill="none" stroke="${shade(t, 0.13)}" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M5 8 V9 M0 0 V1" stroke="${shade(t, -0.14)}" stroke-width="1.2"/>`),
+  // woven-in motif: stepped diamonds on a fine ground
+  jacquard: (id, t) =>
+    wrap(id, t, [24, 24], `
+      <path d="M12 2 L22 12 L12 22 L2 12Z" fill="none" stroke="${shade(t, 0.09)}" stroke-width="2"/>
+      <path d="M12 8 L16 12 L12 16 L8 12Z" fill="${shade(t, -0.08)}"/>
+      <path d="M0 0 H24 M0 24 H24" stroke="${shade(t, -0.05)}" stroke-width="1"/>`),
   rib: (id, t) =>
     wrap(id, t, [6, 6], `
       <rect width="3" height="6" fill="${shade(t, 0.05)}"/>
@@ -74,5 +84,5 @@ const patterns = {
 
 export function fabricTexture(fabric) {
   const fn = patterns[fabric.texture] ?? patterns.smooth;
-  return fn(`tx-${fabric.key}`, fabric.tint).trim();
+  return fn(`tx-${fabric.id}`, fabric.tint).trim();
 }

@@ -9,7 +9,6 @@ const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
 const RULES = [
   ["currency symbol", /₹|\bINR\b|\bRs\.?\s?\d/],
   ["price wording", /\bprice[ -]?(tier|range|from|list)\b|\bfrom ₹|starting (at|from)|per[- ]piece|budget[- ]friendly|affordable|cheap|lowest|best price|discount|wholesale rate|mid-range|slab-wise|priceRange|"price"|lowPrice|AggregateOffer|"offers"/i],
-  ["brand-like fabric name", /lacoste|lycra/i],
   ["placeholder text", /\[(PHOTO|VIDEO|HERO VIDEO|MACRO PHOTO)|XXXX|\bplaceholder\b(?!=)|to be confirmed|\btbc\b|lorem/i],
   ["unverified claim", /GSTIN|GST invoice|verified customer|google reviews|\b\d{2,3},000\+?\s*(pieces|pcs)|happy clients|years of making|pieces \/ month/i],
   ["rating markup", /aggregateRating|"ratingValue"|out of 5 stars/i],
@@ -40,4 +39,4 @@ if (hits) {
   console.error(`\n✖ Content check failed: ${hits} prohibited item(s).`);
   process.exit(1);
 }
-console.log(`✔ Content check passed: ${files.length} files, no prices, brand names, placeholders or unverified claims.`);
+console.log(`✔ Content check passed: ${files.length} files, no prices, placeholders or unverified claims.`);

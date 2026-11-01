@@ -1,23 +1,29 @@
-import { site, products, addresses } from "./data.mjs";
+import { site, categories, addresses } from "./data.mjs";
 import { esc, waLink, icon, imgSize } from "./util.mjs";
 
 export const NAV = [
-  ["Products", "/#products"],
+  ["Clothing", "/clothing"],
   ["Fabrics", "/fabrics"],
-  ["Process", "/#process"],
-  ["Clients", "/clients"],
-  ["Gallery", "/work"],
+  ["Manufacturing", "/manufacturing"],
+  ["Our Work", "/work"],
   ["About", "/about"],
-  ["FAQ", "/faq"],
   ["Contact", "/contact"],
 ];
 
 const year = new Date().getFullYear();
 
-function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd = [], preload = "" }) {
+// Runs before first paint. Decides which version of the homepage entry plays, so the
+// first frame is already the right one (no flash, no layout jump):
+//   intro-play  first visit this session: the full sequence (~2 s, skippable)
+//   intro-short repeat visit: a quick settle
+//   intro-lite  low-power device or Save-Data: fades only, no clip/scale
+// Reduced motion gets none of them. Everything is CSS, so nothing waits on JS or images.
+const introBoot = `(function(){var d=document.documentElement;d.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rm');return}if(!d.hasAttribute('data-home'))return;var n=navigator,c=n.connection||{},seen=sessionStorage.getItem('dct:intro');var lite=c.saveData||(n.deviceMemory&&n.deviceMemory<=2)||(n.hardwareConcurrency&&n.hardwareConcurrency<=2);d.classList.add(seen?'intro-short':lite?'intro-lite':'intro-play');sessionStorage.setItem('dct:intro','1')}catch(e){}})();`;
+
+function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd = [], preload = "", home = false }) {
   const url = site.url + path;
   return `<!doctype html>
-<html lang="en-IN">
+<html lang="en-IN"${home ? " data-home" : ""}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -25,7 +31,7 @@ function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd 
 <meta name="description" content="${esc(description)}">
 ${site.indexable ? "" : `<meta name="robots" content="noindex">
 `}<link rel="canonical" href="${url}">
-<meta name="theme-color" content="#0b0b0c">
+<meta name="theme-color" content="#0e0f10">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D Creations">
 <meta property="og:locale" content="en_IN">
@@ -41,35 +47,36 @@ ${site.indexable ? "" : `<meta name="robots" content="noindex">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/anton-latin.woff2" crossorigin>
 ${preload}<link rel="stylesheet" href="/css/site.css">
-<script>document.documentElement.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm')}catch(e){}</script>
-${jsonLd.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n")}
+<script>${introBoot}</script>
+${jsonLd.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`).join("\n")}
 </head>`;
 }
 
 function header(current) {
   const [lw, lh] = imgSize("logo-light.png");
+  const isCurrent = (h) => current && (current === h || current.startsWith(`${h}/`));
   return `
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr" data-hdr>
   <div class="wrap hdr__in">
-    <a class="hdr__logo" href="/" aria-label="D Creations — home"><img src="/img/logo-light.png" alt="D Creations" width="${lw}" height="${lh}"></a>
+    <a class="hdr__logo" href="/" aria-label="D Creations, home"><img src="/img/logo-light.png" alt="D Creations" width="${lw}" height="${lh}"></a>
     <nav class="hdr__nav" aria-label="Main">
-      ${NAV.map(([l, h]) => `<a href="${h}"${h === current ? ' class="is-current" aria-current="page"' : ""}>${l}</a>`).join("")}
+      ${NAV.map(([l, h]) => `<a href="${h}"${isCurrent(h) ? ' class="is-current" aria-current="page"' : ""}>${l}</a>`).join("")}
     </nav>
-    <a class="btn btn--accent btn--sm hdr__cta" data-magnetic href="/quote">Get a quote</a>
+    <a class="btn btn--accent btn--sm hdr__cta" href="/contact">Request a quote</a>
     <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu" data-burger><span></span><span></span></button>
   </div>
 </header>
 <!-- Sibling of the header, not inside it: the header's backdrop-filter would
      otherwise become the containing block and clip this fixed overlay. -->
-<div class="mnav" id="mnav" data-mnav hidden>
+<div class="mnav" id="mnav" data-mnav role="dialog" aria-modal="true" aria-label="Menu" hidden>
     <nav aria-label="Mobile">
-      ${NAV.map(([l, h], i) => `<a href="${h}" style="--i:${i}"${h === current ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
-      <a href="/quote" style="--i:${NAV.length}" class="mnav__quote">Get a quote</a>
+      ${[["Home", "/"], ...NAV].map(([l, h], i) => `<a href="${h}" style="--i:${i}"${(h === "/" ? current === "/" : isCurrent(h)) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
     </nav>
     <div class="mnav__foot">
-      <a class="btn btn--accent" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp us</a>
-      <a class="btn btn--ghost" href="tel:${site.phoneHref}">${icon.phone} ${site.phoneDisplay}</a>
+      <a class="btn btn--accent" href="/contact">Request a quote ${icon.arrow}</a>
+      <a class="btn btn--wa" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp ${site.phoneDisplay}</a>
+      <a class="btn btn--ghost" href="tel:${site.phoneHref}">${icon.phone} Call ${site.phoneDisplay}</a>
     </div>
 </div>`;
 }
@@ -79,23 +86,24 @@ export function footer() {
 <footer class="ftr">
   <div class="wrap ftr__grid">
     <div class="ftr__brand">
-      <a href="/" class="ftr__logo" aria-label="D Creations — home"><img src="/img/logo-light.png" alt="D Creations" width="273" height="135" loading="lazy"></a>
-      <p>Custom T-shirt and apparel manufacturer for schools, companies, teams and events. ${site.locations.replace("&", "&amp;")}.</p>
+      <a href="/" class="ftr__logo" aria-label="D Creations, home"><img src="/img/logo-light.png" alt="D Creations" width="273" height="135" loading="lazy"></a>
+      <p>Custom apparel manufacturer for schools, companies, teams and events. ${site.locations.replace("&", "&amp;")}.</p>
       <div class="ftr__social">
         <a href="${site.instagram}" target="_blank" rel="noopener" aria-label="Instagram ${site.instagramHandle}">${icon.instagram}</a>
         <a href="${waLink()}" target="_blank" rel="noopener" aria-label="WhatsApp">${icon.whatsapp}</a>
         <a href="${site.mapsUrl}" target="_blank" rel="noopener" aria-label="Google Maps">${icon.pin}</a>
       </div>
     </div>
-    <nav class="ftr__col" aria-label="Quick links">
-      <h2>Quick links</h2>
+    <nav class="ftr__col" aria-label="Site">
+      <h2>Site</h2>
+      <a href="/">Home</a>
       ${NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
-      <a href="/quote">Request a quote</a>
+      <a href="/faq">FAQ</a>
       <a href="/privacy">Privacy notice</a>
     </nav>
-    <nav class="ftr__col" aria-label="Product categories">
-      <h2>Categories</h2>
-      ${products.map((p) => `<a href="/products/${p.slug}">${esc(p.name)}</a>`).join("")}
+    <nav class="ftr__col" aria-label="Clothing categories">
+      <h2>Clothing</h2>
+      ${categories.map((c) => `<a href="/clothing/${c.slug}">${esc(c.title)}</a>`).join("")}
     </nav>
     <div class="ftr__col">
       <h2>Contact</h2>
@@ -106,23 +114,23 @@ export function footer() {
       ${addresses
         .map((a) => `<p class="ftr__addr">${icon.pin}<span><strong>${esc(a.name)}</strong><br>${a.lines.map(esc).join("<br>")}</span></p>`)
         .join("")}
-      <a class="ftr__quote" href="/quote">Request a custom quote ${icon.arrow}</a>
+      <a class="ftr__quote" href="/contact">Request a quote ${icon.arrow}</a>
     </div>
   </div>
   <div class="wrap ftr__bottom">
     <p>© <span data-year>${year}</span> D Creations. All rights reserved.</p>
-    <p>Made with care in Mangalore &amp; Tiruppur · <a href="https://vedora-labs-website-kappa.vercel.app" target="_blank" rel="noopener">Website by Vedora Labs</a></p>
+    <p>Made in Mangalore &amp; Tiruppur · <a href="https://vedoralabs.co.in" target="_blank" rel="noopener">Website by Vedora Labs</a></p>
   </div>
 </footer>`;
 }
 
-function actionBars(quoteHref = "/quote") {
+function actionBars() {
   return `
-<a class="wa-float" data-magnetic href="${waLink()}" target="_blank" rel="noopener" aria-label="Chat with D Creations on WhatsApp">${icon.whatsapp}<span>Chat with us</span></a>
+<a class="wa-float" href="${waLink()}" target="_blank" rel="noopener" aria-label="Chat with D Creations on WhatsApp">${icon.whatsapp}<span>WhatsApp</span></a>
 <nav class="mbar" aria-label="Quick actions">
   <a href="tel:${site.phoneHref}">${icon.phone}<span>Call</span></a>
   <a class="mbar__wa" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp}<span>WhatsApp</span></a>
-  <a href="${quoteHref}">${icon.grid}<span>Get a quote</span></a>
+  <a href="/contact">${icon.grid}<span>Get a quote</span></a>
 </nav>
 <dialog class="lb" data-lightbox aria-label="Image viewer">
   <button class="lb__close" type="button" data-lb-close aria-label="Close">${icon.close}</button>
@@ -140,7 +148,7 @@ export const orgSchema = () => {
     name: site.name,
     alternateName: site.altName,
     description:
-      "Custom T-shirt and apparel manufacturer: school uniforms, event T-shirts, corporate polos, sublimation jerseys, gym wear, trackpants and hoodies.",
+      "Custom apparel manufacturer: school uniform T-shirts, marathon T-shirts, track pants and shorts, corporate T-shirts, gym wear, hoodies and sublimation T-shirts.",
     url: site.url,
     logo: `${site.url}/img/icon-512.png`,
     image: `${site.url}/img/og-image.jpg`,
@@ -151,23 +159,28 @@ export const orgSchema = () => {
     areaServed: { "@type": "Country", name: "India" },
     address: { "@type": "PostalAddress", addressLocality: site.locality, addressRegion: site.region, addressCountry: "IN" },
   };
-  // Only confirmed facts. No prices, ratings or reviews.
+  // Only confirmed facts. No prices, ratings, reviews or opening hours.
   if (site.street) o.address.streetAddress = site.street;
   if (site.postalCode) o.address.postalCode = site.postalCode;
   if (site.email) o.email = site.email;
   return o;
 };
 
-export function page({ title, description, path, body, jsonLd = [], preload = "", quoteHref, data, current }) {
-  return `${head({ title, description, path, jsonLd, preload })}
+export const breadcrumbSchema = (trail) => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: trail.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: `${site.url}${path}` })),
+});
+
+export function page({ title, description, path, body, jsonLd = [], preload = "", data, current, home = false }) {
+  return `${head({ title, description, path, jsonLd, preload, home })}
 <body>
-${header(current)}
+${header(current ?? path)}
 <main id="main">
 ${body}
 </main>
 ${footer()}
-${actionBars(quoteHref)}
-<div class="grain" aria-hidden="true"></div>
+${actionBars()}
 ${data ? `<script type="application/json" id="site-data">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>` : ""}
 <script src="/js/main.js" defer></script>
 </body>

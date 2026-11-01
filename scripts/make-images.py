@@ -79,22 +79,6 @@ for src, box, name in CROPS:
     for w in WIDTHS:
         save(im, name, w)
 
-# Hero frames: graded, wide crops
-HERO = ["generated/concept-sublimation-wave.png", "generated/concept-polo-navy-34.png",
-        "generated/concept-hoodie-charcoal-34.png", "generated/concept-cycling-jersey-teal.png"]
-for i, src in enumerate(HERO, 1):
-    im = Image.open(SRC / src).convert("RGB")
-    # crop to 16:10-ish around centre
-    tw, th = im.width, round(im.width * 10 / 16)
-    if th > im.height:
-        th = im.height
-        tw = round(th * 16 / 10)
-    left = (im.width - tw) // 2
-    top = (im.height - th) // 2
-    im = grade(im.crop((left, top, left + tw, top + th)))
-    for w in (800, 1600):
-        save(im, f"hero-{i}", w, q=70)
-
 # Logo: black-on-white JPEG -> warm off-white on transparent PNG, tightly cropped
 logo = Image.open(SRC / "DC LOGO.jpeg").convert("L")
 alpha = ImageOps.invert(logo).point(lambda v: 0 if v < 40 else min(255, int((v - 40) * 1.3)))
@@ -110,7 +94,7 @@ for name, rgb in (("logo-light", (243, 238, 230)), ("logo-dark", (14, 14, 15))):
 
 # Favicon / touch icon: logo on charcoal with accent underline
 size = 512
-icon = Image.new("RGB", (size, size), (11, 11, 12))
+icon = Image.new("RGB", (size, size), (14, 15, 16))
 mark = Image.open(OUT / "logo-light.png")
 mark.thumbnail((int(size * 0.8), int(size * 0.8)), Image.LANCZOS)
 icon.paste(mark, ((size - mark.width) // 2, (size - mark.height) // 2), mark)
@@ -118,29 +102,26 @@ icon.save(OUT / "icon-512.png", optimize=True)
 icon.resize((180, 180), Image.LANCZOS).save(OUT / "apple-touch-icon.png", optimize=True)
 icon.resize((48, 48), Image.LANCZOS).save(ROOT / "public" / "favicon.ico")
 
-# Open Graph card 1200x630
-og = Image.open(SRC / "product-sublimation.jpg").convert("RGB")
-og = ImageOps.fit(og, (1200, 630), Image.LANCZOS)
-og = grade(og)
-shade = Image.new("RGBA", og.size, (11, 11, 12, 0))
-d = ImageDraw.Draw(shade)
-for x in range(1200):
-    a = int(235 * max(0, 1 - x / 900))
-    d.line([(x, 0), (x, 630)], fill=(11, 11, 12, a))
-og = Image.alpha_composite(og.convert("RGBA"), shade)
-mark = Image.open(OUT / "logo-light.png")
-mark.thumbnail((220, 120), Image.LANCZOS)
-og.paste(mark, (70, 60), mark)
+# Open Graph card 1200x630: graphite, headline left, the hero garment right
+og = Image.new("RGB", (1200, 630), (14, 15, 16))
+garment = ImageOps.fit(Image.open(SRC / "generated/concept-cycling-jersey-teal.png").convert("RGB"), (420, 560), Image.LANCZOS, centering=(0.5, 0.35))
+og.paste(garment, (740, 35))
 d = ImageDraw.Draw(og)
+d.rectangle((740, 35, 1160, 595), outline=(205, 242, 58), width=0)
+mark = Image.open(OUT / "logo-light.png")
+mark.thumbnail((200, 100), Image.LANCZOS)
+og.paste(mark, (64, 52), mark)
 try:
-    font = ImageFont.truetype("impact.ttf", 76)
-    small = ImageFont.truetype("arial.ttf", 30)
+    font = ImageFont.truetype("impact.ttf", 92)
+    small = ImageFont.truetype("arial.ttf", 26)
 except OSError:
     font = small = ImageFont.load_default()
-d.text((70, 250), "CUSTOM APPAREL,", font=font, fill=(243, 238, 230))
-d.text((70, 335), "MADE FOR YOUR TEAM.", font=font, fill=(255, 90, 31))
-d.text((70, 450), "T-shirts, polos, uniforms, jerseys — Mangalore & Tiruppur", font=small, fill=(200, 194, 186))
-og.convert("RGB").save(OUT / "og-image.jpg", quality=85)
+d.text((64, 190), "YOUR TEAM.", font=font, fill=(241, 237, 228))
+d.text((64, 292), "YOUR FABRIC.", font=font, fill=(241, 237, 228))
+d.text((64, 394), "MADE TO ORDER.", font=font, fill=(205, 242, 58))
+d.rectangle((66, 512, 600, 515), fill=(255, 107, 44))
+d.text((64, 540), "Custom apparel manufacturing · Mangalore & Tiruppur", font=small, fill=(171, 167, 158))
+og.save(OUT / "og-image.jpg", quality=86)
 print("done:", len(list(OUT.iterdir())), "files")
 
 # Manifest of intrinsic sizes, read by the HTML build for width/height attrs.

@@ -1,20 +1,29 @@
 // Builds the static site into dist/, then scans it for prohibited content.
-//   node scripts/build.mjs           -> build + content check; lists owner inputs still pending
+//   node scripts/build.mjs           -> validate data, build, content check; lists owner inputs still pending
 //   node scripts/build.mjs --strict  -> also fail while owner inputs are pending (go-live gate)
 import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import * as data from "../src/data.mjs";
-import { page, orgSchema } from "../src/layout.mjs";
-import { home, homeData } from "../src/home.mjs";
-import { productPage, productSchema, breadcrumbSchema } from "../src/product.mjs";
+import { page, orgSchema, breadcrumbSchema } from "../src/layout.mjs";
+import { home } from "../src/home.mjs";
+import { categoryPage, categorySchema } from "../src/clothing.mjs";
 import { pages, pageBody } from "../src/pages.mjs";
+import { enquiryData } from "../src/enquiry.mjs";
 import { imgSize, icon } from "../src/util.mjs";
 import { fabricTexture } from "../src/textures.mjs";
+import { validate } from "./validate-data.mjs";
 
 const ROOT = new URL("../", import.meta.url);
 const DIST = new URL("dist/", ROOT);
 const strict = process.argv.includes("--strict");
+
+const problems = validate();
+if (problems.length) {
+  for (const p of problems) console.error("✖", p);
+  console.error("✖ src/data.mjs has broken references.");
+  process.exit(1);
+}
 
 if (data.pending.length) {
   console.log(`
@@ -28,53 +37,57 @@ Owner inputs still pending (${data.pending.length}). Details in OWNER-INPUTS.md:
 }
 
 rmSync(DIST, { recursive: true, force: true });
-mkdirSync(new URL("products/", DIST), { recursive: true });
+mkdirSync(new URL("clothing/", DIST), { recursive: true });
 cpSync(new URL("public/", ROOT), DIST, { recursive: true });
 rmSync(new URL("img/manifest.json", DIST), { force: true });
 
 const write = (rel, html) => writeFileSync(new URL(rel, DIST), html);
 
-// Fabric Guide textures as standalone SVG files (lazy-loaded, no DOM cost)
+// Illustrative fabric textures as standalone SVG files (lazy-loaded, no DOM cost),
+// plus the lime knit panel the homepage entry pulls away.
 mkdirSync(new URL("img/tx/", DIST), { recursive: true });
-for (const f of data.fabrics) write(`img/tx/${f.key}.svg`, fabricTexture(f).replace(' aria-hidden="true" focusable="false"', ""));
+const svgFile = (f) => fabricTexture(f).replace(' aria-hidden="true" focusable="false"', "");
+for (const f of data.fabrics) write(`img/tx/${f.id}.svg`, svgFile(f));
+write("img/tx/hero-knit.svg", svgFile({ id: "hero-knit", texture: "pique", tint: "#b8dc2c" }));
+
+const crumbs = (...trail) => breadcrumbSchema([["Home", "/"], ...trail]);
 
 // ---- home ----------------------------------------------------------------
-const [hw] = imgSize("hero-1-1600.webp");
-const heroPreload = `<link rel="preload" as="image" href="/img/hero-1-1600.webp" imagesrcset="/img/hero-1-800.webp 800w, /img/hero-1-1600.webp ${hw}w" imagesizes="100vw" fetchpriority="high">\n`;
+const hero = data.categories.find((c) => c.slug === "gym-wears").heroImage;
+const [hw] = imgSize(`${hero}-960.webp`);
+const [sw] = imgSize(`${hero}-480.webp`);
+const heroPreload = `<link rel="preload" as="image" href="/img/${hero}-960.webp" imagesrcset="/img/${hero}-480.webp ${sw}w, /img/${hero}-960.webp ${hw}w" imagesizes="(min-width: 1000px) 40vw, 70vw" fetchpriority="high">\n`;
 
 write(
   "index.html",
   page({
-    title: "Custom T-Shirt Manufacturer in Mangalore & Tiruppur | D Creations",
+    title: "Custom T-Shirt & Apparel Manufacturer in Mangalore | D Creations",
     description:
-      "D Creations makes custom school uniforms, marathon & event t-shirts, corporate polos, sublimation jerseys, gym wear and hoodies in bulk. Sample before bulk, pan-India delivery. Get a WhatsApp quote.",
+      "D Creations manufactures custom school uniform T-shirts, marathon T-shirts, corporate T-shirts, track pants, gym wear, hoodies and sublimation tees in Mangalore & Tiruppur. Request a quote.",
     path: "/",
+    home: true,
     preload: heroPreload,
-    jsonLd: [
-      orgSchema(),
-      { "@context": "https://schema.org", "@type": "WebSite", name: "D Creations", url: data.site.url },
-    ],
+    jsonLd: [orgSchema(), { "@context": "https://schema.org", "@type": "WebSite", name: "D Creations", url: data.site.url }],
     body: home(),
-    data: homeData(),
+    data: enquiryData(),
   })
 );
 
-// ---- product pages ------------------------------------------------------
-for (const p of data.products) {
+// ---- clothing category pages ----------------------------------------------
+for (const c of data.categories) {
   write(
-    `products/${p.slug}.html`,
+    `clothing/${c.slug}.html`,
     page({
-      title: p.title,
-      description: p.description,
-      path: `/products/${p.slug}`,
-      quoteHref: `/quote?product=${p.slug}`,
-      jsonLd: [productSchema(p), breadcrumbSchema(p), orgSchema()],
-      body: productPage(p),
+      title: c.metaTitle,
+      description: c.description,
+      path: `/clothing/${c.slug}`,
+      jsonLd: [categorySchema(c), crumbs(["Clothing", "/clothing"], [c.title, `/clothing/${c.slug}`]), orgSchema()],
+      body: categoryPage(c),
     })
   );
 }
 
-// ---- standalone pages (fabrics, work, about, quote, faq, contact) -----------
+// ---- standalone pages --------------------------------------------------------
 for (const pg of pages) {
   write(
     `${pg.path.slice(1)}.html`,
@@ -82,19 +95,8 @@ for (const pg of pages) {
       title: pg.title,
       description: pg.description,
       path: pg.path,
-      current: pg.path,
-      data: pg.data ? homeData() : undefined,
-      jsonLd: [
-        orgSchema(),
-        {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: `${data.site.url}/` },
-            { "@type": "ListItem", position: 2, name: pg.name, item: `${data.site.url}${pg.path}` },
-          ],
-        },
-      ],
+      data: pg.data ? enquiryData() : undefined,
+      jsonLd: [orgSchema(), crumbs([pg.name, pg.path])],
       body: pageBody(pg),
     })
   );
@@ -115,7 +117,7 @@ write(
     <p class="lead">The page you're looking for has moved or never existed.</p>
     <div class="cta__btns">
       <a class="btn btn--accent btn--lg" href="/">Back to home ${icon.arrow}</a>
-      <a class="btn btn--ghost btn--lg" href="/#products">See products</a>
+      <a class="btn btn--ghost btn--lg" href="/clothing">See clothing</a>
     </div>
   </div>
 </section>`,
@@ -124,7 +126,7 @@ write(
 
 // ---- sitemap / robots / manifest ---------------------------------------------
 const today = new Date().toISOString().slice(0, 10);
-const urls = ["/", ...pages.map((p) => p.path), ...data.products.map((p) => `/products/${p.slug}`)];
+const urls = ["/", ...pages.map((p) => p.path), ...data.categories.map((c) => `/clothing/${c.slug}`)];
 write(
   "sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -133,6 +135,8 @@ ${urls.map((u) => `  <url><loc>${data.site.url}${u}</loc><lastmod>${today}</last
 </urlset>
 `
 );
+// Until the production domain is confirmed, every page is noindex and robots stays open
+// so crawlers can see that. Flip `site.indexable` in src/data.mjs at go-live.
 write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${data.site.url}/sitemap.xml\n`);
 write(
   "site.webmanifest",
@@ -141,8 +145,8 @@ write(
       name: "D Creations",
       short_name: "D Creations",
       icons: [{ src: "/img/icon-512.png", sizes: "512x512", type: "image/png" }],
-      theme_color: "#0b0b0c",
-      background_color: "#0b0b0c",
+      theme_color: "#0e0f10",
+      background_color: "#0e0f10",
       display: "browser",
     },
     null,
@@ -152,7 +156,7 @@ write(
 
 console.log(`✔ Built ${urls.length + 1} pages into dist/`);
 
-// Prohibited-content regression check (prices, brand names, placeholders...).
+// Prohibited-content regression check (prices, placeholders, unverified claims...).
 try {
   execFileSync(process.execPath, [fileURLToPath(new URL("check-content.mjs", import.meta.url))], { stdio: "inherit" });
 } catch {
