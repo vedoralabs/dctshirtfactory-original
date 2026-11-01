@@ -75,18 +75,21 @@ for (const w of WIDTHS) {
 }
 
 // ---- entry sequence ----
-await check("intro: first visit plays, content visible at once, settles by ~2.1 s", async () => {
+await check("intro: first visit plays the title sequence, nav reachable, settles by ~3.8 s", async () => {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const p = await open(ctx, "/", { wait: "commit" });
   await p.waitForSelector(".hero__title");
   ok(await p.evaluate(() => document.documentElement.classList.contains("intro-play")), "intro-play not set");
   ok(await p.isVisible("[data-intro-skip]"), "skip control not shown");
-  ok(await p.isVisible(".hdr__nav a"), "nav not reachable during intro");
-  await p.waitForTimeout(2300);
+  ok(await p.isVisible(".intro"), "title sequence overlay not shown");
+  // any tap ends it, so the nav is one interaction away; the link itself stays in the DOM
+  ok(await p.$(".hdr__nav a[href='/clothing']"), "nav missing");
+  await p.waitForTimeout(3900);
   const op = await p.$eval(".hero__ctas", (e) => getComputedStyle(e).opacity);
   ok(op === "1", `CTAs opacity ${op} after the sequence`);
   ok(await p.evaluate(() => document.documentElement.classList.contains("intro-done")), "not marked done");
   ok(!(await p.isVisible("[data-intro-skip]")), "skip control still visible after the end");
+  ok(!(await p.isVisible(".intro")), "overlay still visible after the end");
   ok(!p.errors.length, p.errors.join(" | "));
   // repeat visit in the same session: short version
   await p.reload({ waitUntil: "commit" });
@@ -137,9 +140,9 @@ await check("intro: slow or failing hero image never delays the sequence", async
     });
     const p = await ctx.newPage();
     await p.goto(BASE + "/", { waitUntil: "commit" });
-    await p.waitForTimeout(2300);
+    await p.waitForTimeout(3900);
     const op = await p.$eval(".hero__ctas", (e) => getComputedStyle(e).opacity);
-    ok(op === "1", `${mode}: CTAs opacity ${op} at 2.3 s`);
+    ok(op === "1", `${mode}: CTAs opacity ${op} at 3.9 s`);
     await ctx.close();
   }
 });
@@ -149,6 +152,7 @@ await check("intro: a link can be followed mid-sequence", async () => {
   const p = await open(ctx, "/", { wait: "commit" });
   await p.waitForSelector(".hdr__nav a");
   await p.waitForTimeout(400);
+  await p.mouse.click(10, 300); // any tap ends the sequence
   await p.click(".hdr__nav a[href='/clothing']");
   await p.waitForURL("**/clothing");
   ok((await p.textContent("h1")).includes("Seven categories"), "did not reach /clothing");

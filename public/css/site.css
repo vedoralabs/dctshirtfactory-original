@@ -235,7 +235,6 @@ address { font-style: normal; }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-5); }
 .hero__meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin-top: var(--s-5); padding-top: var(--s-3); border-top: 1px solid var(--c-line); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-muted); }
 .hero__meta strong { color: var(--c-text); font-weight: 600; }
-.intro-skip { display: none; }
 @media (max-width: 599px) {
   .hero__copy { margin-top: var(--s-4); }
   .hero__ctas .btn { flex: 1 1 auto; min-height: 50px; padding: 0.8rem 1rem; font-size: 0.9375rem; }
@@ -254,27 +253,53 @@ address { font-style: normal; }
   .hero__title { margin-right: -14vw; position: relative; z-index: 2; }
 }
 
-/* Entry choreography. Set before first paint by the inline script in layout.mjs.
-   A: graphite frame, kicker + header (0–250 ms)   B: headline lines, rule draws (250–900)
-   C: a graphite shutter drops to show the knit panel (650–1270)     D: knit pulls away, garment shows (1100–1750)
-   E: copy, CTAs and meta settle (1450–2100). Nothing is ever blocked: links work throughout,
-   and the skip control / any key / scroll / tap finishes it at once (main.js). */
-.intro-play .hdr { animation: introFade 450ms var(--ease-out) 80ms both; }
-.intro-play .hero__kicker { animation: introUp 450ms var(--ease-out) 0ms both; }
+/* Entry choreography: the opening title sequence (intro-play, first visit in a tab).
+   Set before first paint by the inline script in layout.mjs; pure CSS, transform/opacity only.
+   0.15–0.7 s   a lime thread draws across a black frame under the kicker line
+   0.7–1.43 s   title cards cut in on the thread: FABRIC. / PRINT. / STITCH.
+   1.3–1.95 s   ten fabric strips weave in from alternating sides into a lime knit
+   1.75–2.9 s   MADE TO ORDER. rises out of the fabric
+   2.45–3.3 s   strips pull away left and right, revealing the homepage
+   2.55–3.7 s   hero settles: headline lines, rule, shutter + knit panel, copy, CTAs
+   Never blocking: the skip control, any key, tap, wheel or touch finishes it at once (main.js). */
+.intro { display: none; }
+.intro-play .intro { display: block; position: fixed; inset: 0; z-index: 80; overflow: hidden; animation: introGone 1ms linear 3300ms both; }
+.intro-play.intro-done .intro { display: none; }
+.intro::before { content: ""; position: absolute; inset: 0; background: var(--c-bg); animation: introOff 1ms linear 1980ms both; }
+.intro__strips span { position: absolute; left: 0; width: 100%; top: calc(var(--i) * 10%); height: 10.4%; background: repeating-linear-gradient(135deg, rgba(14,15,16,.07) 0 2px, transparent 2px 7px), #cdf23a; transform: translateX(-101%); animation: introWeaveL 1700ms calc(1300ms + var(--i) * 35ms) both; }
+.intro__strips span:nth-child(even) { background-color: #c1e52f; animation-name: introWeaveR; }
+.intro__kicker { position: absolute; left: 0; right: 0; top: calc(50% - 2.6rem); z-index: 2; text-align: center; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--c-accent); padding-inline: var(--gutter); animation: introUp 400ms var(--ease-out) 150ms both, introOff 1ms linear 690ms both; }
+.intro__thread { position: absolute; left: 8%; right: 8%; top: 50%; z-index: 2; height: 2px; background: var(--c-accent); transform-origin: left; animation: introDraw 550ms var(--ease-in-out) 150ms both, introOff 1ms linear 1350ms both; }
+.intro__cards span { position: absolute; left: 0; right: 0; top: 50%; z-index: 2; margin-top: -0.5em; text-align: center; font-family: var(--f-display); font-size: clamp(4.2rem, 19vw, 15rem); line-height: 1; text-transform: uppercase; color: var(--c-text); opacity: 0; animation: introCard 250ms linear both; }
+.intro__cards span:nth-child(1) { animation-delay: 700ms; }
+.intro__cards span:nth-child(2) { animation-delay: 940ms; }
+.intro__cards span:nth-child(3) { animation-delay: 1180ms; color: var(--c-accent); }
+.intro__word { position: absolute; left: 0; right: 0; top: 50%; z-index: 2; transform: translateY(-50%); text-align: center; font-family: var(--f-display); font-size: clamp(4.5rem, 20vw, 17rem); line-height: 0.86; text-transform: uppercase; color: var(--c-bg); }
+.intro__word .ln { display: block; overflow: hidden; padding-bottom: 0.04em; }
+.intro__word .ln > span { display: inline-block; transform: translateY(110%); animation: introWord 1150ms 1750ms both; }
+.intro__word .ln:nth-child(2) > span { animation-delay: 1840ms; }
+.intro-skip { display: none; }
+.intro-play .intro-skip { display: inline-flex; position: fixed; right: var(--gutter); bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 3; align-items: center; min-height: 44px; padding: 0.5rem 1rem; border: 1px solid var(--c-line-strong); border-radius: var(--r-sm); background: rgba(14, 15, 16, 0.75); color: var(--c-text); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; animation: introSkip 3300ms linear both; }
+/* the homepage underneath picks up as the strips leave */
+.intro-play .hdr { animation: introFade 500ms var(--ease-out) 2550ms both; }
+.intro-play .hero__kicker { animation: introUp 450ms var(--ease-out) 2550ms both; }
 .intro-play .hero__title .ln > span { animation: introLine 760ms var(--ease-out) both; }
-.intro-play .hero__title .ln:nth-child(1) > span { animation-delay: 250ms; }
-.intro-play .hero__title .ln:nth-child(2) > span { animation-delay: 340ms; }
-.intro-play .hero__title .ln:nth-child(3) > span { animation-delay: 430ms; }
-.intro-play .hero__rule { animation: introDraw 600ms var(--ease-draw) 300ms both; }
-.intro-play .hero__frame::after { animation: introShutter 620ms var(--ease-in-out) 650ms both; }
-.intro-play .hero__img { animation: introSettle 1200ms var(--ease-out) 650ms both; }
-.intro-play .hero__knit { animation: introPull 650ms var(--ease-in-out) 1100ms both; }
-.intro-play .hero__sub { animation: introUp 450ms var(--ease-out) 1450ms both; }
-.intro-play .hero__ctas { animation: introUp 450ms var(--ease-out) 1550ms both; }
-.intro-play .hero__meta { animation: introUp 450ms var(--ease-out) 1650ms both; }
-.intro-play .intro-skip { display: inline-flex; position: absolute; right: var(--gutter); bottom: calc(var(--mbar-h) + 1rem); z-index: 5; align-items: center; min-height: 44px; padding: 0.5rem 1rem; border: 1px solid var(--c-line-strong); border-radius: var(--r-sm); background: rgba(14, 15, 16, 0.7); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; animation: introSkip 2100ms linear both; }
-.intro-play.intro-done .intro-skip { display: none; }
-@media (max-width: 899px) { .intro-play .intro-skip { bottom: 1rem; } }
+.intro-play .hero__title .ln:nth-child(1) > span { animation-delay: 2600ms; }
+.intro-play .hero__title .ln:nth-child(2) > span { animation-delay: 2690ms; }
+.intro-play .hero__title .ln:nth-child(3) > span { animation-delay: 2780ms; }
+.intro-play .hero__rule { animation: introDraw 600ms var(--ease-draw) 2700ms both; }
+.intro-play .hero__frame::after { animation: introShutter 520ms var(--ease-in-out) 2650ms both; }
+.intro-play .hero__img { animation: introSettle 1200ms var(--ease-out) 2650ms both; }
+.intro-play .hero__knit { animation: introPull 560ms var(--ease-in-out) 2980ms both; }
+.intro-play .hero__sub { animation: introUp 450ms var(--ease-out) 3150ms both; }
+.intro-play .hero__ctas { animation: introUp 450ms var(--ease-out) 3250ms both; }
+.intro-play .hero__meta { animation: introUp 450ms var(--ease-out) 3350ms both; }
+@keyframes introOff { from { opacity: 1; } to { opacity: 0; } }
+@keyframes introGone { from { visibility: visible; } to { visibility: hidden; } }
+@keyframes introCard { 0% { opacity: 0; transform: translateY(30%) scale(1.04); } 22% { opacity: 1; transform: none; } 88% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8%); } }
+@keyframes introWeaveL { 0% { transform: translateX(-101%); animation-timing-function: cubic-bezier(.65,0,.35,1); } 30%, 67% { transform: translateX(0); animation-timing-function: cubic-bezier(.7,0,.84,0); } 100% { transform: translateX(101%); } }
+@keyframes introWeaveR { 0% { transform: translateX(101%); animation-timing-function: cubic-bezier(.65,0,.35,1); } 30%, 67% { transform: translateX(0); animation-timing-function: cubic-bezier(.7,0,.84,0); } 100% { transform: translateX(-101%); } }
+@keyframes introWord { 0% { transform: translateY(110%); animation-timing-function: cubic-bezier(.16,1,.3,1); } 32%, 66% { transform: translateY(0); animation-timing-function: cubic-bezier(.7,0,.84,0); } 100% { transform: translateY(-110%); } }
 /* Repeat visit and low-power devices: a short settle, no clip or scale. */
 .intro-short .hero__title .ln > span, .intro-lite .hero__title .ln > span { animation: introLine 600ms var(--ease-out) both; }
 .intro-short .hero__title .ln:nth-child(2) > span, .intro-lite .hero__title .ln:nth-child(2) > span { animation-delay: 60ms; }
@@ -289,7 +314,7 @@ address { font-style: normal; }
 @keyframes introShutter { from { transform: translateY(0); } to { transform: translateY(101%); } }
 @keyframes introSettle { from { transform: scale(1.16); } }
 @keyframes introPull { from { transform: translateY(0); } to { transform: translateY(-101%); } }
-@keyframes introSkip { 0%, 8% { opacity: 0; } 14%, 80% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes introSkip { 0%, 6% { opacity: 0; } 12%, 85% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 
 /* 5. SECTIONS ---------------------------------------------------------------- */
 

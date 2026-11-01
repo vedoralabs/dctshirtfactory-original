@@ -21,6 +21,7 @@ No elastic or bouncy easing. Every animation uses transform and opacity only. No
 |---|---|---|
 | **Signature entry** | Homepage hero | CSS keyframes, set before first paint (see below) |
 | **Text mask reveal** | Hero headline (3 lines); section titles (`data-split`) | Lines or words rise inside an `overflow: hidden` wrapper. Screen readers get the full title through `aria-label`, and the split words are `aria-hidden`. |
+| **Strip weave** | Opening sequence only | Ten full-width bars, transform-only, alternating directions |
 | **Image reveal** | Hero frame only | A graphite shutter (`::after`) slides off. The image is painted underneath from the first frame, so LCP is never delayed. |
 | **Staggered entrance** | Hero copy, CTAs, meta | Three items 100 ms apart, so nobody waits on a long chain |
 | **Scroll reveal** | `[data-reveal]` blocks | IntersectionObserver, fires once: 24 px rise plus fade over 700 ms. No scroll-jacking. |
@@ -41,19 +42,22 @@ An inline script in `<head>` (`src/layout.mjs`, `introBoot`) puts a class on `<h
 | none (`rm`) | `prefers-reduced-motion: reduce` | Final state at once |
 | none | JS disabled or storage blocked | Final state at once |
 
-Timeline for `intro-play`:
+Timeline for `intro-play`, a full-screen title sequence on a fixed overlay (`.intro`, outside the hero so it sits above the header and mobile bar):
 
 | Beat | Time | What happens |
 |---|---|---|
-| A | 0–250 ms | Graphite frame, kicker line, header fades in. Nav and the mobile Call/WhatsApp bar are live from the start. |
-| B | 250–1190 ms | Headline lines rise (90 ms apart); the orange rule draws across |
-| C | 650–1270 ms | Graphite shutter drops to show a lime knit panel in the frame |
-| D | 1100–1750 ms | Knit panel pulls up and away to show the garment; the image settles from 1.16× scale |
-| E | 1450–2100 ms | Sub-copy, CTAs and meta line settle |
+| Thread | 0.15–0.7 s | Black frame. A lime thread draws across the middle under the kicker line. |
+| Title cards | 0.7–1.43 s | FABRIC. → PRINT. → STITCH. cut in on the thread, about 240 ms each (STITCH in lime) |
+| Weave | 1.3–1.95 s | Ten fabric strips slide in from alternating sides (35 ms stagger) into a full-screen lime knit |
+| Statement | 1.75–2.9 s | MADE TO ORDER. rises out of the fabric, holds, then lifts away |
+| Pull | 2.45–3.3 s | Strips pull out the way they came, revealing the homepage. The overlay is hidden at 3.3 s. |
+| Settle | 2.55–3.8 s | Header fades in, headline lines rise, rule draws, frame shutter + knit panel show the garment, copy and CTAs settle |
+
+The repeat-visit, low-power and reduced-motion paths skip the overlay entirely.
 
 How it stays safe:
 - It's all CSS, so nothing waits on JavaScript, the hero image or fonts. A slow or failed image still finishes on time (tested).
-- Links work throughout, and the page never locks scrolling.
+- The page never locks scrolling. The overlay covers the page for up to 3.3 s, but one tap or key press removes it, so nav and contact are one interaction away.
 - "Skip intro" is visible during the sequence. Any key, tap, wheel or touch-move also finishes it at once: `main.js` calls `finish()` on every hero animation through `document.getAnimations()`.
 - The tests cover first visit, repeat visit, skip, key press, reduced motion, slow image, failed image and following a link mid-sequence (`tests/e2e.mjs`).
 

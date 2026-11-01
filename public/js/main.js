@@ -16,13 +16,14 @@
   // The sequence never blocks anything; this only lets visitors jump to the end state.
   if (root.classList.contains("intro-play")) {
     const hero = $("[data-hero]");
+    const intro = $("[data-intro]");
     const hdr = $("[data-hdr]");
     const finish = () => {
       if (root.classList.contains("intro-done")) return;
       root.classList.add("intro-done");
       document.getAnimations?.().forEach((a) => {
         const t = a.effect?.target;
-        if (t && (hero?.contains(t) || t === hdr)) a.finish();
+        if (t && (hero?.contains(t) || intro?.contains(t) || t === hdr)) a.finish();
       });
       off();
     };
@@ -31,7 +32,7 @@
     events.forEach((e) => addEventListener(e, finish, { capture: true, passive: true }));
     $("[data-intro-skip]")?.addEventListener("click", finish);
     // Done naturally: release the listeners.
-    setTimeout(() => { root.classList.add("intro-done"); off(); }, 2300);
+    setTimeout(() => { root.classList.add("intro-done"); off(); }, 3800);
   }
 
   /* ---------- header: solid on scroll ---------- */

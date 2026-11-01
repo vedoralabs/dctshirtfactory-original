@@ -30,6 +30,16 @@ export function secHead({ n, label, title, id, lead = "", aside = "", row = fals
 function hero() {
   const lead = categoryBySlug["gym-wears"];
   return `
+<div class="intro" data-intro>
+  <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
+  <div aria-hidden="true">
+  <div class="intro__strips">${Array.from({ length: 10 }, (_, i) => `<span style="--i:${i}"></span>`).join("")}</div>
+  <p class="intro__kicker">Custom apparel manufacturing · ${site.locations.replace("&", "&amp;")}</p>
+  <span class="intro__thread"></span>
+  <div class="intro__cards"><span>Fabric.</span><span>Print.</span><span>Stitch.</span></div>
+  <p class="intro__word"><span class="ln"><span>Made to</span></span><span class="ln"><span>order.</span></span></p>
+  </div>
+</div>
 <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
   <div class="wrap hero__grid">
     <figure class="hero__media">
@@ -59,7 +69,6 @@ function hero() {
       </ul>
     </div>
   </div>
-  <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
 </section>`;
 }
 
