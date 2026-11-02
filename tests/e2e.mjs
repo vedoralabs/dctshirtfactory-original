@@ -333,6 +333,24 @@ await check("phones: both hero CTAs sit above the bottom action bar (portrait an
   }
 });
 
+await check("hero headline never runs into the photo and the hero fits on screen (phones to wide desktops)", async () => {
+  for (const [w, h, mobile] of [[320, 568, 1], [390, 844, 1], [768, 1024, 1], [1024, 768], [1280, 720], [1366, 657], [1440, 900], [1893, 903], [1920, 1080], [2560, 1300]]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: !!mobile, hasTouch: !!mobile, reducedMotion: "reduce" });
+    const p = await open(ctx, "/");
+    const r = await p.evaluate(() => {
+      const f = document.querySelector(".hero__frame").getBoundingClientRect();
+      const lines = [...document.querySelectorAll(".hero__title .ln > span")].map((e) => e.getBoundingClientRect());
+      const hit = lines.some((l) => l.right > f.left + 1 && l.left < f.right - 1 && l.bottom > f.top + 1 && l.top < f.bottom - 1);
+      const widest = Math.max(...lines.map((l) => l.right));
+      return { hit, widest, frameBottom: f.bottom };
+    });
+    ok(!r.hit, `${w}x${h}: headline overlaps the photo`);
+    ok(r.widest <= w, `${w}x${h}: headline wider than the screen (${Math.round(r.widest)}px)`);
+    if (!mobile) ok(r.frameBottom <= h + 1, `${w}x${h}: photo runs below the fold (${Math.round(r.frameBottom)}px)`);
+    await ctx.close();
+  }
+});
+
 await check("deep links land on their target on a phone (fabric anchor, prefilled quote form)", async () => {
   const ctx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
   await ctx.addInitScript(() => sessionStorage.setItem("dct:intro", "1"));
