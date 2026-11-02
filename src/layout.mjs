@@ -17,8 +17,9 @@ const year = new Date().getFullYear();
 //   intro-play  first visit this session: the full sequence (~2 s, skippable)
 //   intro-short repeat visit: a quick settle
 //   intro-lite  low-power device or Save-Data: fades only, no clip/scale
-// Reduced motion gets none of them. Everything is CSS, so nothing waits on JS or images.
-const introBoot = `(function(){var d=document.documentElement;d.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rm');return}if(!d.hasAttribute('data-home'))return;var n=navigator,c=n.connection||{},seen=sessionStorage.getItem('dct:intro');var lite=c.saveData||(n.deviceMemory&&n.deviceMemory<=2)||(n.hardwareConcurrency&&n.hardwareConcurrency<=2);d.classList.add(seen?'intro-short':lite?'intro-lite':'intro-play');sessionStorage.setItem('dct:intro','1')}catch(e){}})();`;
+// Reduced motion gets none of them. Everything is CSS, so nothing waits on JS or images;
+// the timeout here removes the overlay even if main.js fails to load.
+const introBoot = `(function(){var d=document.documentElement;d.classList.add('js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rm');return}if(!d.hasAttribute('data-home'))return;var n=navigator,c=n.connection||{},seen=sessionStorage.getItem('dct:intro');var lite=c.saveData||(n.deviceMemory&&n.deviceMemory<=2)||(n.hardwareConcurrency&&n.hardwareConcurrency<=2);d.classList.add(seen?'intro-short':lite?'intro-lite':'intro-play');if(!seen&&!lite)setTimeout(function(){d.classList.add('intro-done')},5200);sessionStorage.setItem('dct:intro','1')}catch(e){}})();`;
 
 function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd = [], preload = "", home = false }) {
   const url = site.url + path;
