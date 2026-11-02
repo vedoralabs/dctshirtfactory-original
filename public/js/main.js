@@ -20,8 +20,8 @@
     const hdr = $("[data-hdr]");
     const finish = (e) => {
       if (root.classList.contains("intro-done")) return;
-      // The overlay lets taps through, so the tap that ends the intro must not also
-      // activate whatever (still hidden) link sits under the finger.
+      // The overlay disappears on this tap, so the click that follows must not land on
+      // whatever (still hidden) link now sits under the finger.
       if (e?.type === "pointerdown" && !e.target.closest?.("[data-intro-skip]")) {
         const swallow = (c) => { c.preventDefault(); c.stopPropagation(); };
         addEventListener("click", swallow, { capture: true, once: true });
@@ -78,6 +78,28 @@
   matchMedia("(min-width: 1100px)").addEventListener?.("change", (m) => m.matches && !mnav?.hidden && setMenu(false, false));
   // back/forward cache restore: never come back with the menu open
   addEventListener("pageshow", (e) => e.persisted && !mnav?.hidden && setMenu(false, false));
+
+  /* ---------- deep links land exactly ---------- */
+  // Web fonts and the phone-only content-visibility placeholders change heights after the
+  // first jump, which left /fabrics#fabric-… and prefilled quote links short of their target.
+  // Lay the page out fully, jump, then jump again once fonts and images settle, unless
+  // the visitor has started scrolling by then.
+  function landOn(el) {
+    if (!el) return;
+    root.classList.add("cv-off");
+    const go = () => el.scrollIntoView({ block: "start", behavior: "instant" });
+    let touched = false;
+    const stop = () => (touched = true);
+    ["wheel", "touchstart", "keydown"].forEach((e) => addEventListener(e, stop, { once: true, passive: true }));
+    requestAnimationFrame(go);
+    const loaded = document.readyState === "complete" ? null : new Promise((r) => addEventListener("load", r, { once: true }));
+    Promise.all([document.fonts?.ready, loaded]).then(() => requestAnimationFrame(() => !touched && go()));
+  }
+  if (location.hash.length > 1) {
+    let target = null;
+    try { target = $(location.hash); } catch {}
+    if (target && target.id !== "main") landOn(target);
+  }
 
   /* ---------- text mask reveal for section titles ---------- */
   $$("[data-split]").forEach((el) => {
@@ -312,10 +334,8 @@
       if (![...fabricSel.options].some((o) => o.value === fab)) fabricSel.add(new Option(fabricName(fab), fab), 1);
       fabricSel.value = fab;
     }
-    if ((cat || fab) && form.closest("#enquiry")) {
-      // arriving from a "Request a quote" link: bring the form into view
-      requestAnimationFrame(() => document.getElementById("enquiry")?.scrollIntoView({ block: "start" }));
-    }
+    // arriving from a "Request a quote" link: bring the form into view
+    if ((cat || fab) && form.closest("#enquiry")) landOn(document.getElementById("enquiry"));
   });
 
   /* ---------- Instagram: official embed only after the visitor asks ---------- */

@@ -319,6 +319,33 @@ await check("external links open safely; tel/mailto/WhatsApp use one number", as
   await ctx.close();
 });
 
+await check("phones: both hero CTAs sit above the bottom action bar (portrait and landscape)", async () => {
+  for (const [w, h] of [[320, 568], [360, 640], [375, 667], [375, 812], [390, 844], [412, 915], [768, 1024], [844, 390], [667, 375]]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, reducedMotion: "reduce" });
+    const p = await open(ctx, "/");
+    const r = await p.evaluate(() => {
+      const bar = document.querySelector(".mbar");
+      const limit = getComputedStyle(bar).display === "none" ? innerHeight : bar.getBoundingClientRect().top;
+      return { limit, bottoms: [...document.querySelectorAll(".hero__ctas .btn")].map((b) => b.getBoundingClientRect().bottom) };
+    });
+    ok(r.bottoms.length === 2 && r.bottoms.every((b) => b <= r.limit + 1), `${w}x${h}: CTA bottoms ${r.bottoms.map(Math.round)} vs bar ${Math.round(r.limit)}`);
+    await ctx.close();
+  }
+});
+
+await check("deep links land on their target on a phone (fabric anchor, prefilled quote form)", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
+  await ctx.addInitScript(() => sessionStorage.setItem("dct:intro", "1"));
+  for (const [path, id] of [["/fabrics#fabric-selina", "fabric-selina"], ["/contact?category=gym-wears&fabric=lycra", "enquiry"], ["/?category=marathon-tshirt", "enquiry"]]) {
+    const p = await open(ctx, path, { wait: "networkidle" });
+    await p.waitForTimeout(800);
+    const top = await p.evaluate((id) => document.getElementById(id).getBoundingClientRect().top, id);
+    ok(top > 60 && top < 110, `${path}: target top ${Math.round(top)}px (expected just under the header)`);
+    await p.close();
+  }
+  await ctx.close();
+});
+
 await browser.close();
 server.close();
 

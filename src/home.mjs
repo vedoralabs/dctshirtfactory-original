@@ -45,7 +45,7 @@ function hero() {
     <figure class="hero__media">
       <div class="hero__frame">
         ${img(lead.heroImage, "Cycling jersey in teal and grey on a mannequin: design concept", { eager: true, sizes: "(min-width: 1000px) 40vw, 70vw", cls: "hero__img" })}
-        <span class="concept-tag">Design concept · ${esc(lead.title)}</span>
+        <span class="concept-tag">Design concept<span class="concept-tag__x"> · ${esc(lead.title)}</span></span>
         <span class="hero__knit" aria-hidden="true"></span>
       </div>
     </figure>
