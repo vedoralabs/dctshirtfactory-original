@@ -138,6 +138,12 @@
       if (en.isIntersecting) { en.target.classList.add("is-in"); revealIO.unobserve(en.target); }
     });
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  // siblings that reveal together cascade in, unless the markup set its own delay
+  $$("[data-reveal]").forEach((el) => {
+    if (el.style.getPropertyValue("--d")) return;
+    const sibs = [...el.parentElement.children].filter((s) => s.hasAttribute("data-reveal"));
+    if (sibs.length > 1) el.style.setProperty("--d", `${(sibs.indexOf(el) % 4) * 80}ms`);
+  });
   $$("[data-reveal], .is-split").forEach((el) => revealIO.observe(el));
 
   /* ---------- lightbox ---------- */

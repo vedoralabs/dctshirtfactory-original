@@ -94,7 +94,7 @@ export function categoryPage(c) {
       <header class="sec-head sec-head--row" data-reveal>
         <div>
           <p class="eyebrow">Fabrics</p>
-          <h2 class="display" id="cf-title">${fabricList.length ? `${fabricList.length} fabrics for <em>${esc(c.title)}.</em>` : `Fabrics for <em>${esc(c.title)}.</em>`}</h2>
+          <h2 class="display" id="cf-title" data-split>${fabricList.length ? `${fabricList.length} fabrics for <em>${esc(c.title)}.</em>` : `Fabrics for <em>${esc(c.title)}.</em>`}</h2>
         </div>
         <div class="sec-head__aside"><p>${
           fabricList.length
@@ -113,7 +113,7 @@ export function categoryPage(c) {
   <section class="section cat__opts" aria-labelledby="opts-title">
     <div class="wrap cat__opts-grid">
       <div>
-        <h2 class="display display--sm" id="opts-title">Options</h2>
+        <h2 class="display display--sm" id="opts-title" data-split>Options</h2>
         <table class="specs">
           <tbody>
             <tr><th scope="row">Sizes</th><td>${esc(sizes)}</td></tr>
@@ -124,9 +124,9 @@ export function categoryPage(c) {
         </table>
       </div>
       <div>
-        <h2 class="display display--sm">Made for</h2>
+        <h2 class="display display--sm" data-split>Made for</h2>
         <ul class="uses">${c.useCases.map((u) => `<li>${icon.check}${esc(u)}</li>`).join("")}</ul>
-        <h2 class="display display--sm">Customisation</h2>
+        <h2 class="display display--sm" data-split>Customisation</h2>
         <ul class="methods">${methods.map((m) => `<li><strong>${esc(m.name)}</strong><span>${esc(m.note)}</span></li>`).join("")}</ul>
       </div>
     </div>
@@ -136,7 +136,7 @@ export function categoryPage(c) {
     others.length
       ? `<section class="section cat__gal" aria-labelledby="gal-title">
     <div class="wrap">
-      <h2 class="display display--sm" id="gal-title">More design concepts</h2>
+      <h2 class="display display--sm" id="gal-title" data-split>More design concepts</h2>
       <ul class="cat__gal-grid" data-gallery="cat">
         ${others
           .map(
@@ -151,7 +151,7 @@ export function categoryPage(c) {
 
   <section class="section cat__steps" aria-labelledby="steps-title">
     <div class="wrap">
-      <h2 class="display display--sm" id="steps-title">How an order works</h2>
+      <h2 class="display display--sm" id="steps-title" data-split>How an order works</h2>
       <ol class="mini-steps">
         ${steps.map((s) => `<li data-reveal><span>${s.n}</span><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join("")}
       </ol>
@@ -163,7 +163,7 @@ export function categoryPage(c) {
     <div class="wrap faqs__grid">
       <header class="sec-head">
         <p class="eyebrow">Questions</p>
-        <h2 class="display" id="cat-faq-title">Before you order</h2>
+        <h2 class="display" id="cat-faq-title" data-split>Before you order</h2>
         <a class="btn btn--line" href="/faq">All FAQs ${icon.arrow}</a>
       </header>
       ${faqList([faqs[1], faqs[2], faqs[6], faqs[7]], "cfaq")}
@@ -172,7 +172,7 @@ export function categoryPage(c) {
 
   <section class="section cat__rel" aria-labelledby="rel-title">
     <div class="wrap">
-      <h2 class="display display--sm" id="rel-title">Other categories</h2>
+      <h2 class="display display--sm" id="rel-title" data-split>Other categories</h2>
       <div class="rel">
         ${rel
           .map(

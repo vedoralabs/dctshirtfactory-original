@@ -284,7 +284,7 @@ export function instagram() {
   <div class="wrap ig__in">
     <div data-reveal>
       <p class="eyebrow">From the workshop</p>
-      <h2 class="display display--sm" id="ig-title">See our real work on Instagram</h2>
+      <h2 class="display display--sm" id="ig-title" data-split>See our real work on Instagram</h2>
       <p class="lead">Our latest products, production and customer orders are posted on ${site.instagramHandle}.</p>
     </div>
     ${grid}

@@ -86,7 +86,7 @@ export function footer() {
   return `
 <footer class="ftr">
   <div class="wrap ftr__grid">
-    <div class="ftr__brand">
+    <div class="ftr__brand" data-reveal>
       <a href="/" class="ftr__logo" aria-label="D Creations, home"><img src="/img/logo-light.png" alt="D Creations" width="273" height="135" loading="lazy"></a>
       <p>Custom apparel manufacturer for schools, companies, teams and events. ${site.locations.replace("&", "&amp;")}.</p>
       <div class="ftr__social">
@@ -95,18 +95,18 @@ export function footer() {
         <a href="${site.mapsUrl}" target="_blank" rel="noopener" aria-label="Google Maps">${icon.pin}</a>
       </div>
     </div>
-    <nav class="ftr__col" aria-label="Site">
+    <nav class="ftr__col" aria-label="Site" data-reveal>
       <h2>Site</h2>
       <a href="/">Home</a>
       ${NAV.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
       <a href="/faq">FAQ</a>
       <a href="/privacy">Privacy notice</a>
     </nav>
-    <nav class="ftr__col" aria-label="Clothing categories">
+    <nav class="ftr__col" aria-label="Clothing categories" data-reveal>
       <h2>Clothing</h2>
       ${categories.map((c) => `<a href="/clothing/${c.slug}">${esc(c.title)}</a>`).join("")}
     </nav>
-    <div class="ftr__col">
+    <div class="ftr__col" data-reveal>
       <h2>Contact</h2>
       <a href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp} WhatsApp ${site.phoneDisplay}</a>
       <a href="tel:${site.phoneHref}">${icon.phone} Call ${site.phoneDisplay}</a>

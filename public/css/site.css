@@ -247,23 +247,27 @@ address { font-style: normal; }
 }
 @media (max-width: 399px) { .hero__ctas .ico { display: none; } }
 /* short phones (SE, small Androids): the headline and CTAs matter most */
-@media (max-width: 599px) and (max-height: 700px) { .hero__sub { display: none; } .hero__media { min-height: 6rem; } }
-@media (min-width: 600px) and (max-width: 999px) { .hero__media { width: min(56%, 24rem); } .hero__frame { max-height: 46svh; } }
+@media (max-width: 599px) and (max-height: 700px) { .hero__sub { display: none; } .hero__grid { grid-template-rows: minmax(6rem, 1fr) auto; } }
 /* Phones and tablets: the hero ends at the top of the fixed action bar, and the garment
-   takes only the height the copy leaves, so both CTAs are on screen, never under the bar. */
+   takes only the height the copy leaves, so both CTAs are on screen, never under the bar.
+   A grid row gets the leftover height; the frame is pinned to that row's height and takes
+   its width from the 4:5 ratio (plain sizing that Safari and Chrome agree on). */
 @media (max-width: 999px) {
   .hero { min-height: calc(100vh - var(--mbar-h)); min-height: calc(100svh - var(--mbar-h)); padding-bottom: var(--s-5); }
-  @supports (container-type: size) {
-    .hero__media { flex: 1 1 0; min-height: 8rem; width: 100%; container-type: size; align-items: flex-end; }
-    .hero__frame { flex: none; width: min(72cqw, 26rem, 80cqh); max-height: none; }
-  }
+  .hero__grid { display: grid; grid-template-rows: minmax(7rem, 1fr) auto; width: 100%;
+    min-height: calc(100vh - var(--mbar-h) - var(--hdr-h) - 1rem - var(--s-5));
+    min-height: calc(100svh - var(--mbar-h) - var(--hdr-h) - 1rem - var(--s-5)); }
+  .hero__media { display: block; width: 100%; height: auto; min-height: 0; margin: 0; }
+  .hero__frame { position: absolute; bottom: 0; right: 0; width: auto; height: 100%; max-width: 72%; max-height: 26rem; margin: 0; }
+  @supports not (aspect-ratio: 4 / 5) { .hero__frame { width: 60%; } }
 }
-@media (min-width: 600px) and (max-width: 999px) { @supports (container-type: size) { .hero__frame { width: min(56cqw, 24rem, 80cqh); } } }
+@media (min-width: 600px) and (max-width: 999px) { .hero__frame { max-width: 56%; max-height: 30rem; } }
 /* Phones held sideways: the screen is too short for the garment and a bottom bar. The header
    keeps its Request a quote button there, so the bar goes and the headline fits the height. */
 @media (max-width: 999px) and (min-width: 560px) and (max-height: 520px) and (orientation: landscape) {
   .hero__media, .hero__sub { display: none; }
   .hero__title { font-size: min(var(--fs-hero), 14svh); }
+  .hero__grid { grid-template-rows: auto; align-content: end; }
   .hero__ctas { flex-wrap: nowrap; }
   .mnav nav a { font-size: min(9vw, 10svh); }
 }
@@ -766,6 +770,34 @@ html:not(.js) [data-enq] { display: none; }
 .w > span { display: inline-block; transform: translateY(105%); transition: transform 800ms var(--ease-out); transition-delay: calc(var(--wi) * 45ms); }
 .is-split.is-in .w > span { transform: none; }
 
+/* Pictures settle into their frames as their card reveals (scale only, composited). */
+.js .pcard[data-reveal] .pcard__img, .js [data-reveal] .swatch img, .js .work__item[data-reveal] img { scale: 1.14; transition: scale 1400ms var(--ease-out), transform 900ms var(--ease-out); }
+.js .pcard[data-reveal].is-in .pcard__img, .js [data-reveal].is-in .swatch img, .js .work__item[data-reveal].is-in img { scale: 1; }
+/* Section furniture draws in after its heading: the eyebrow rule, the outline numeral. */
+.js [data-reveal] .eyebrow::after { transform: scaleX(0); transform-origin: left; transition: transform 900ms var(--ease-out) 250ms; }
+.js [data-reveal].is-in .eyebrow::after { transform: none; }
+.js [data-reveal] .sec-num { opacity: 0; translate: 0 25%; transition: opacity 900ms var(--ease-out) 150ms, translate 1100ms var(--ease-out) 150ms; }
+.js [data-reveal].is-in .sec-num { opacity: 1; translate: none; }
+/* Press feedback on everything tappable. */
+.btn { transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro), scale 160ms var(--ease-out); }
+.mbar a, .seg, .wa-float { transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro), scale 160ms var(--ease-out); }
+.btn:active, .mbar a:active, .wa-float:active, .seg:active { scale: 0.96; transition-duration: 60ms; }
+/* The bottom bar and the WhatsApp button slide up once the page (or the intro) is ready. */
+.mbar, .wa-float { animation: barUp 650ms var(--ease-out) 250ms both; }
+.intro-play .mbar, .intro-play .wa-float { animation-delay: 4550ms; }
+@keyframes barUp { from { transform: translateY(110%); } }
+
+/* Page to page: the old page lifts away, the new one rises in; header and bars stay put.
+   Browsers without cross-document view transitions simply navigate as before. */
+@view-transition { navigation: auto; }
+.hdr { view-transition-name: hdr; }
+.mbar { view-transition-name: mbar; }
+.wa-float { view-transition-name: wafloat; }
+::view-transition-old(root) { animation: vtOut 260ms var(--ease-in-out) both; }
+::view-transition-new(root) { animation: vtIn 520ms var(--ease-out) 60ms both; }
+@keyframes vtOut { to { opacity: 0; transform: translateY(-24px); } }
+@keyframes vtIn { from { opacity: 0; transform: translateY(32px); } }
+
 /* Phones: skip style/layout work for sections far below the fold */
 @media (max-width: 999px) {
   main > .section:not(.caps):not(.archive):not(.flibrary), main > .how, main > .cta, .ftr { content-visibility: auto; contain-intrinsic-size: auto 900px; }
@@ -778,4 +810,7 @@ html:not(.js) [data-enq] { display: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
   .js [data-reveal], .w > span { opacity: 1 !important; transform: none !important; }
   .intro-skip { display: none !important; }
+  .js [data-reveal] .eyebrow::after, .js [data-reveal] .sec-num { transform: none !important; opacity: 1 !important; translate: none !important; }
+  .js [data-reveal] img, .js [data-reveal] .pcard__img { scale: 1 !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
