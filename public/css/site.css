@@ -671,6 +671,13 @@ address { font-style: normal; }
 .cat__gal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
 .cat__gal-grid .work__btn { aspect-ratio: 3 / 4; }
 @media (min-width: 900px) { .cat__gal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* one or two concepts: fill the row instead of leaving empty columns (the images are square) */
+.cat__gal-grid > li:only-child { grid-column: 1 / -1; }
+.cat__gal-grid > li:only-child .work__btn { aspect-ratio: 1; }
+@media (min-width: 900px) {
+  .cat__gal-grid:has(> li:only-child) { max-width: 34rem; }
+  .cat__gal-grid:has(> li:nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 56rem; }
+}
 .mini-steps { display: grid; gap: var(--s-3); }
 @media (min-width: 700px) { .mini-steps { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .mini-steps { grid-template-columns: repeat(5, 1fr); } }
