@@ -264,7 +264,9 @@ address { font-style: normal; }
    (the header is never faded: the overlay covers it until the strips leave)
    Never blocking: the skip control, any key, tap, wheel or touch finishes it at once (main.js). */
 .intro { display: none; }
-.intro-play .intro { display: block; position: fixed; inset: 0; z-index: 80; overflow: hidden; animation: introGone 1ms linear 4450ms both; }
+/* opacity only (no visibility animation: discrete properties tick on the main thread every frame).
+   pointer-events: none so a dead overlay can never trap the page; main.js swallows the tap that ends it. */
+.intro-play .intro { display: block; position: fixed; inset: 0; z-index: 80; overflow: hidden; pointer-events: none; animation: introOff 1ms linear 4450ms both; }
 .intro-play.intro-done .intro { display: none; }
 .intro::before { content: ""; position: absolute; inset: 0; background: var(--c-bg); animation: introOff 1ms linear 2750ms both; }
 .intro__strips span { position: absolute; left: 0; width: 100%; top: calc(var(--i) * 10%); height: 10.4%; background: repeating-linear-gradient(135deg, rgba(14,15,16,.07) 0 2px, transparent 2px 7px), #cdf23a; transform: translateX(-101%); animation: introWeaveL 2250ms calc(1850ms + var(--i) * 35ms) both; }
@@ -281,7 +283,7 @@ address { font-style: normal; }
 .intro__word .ln > span { display: inline-block; transform: translateY(110%); animation: introWord 1550ms 2350ms both; }
 .intro__word .ln:nth-child(2) > span { animation-delay: 2440ms; }
 .intro-skip { display: none; }
-.intro-play .intro-skip { display: inline-flex; position: fixed; right: var(--gutter); bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 3; align-items: center; min-height: 44px; padding: 0.5rem 1rem; border: 1px solid var(--c-line-strong); border-radius: var(--r-sm); background: rgba(14, 15, 16, 0.75); color: var(--c-text); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; animation: introSkip 4450ms linear both; }
+.intro-play .intro-skip { display: inline-flex; position: fixed; right: var(--gutter); bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 3; align-items: center; min-height: 44px; padding: 0.5rem 1rem; border: 1px solid var(--c-line-strong); border-radius: var(--r-sm); background: rgba(14, 15, 16, 0.75); color: var(--c-text); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; pointer-events: auto; animation: introSkip 4450ms linear both; }
 /* the homepage underneath picks up as the strips leave */
 .intro-play .hero__kicker { animation: introUp 450ms var(--ease-out) 3500ms both; }
 .intro-play .hero__title .ln > span { animation: introLine 760ms var(--ease-out) both; }
@@ -296,7 +298,6 @@ address { font-style: normal; }
 .intro-play .hero__ctas { animation: introUp 450ms var(--ease-out) 4200ms both; }
 .intro-play .hero__meta { animation: introUp 450ms var(--ease-out) 4300ms both; }
 @keyframes introOff { from { opacity: 1; } to { opacity: 0; } }
-@keyframes introGone { from { visibility: visible; } to { visibility: hidden; } }
 @keyframes introCard { 0% { opacity: 0; transform: translateY(30%) scale(1.04); } 22% { opacity: 1; transform: none; } 88% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8%); } }
 @keyframes introWeaveL { 0% { transform: translateX(-101%); animation-timing-function: cubic-bezier(.65,0,.35,1); } 25%, 72% { transform: translateX(0); animation-timing-function: cubic-bezier(.7,0,.84,0); } 100% { transform: translateX(101%); } }
 @keyframes introWeaveR { 0% { transform: translateX(101%); animation-timing-function: cubic-bezier(.65,0,.35,1); } 25%, 72% { transform: translateX(0); animation-timing-function: cubic-bezier(.7,0,.84,0); } 100% { transform: translateX(-101%); } }
@@ -315,7 +316,7 @@ address { font-style: normal; }
 @keyframes introShutter { from { transform: translateY(0); } to { transform: translateY(101%); } }
 @keyframes introSettle { from { transform: scale(1.16); } }
 @keyframes introPull { from { transform: translateY(0); } to { transform: translateY(-101%); } }
-@keyframes introSkip { 0%, 6% { opacity: 0; } 12%, 85% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes introSkip { 0%, 6% { opacity: 0; } 12%, 85% { opacity: 1; } 100% { opacity: 0; } }
 
 /* 5. SECTIONS ---------------------------------------------------------------- */
 

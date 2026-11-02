@@ -18,8 +18,15 @@
     const hero = $("[data-hero]");
     const intro = $("[data-intro]");
     const hdr = $("[data-hdr]");
-    const finish = () => {
+    const finish = (e) => {
       if (root.classList.contains("intro-done")) return;
+      // The overlay lets taps through, so the tap that ends the intro must not also
+      // activate whatever (still hidden) link sits under the finger.
+      if (e?.type === "pointerdown" && !e.target.closest?.("[data-intro-skip]")) {
+        const swallow = (c) => { c.preventDefault(); c.stopPropagation(); };
+        addEventListener("click", swallow, { capture: true, once: true });
+        setTimeout(() => removeEventListener("click", swallow, true), 600);
+      }
       root.classList.add("intro-done");
       document.getAnimations?.().forEach((a) => {
         const t = a.effect?.target;
@@ -30,7 +37,7 @@
     const events = ["keydown", "pointerdown", "wheel", "touchmove"];
     const off = () => events.forEach((e) => removeEventListener(e, finish, true));
     events.forEach((e) => addEventListener(e, finish, { capture: true, passive: true }));
-    $("[data-intro-skip]")?.addEventListener("click", finish);
+    $("[data-intro-skip]")?.addEventListener("click", () => finish());
     // Done naturally: release the listeners.
     setTimeout(() => { root.classList.add("intro-done"); off(); }, 4800);
   }
