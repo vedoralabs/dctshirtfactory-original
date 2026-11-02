@@ -84,6 +84,7 @@
   // first jump, which left /fabrics#fabric-… and prefilled quote links short of their target.
   // Lay the page out fully, jump, then jump again once fonts and images settle, unless
   // the visitor has started scrolling by then.
+  let reland = null; // the desktop scroll layer calls this after its pin spacer shifts the page
   function landOn(el) {
     if (!el) return;
     root.classList.add("cv-off");
@@ -93,7 +94,8 @@
     ["wheel", "touchstart", "keydown"].forEach((e) => addEventListener(e, stop, { once: true, passive: true }));
     requestAnimationFrame(go);
     const loaded = document.readyState === "complete" ? null : new Promise((r) => addEventListener("load", r, { once: true }));
-    Promise.all([document.fonts?.ready, loaded]).then(() => requestAnimationFrame(() => !touched && go()));
+    reland = () => requestAnimationFrame(() => !touched && go());
+    Promise.all([document.fonts?.ready, loaded]).then(reland);
   }
   if (location.hash.length > 1) {
     let target = null;
@@ -426,7 +428,8 @@
       });
     });
 
-    // Re-measure once fonts and late images have settled.
+    // Re-measure once fonts and late images have settled; a deep link re-lands each time.
+    ScrollTrigger.addEventListener("refresh", () => reland?.());
     document.fonts?.ready.then(() => ScrollTrigger.refresh());
     addEventListener("load", () => ScrollTrigger.refresh());
   };
