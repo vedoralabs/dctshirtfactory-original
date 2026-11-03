@@ -30,7 +30,8 @@
       root.classList.add("intro-done");
       document.getAnimations?.().forEach((a) => {
         const t = a.effect?.target;
-        if (t && (hero?.contains(t) || intro?.contains(t) || t === hdr)) a.finish();
+        // (endless ones, like the garment ring's turn, can't be finished)
+        if (t && (hero?.contains(t) || intro?.contains(t) || t === hdr) && a.effect.getTiming().iterations !== Infinity) a.finish();
       });
       dispatchEvent(new Event("intro:done"));
       off();
@@ -105,9 +106,9 @@
   }
 
   /* ---------- hero: 3D garment ring ---------- */
-  // One transform per frame on the ring (the cards are placed once in CSS). It turns on its
-  // own, a horizontal drag turns it by hand with a little glide, and it stops whenever the
-  // hero is off screen or the tab is hidden. Reduced motion: no auto-turn, drag still works.
+  // The turn is a CSS animation (runs off the main thread). JS only sizes the ring, names
+  // the front card a few times a second, and scrubs the animation while it's dragged.
+  // Paused off screen, in hidden tabs and during the intro. Reduced motion: no auto-turn.
   const ringBox = $("[data-ring]");
   const ring = ringBox && $(".ring", ringBox);
   if (ring) {
@@ -115,63 +116,53 @@
     const cards = $$(".ring__card", ring);
     const cap = $("[data-ring-cap]", ringBox);
     const step = 360 / cards.length;
-    const AUTO = reduced ? 0 : -360 / 36000; // degrees per ms: one turn in 36 s
-    let angle = 0, vel = AUTO, drag = null, moved = 0, front = -1, last = 0, running = false, onScreen = true;
-    let armed = !root.classList.contains("intro-play"); // wait for the intro to clear
-    // the ring sits back by its radius, so the front card shows at its natural size
-    let r = 0;
-    const size = () => {
-      r = (spin.offsetWidth / 2 / Math.tan(Math.PI / cards.length)) * 1.14;
-      spin.style.setProperty("--r", `${r}px`);
-    };
+    const TURN = 36000; // ms per full turn, as in site.css
+    const size = () => spin.style.setProperty("--r", `${(spin.offsetWidth / 2 / Math.tan(Math.PI / cards.length)) * 1.14}px`);
     size();
     new ResizeObserver(size).observe(spin);
     ring.classList.add("is-3d");
-    const paint = () => {
-      spin.style.transform = `translateZ(${-r}px) rotateX(-7deg) rotateY(${angle}deg)`;
-      const f = (((Math.round(-angle / step) % cards.length) + cards.length) % cards.length);
-      if (f !== front) {
-        cards[front]?.classList.remove("is-front");
-        cards[f].classList.add("is-front");
-        front = f;
-        if (cap) cap.textContent = cards[f].dataset.t;
-      }
+    const anim = spin.getAnimations?.()[0];
+    let front = -1, onScreen = true, drag = null, moved = 0;
+    let armed = !root.classList.contains("intro-play"); // wait for the intro to clear
+    const angle = () => (anim ? -((Number(anim.currentTime) || 0) % TURN) / TURN * 360 : 0);
+    const name = () => {
+      const f = (((Math.round(-angle() / step) % cards.length) + cards.length) % cards.length);
+      if (f === front) return;
+      cards[front]?.classList.remove("is-front");
+      cards[f].classList.add("is-front");
+      front = f;
+      if (cap) cap.textContent = cards[f].dataset.t;
     };
-    const tick = (t) => {
-      if (!running) return;
-      const dt = Math.min(50, t - (last || t));
-      last = t;
-      if (!drag) { vel += (AUTO - vel) * Math.min(1, dt / 900); angle += vel * dt; }
-      paint();
-      requestAnimationFrame(tick);
+    const sync = () => {
+      if (!anim) return;
+      const go = armed && onScreen && !document.hidden && !drag && !reduced;
+      if (go && anim.playState !== "running") anim.play();
+      if (!go && anim.playState === "running") anim.pause();
     };
-    const start = () => {
-      if (running || !armed || !onScreen || document.hidden) return;
-      running = true; last = 0;
-      requestAnimationFrame(tick);
-    };
-    const stop = () => (running = false);
-    paint();
-    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; onScreen ? start() : stop(); }).observe(ringBox);
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
-    if (!armed) setTimeout(() => { armed = true; start(); }, 4300);
-    addEventListener("intro:done", () => { armed = true; start(); });
+    if (anim) anim.pause();
+    name();
+    setInterval(() => onScreen && !document.hidden && name(), 250);
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(ringBox);
+    document.addEventListener("visibilitychange", sync);
+    const arm = () => { armed = true; sync(); };
+    if (armed) sync();
+    else { setTimeout(arm, 4300); addEventListener("intro:done", arm); }
 
+    // drag: scrub the animation's clock (one style write per pointer event)
     ringBox.addEventListener("pointerdown", (e) => {
-      drag = { x: e.clientX, a: angle, t: e.timeStamp };
-      moved = 0; vel = 0;
-      armed = true; start();
+      if (!anim) return;
+      drag = { x: e.clientX, t: Number(anim.currentTime) || 0 };
+      moved = 0;
+      armed = true; sync();
     });
     addEventListener("pointermove", (e) => {
       if (!drag) return;
       const dx = e.clientX - drag.x;
       moved = Math.max(moved, Math.abs(dx));
-      const next = drag.a + dx * 0.3;
-      const dt = Math.max(8, e.timeStamp - drag.t);
-      vel = (next - angle) / dt;
-      angle = next; drag.t = e.timeStamp;
+      anim.currentTime = (((drag.t - (dx * 0.3 / 360) * TURN) % TURN) + TURN) % TURN;
+      name();
     }, { passive: true });
-    const release = () => { if (drag) { drag = null; vel = Math.max(-0.6, Math.min(0.6, vel)); } };
+    const release = () => { if (drag) { drag = null; sync(); } };
     addEventListener("pointerup", release);
     addEventListener("pointercancel", release);
     // a drag is not a tap: don't follow the card's link after turning the ring

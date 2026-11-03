@@ -355,7 +355,7 @@ await check("hero ring: 3D cards placed, turns on its own, drag turns it", async
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   await ctx.addInitScript(() => sessionStorage.setItem("dct:intro", "1"));
   const p = await open(ctx, "/");
-  const read = () => p.evaluate(() => ({ is3d: document.querySelector(".ring").classList.contains("is-3d"), t: document.querySelector(".ring__spin").style.transform, r: parseFloat(getComputedStyle(document.querySelector(".ring__spin")).getPropertyValue("--r")) }));
+  const read = () => p.evaluate(() => ({ is3d: document.querySelector(".ring").classList.contains("is-3d"), t: getComputedStyle(document.querySelector(".ring__spin")).transform, r: parseFloat(getComputedStyle(document.querySelector(".ring__spin")).getPropertyValue("--r")) }));
   const a = await read();
   await p.waitForTimeout(600);
   const b = await read();
