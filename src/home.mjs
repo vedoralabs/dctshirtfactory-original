@@ -209,7 +209,7 @@ export function gallery() {
           (w, i) => `
       <li class="work__item work__item--${i + 1}" data-cat="${w.cat}" data-reveal>
         <button type="button" class="work__btn" data-lb-src="/img/${w.img}-960.webp" data-lb-caption="${esc(`${w.title}: design concept (${categoryBySlug[w.cat].title})`)}" aria-label="${esc(`View ${w.title}, design concept, larger`)}">
-          ${img(w.img, `${w.title}: design concept`, { sizes: "(min-width: 900px) 33vw, 50vw" })}
+          ${img(w.img, `${w.title}: design concept`, { sizes: i === 0 || i === 6 ? "(min-width: 900px) 50vw, 92vw" : "(min-width: 900px) 25vw, 46vw" })}
           ${conceptTag}
           <span class="work__cap"><strong>${esc(w.title)}</strong><span>${esc(categoryBySlug[w.cat].title)}</span></span>
         </button>

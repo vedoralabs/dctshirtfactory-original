@@ -140,7 +140,7 @@ export function categoryPage(c) {
       <ul class="cat__gal-grid" data-gallery="cat">
         ${others
           .map(
-            (b, i) => `<li data-reveal><button type="button" class="work__btn" data-lb-src="/img/${b}-960.webp" data-lb-caption="${esc(c.title)}: design concept" aria-label="View design concept ${i + 2} larger">${img(b, `${c.title}: design concept ${i + 2}`, { sizes: "(min-width: 900px) 33vw, 50vw" })}<span class="concept-tag">Design concept</span></button></li>`
+            (b, i) => `<li data-reveal><button type="button" class="work__btn" data-lb-src="/img/${b}-960.webp" data-lb-caption="${esc(c.title)}: design concept" aria-label="View design concept ${i + 2} larger">${img(b, `${c.title}: design concept ${i + 2}`, { sizes: others.length === 1 ? "(min-width: 900px) 45vw, 92vw" : "(min-width: 900px) 33vw, 50vw" })}<span class="concept-tag">Design concept</span></button></li>`
           )
           .join("")}
       </ul>

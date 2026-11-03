@@ -7,6 +7,10 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Home: the floating Ask/WhatsApp buttons wait until the hero (which has its own CTAs) scrolls away.
+  const heroEl = $("[data-hero]");
+  if (heroEl) root.classList.add("hero-on");
+  if (heroEl) new IntersectionObserver(([e]) => root.classList.toggle("hero-on", e.intersectionRatio > 0.35), { threshold: [0, 0.35, 1] }).observe(heroEl);
   const data = (() => { try { return JSON.parse($("#site-data")?.textContent || "{}"); } catch { return {}; } })();
 
   /* ---------- year ---------- */

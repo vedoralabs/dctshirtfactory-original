@@ -42,7 +42,21 @@ mkdirSync(new URL("clothing/", DIST), { recursive: true });
 cpSync(new URL("public/", ROOT), DIST, { recursive: true });
 rmSync(new URL("img/manifest.json", DIST), { force: true });
 
-const write = (rel, html) => writeFileSync(new URL(rel, DIST), html);
+// Names like "T-Shirts" must not break after the hyphen ("T-" / "SHIRTS"). Wrap them in a
+// no-wrap span in visible text only (not in tags, <title>, <option>, scripts or styles).
+const SKIP = /^<(title|option|script|style|textarea)\b/i;
+const keepHyphens = (html) => {
+  let skip = null;
+  return html.split(/(<[^>]+>)/).map((part) => {
+    if (part.startsWith("<")) {
+      if (skip && new RegExp(`^</${skip}`, "i").test(part)) skip = null;
+      else if (!skip && SKIP.test(part) && !part.endsWith("/>")) skip = part.match(SKIP)[1];
+      return part;
+    }
+    return skip ? part : part.replace(/\b([A-Za-z]{1,3}-[A-Za-z]+)\b/g, '<span class="nw">$1</span>');
+  }).join("");
+};
+const write = (rel, html) => writeFileSync(new URL(rel, DIST), rel.endsWith(".html") ? keepHyphens(html) : html);
 
 // Illustrative fabric textures as standalone SVG files (lazy-loaded, no DOM cost),
 // plus the lime knit panel the homepage entry pulls away.
