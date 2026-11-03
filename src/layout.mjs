@@ -127,10 +127,12 @@ export function footer() {
 
 function actionBars() {
   return `
+<button type="button" class="ask-float" data-ask aria-label="Ask a question about D Creations">${icon.ask}<span>Ask us</span></button>
 <a class="wa-float" href="${waLink()}" target="_blank" rel="noopener" aria-label="Chat with D Creations on WhatsApp">${icon.whatsapp}<span>WhatsApp</span></a>
 <nav class="mbar" aria-label="Quick actions">
   <a href="tel:${site.phoneHref}">${icon.phone}<span>Call</span></a>
   <a class="mbar__wa" href="${waLink()}" target="_blank" rel="noopener">${icon.whatsapp}<span>WhatsApp</span></a>
+  <button type="button" data-ask>${icon.ask}<span>Ask</span></button>
   <a href="/contact">${icon.grid}<span>Get a quote</span></a>
 </nav>
 <dialog class="lb" data-lightbox aria-label="Image viewer">

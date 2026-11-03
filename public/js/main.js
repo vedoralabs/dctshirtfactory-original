@@ -32,6 +32,7 @@
         const t = a.effect?.target;
         if (t && (hero?.contains(t) || intro?.contains(t) || t === hdr)) a.finish();
       });
+      dispatchEvent(new Event("intro:done"));
       off();
     };
     const events = ["keydown", "pointerdown", "wheel", "touchmove"];
@@ -103,6 +104,80 @@
     if (target && target.id !== "main") landOn(target);
   }
 
+  /* ---------- hero: 3D garment ring ---------- */
+  // One transform per frame on the ring (the cards are placed once in CSS). It turns on its
+  // own, a horizontal drag turns it by hand with a little glide, and it stops whenever the
+  // hero is off screen or the tab is hidden. Reduced motion: no auto-turn, drag still works.
+  const ringBox = $("[data-ring]");
+  const ring = ringBox && $(".ring", ringBox);
+  if (ring) {
+    const spin = $(".ring__spin", ring);
+    const cards = $$(".ring__card", ring);
+    const cap = $("[data-ring-cap]", ringBox);
+    const step = 360 / cards.length;
+    const AUTO = reduced ? 0 : -360 / 36000; // degrees per ms: one turn in 36 s
+    let angle = 0, vel = AUTO, drag = null, moved = 0, front = -1, last = 0, running = false, onScreen = true;
+    let armed = !root.classList.contains("intro-play"); // wait for the intro to clear
+    // the ring sits back by its radius, so the front card shows at its natural size
+    let r = 0;
+    const size = () => {
+      r = (spin.offsetWidth / 2 / Math.tan(Math.PI / cards.length)) * 1.14;
+      spin.style.setProperty("--r", `${r}px`);
+    };
+    size();
+    new ResizeObserver(size).observe(spin);
+    ring.classList.add("is-3d");
+    const paint = () => {
+      spin.style.transform = `translateZ(${-r}px) rotateX(-7deg) rotateY(${angle}deg)`;
+      const f = (((Math.round(-angle / step) % cards.length) + cards.length) % cards.length);
+      if (f !== front) {
+        cards[front]?.classList.remove("is-front");
+        cards[f].classList.add("is-front");
+        front = f;
+        if (cap) cap.textContent = cards[f].dataset.t;
+      }
+    };
+    const tick = (t) => {
+      if (!running) return;
+      const dt = Math.min(50, t - (last || t));
+      last = t;
+      if (!drag) { vel += (AUTO - vel) * Math.min(1, dt / 900); angle += vel * dt; }
+      paint();
+      requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (running || !armed || !onScreen || document.hidden) return;
+      running = true; last = 0;
+      requestAnimationFrame(tick);
+    };
+    const stop = () => (running = false);
+    paint();
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; onScreen ? start() : stop(); }).observe(ringBox);
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    if (!armed) setTimeout(() => { armed = true; start(); }, 4300);
+    addEventListener("intro:done", () => { armed = true; start(); });
+
+    ringBox.addEventListener("pointerdown", (e) => {
+      drag = { x: e.clientX, a: angle, t: e.timeStamp };
+      moved = 0; vel = 0;
+      armed = true; start();
+    });
+    addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      moved = Math.max(moved, Math.abs(dx));
+      const next = drag.a + dx * 0.3;
+      const dt = Math.max(8, e.timeStamp - drag.t);
+      vel = (next - angle) / dt;
+      angle = next; drag.t = e.timeStamp;
+    }, { passive: true });
+    const release = () => { if (drag) { drag = null; vel = Math.max(-0.6, Math.min(0.6, vel)); } };
+    addEventListener("pointerup", release);
+    addEventListener("pointercancel", release);
+    // a drag is not a tap: don't follow the card's link after turning the ring
+    ringBox.addEventListener("click", (e) => { if (moved > 6) e.preventDefault(); }, true);
+  }
+
   /* ---------- text mask reveal for section titles ---------- */
   $$("[data-split]").forEach((el) => {
     let i = 0;
@@ -145,6 +220,13 @@
     if (sibs.length > 1) el.style.setProperty("--d", `${(sibs.indexOf(el) % 4) * 80}ms`);
   });
   $$("[data-reveal], .is-split").forEach((el) => revealIO.observe(el));
+
+  /* ---------- assistant: loaded on first use ---------- */
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-ask]");
+    if (!b) return;
+    import("/js/assistant.js").then((m) => m.toggle(b)).catch(() => (location.href = "/faq"));
+  });
 
   /* ---------- lightbox ---------- */
   const lb = $("[data-lightbox]");

@@ -13,6 +13,7 @@ import { enquiryData } from "../src/enquiry.mjs";
 import { imgSize, icon } from "../src/util.mjs";
 import { fabricTexture } from "../src/textures.mjs";
 import { validate } from "./validate-data.mjs";
+import { assistantKB } from "../src/assistant.mjs";
 
 const ROOT = new URL("../", import.meta.url);
 const DIST = new URL("dist/", ROOT);
@@ -48,7 +49,6 @@ const write = (rel, html) => writeFileSync(new URL(rel, DIST), html);
 mkdirSync(new URL("img/tx/", DIST), { recursive: true });
 const svgFile = (f) => fabricTexture(f).replace(' aria-hidden="true" focusable="false"', "");
 for (const f of data.fabrics) write(`img/tx/${f.id}.svg`, svgFile(f));
-write("img/tx/hero-knit.svg", svgFile({ id: "hero-knit", texture: "pique", tint: "#b8dc2c" }));
 
 const crumbs = (...trail) => breadcrumbSchema([["Home", "/"], ...trail]);
 
@@ -123,6 +123,9 @@ write(
 </section>`,
   }).replace("<head>", '<head>\n<meta name="robots" content="noindex">')
 );
+
+// ---- assistant knowledge base (read by public/js/assistant.js) ------------------
+write("assistant.json", JSON.stringify(assistantKB()));
 
 // ---- sitemap / robots / manifest ---------------------------------------------
 const today = new Date().toISOString().slice(0, 10);

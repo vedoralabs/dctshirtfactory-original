@@ -109,11 +109,11 @@ await check("intro: skip button and any key jump straight to the final state", a
     await p.waitForTimeout(50);
     const st = await p.evaluate(() => ({
       ctas: getComputedStyle(document.querySelector(".hero__ctas")).opacity,
-      knit: getComputedStyle(document.querySelector(".hero__knit")).transform,
+      ring: getComputedStyle(document.querySelector(".ring")).opacity,
       done: document.documentElement.classList.contains("intro-done"),
     }));
     ok(st.done && st.ctas === "1", `${how}: not finished (${JSON.stringify(st)})`);
-    ok(st.knit !== "none" && !st.knit.endsWith(", 0)"), `${how}: knit panel still covering (${st.knit})`);
+    ok(st.ring === "1", `${how}: garment ring still fading in (${st.ring})`);
     await ctx.close();
   }
 });
@@ -338,7 +338,7 @@ await check("hero headline never runs into the photo and the hero fits on screen
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: !!mobile, hasTouch: !!mobile, reducedMotion: "reduce" });
     const p = await open(ctx, "/");
     const r = await p.evaluate(() => {
-      const f = document.querySelector(".hero__frame").getBoundingClientRect();
+      const f = document.querySelector(".ring__card.is-front").getBoundingClientRect();
       const lines = [...document.querySelectorAll(".hero__title .ln > span")].map((e) => e.getBoundingClientRect());
       const hit = lines.some((l) => l.right > f.left + 1 && l.left < f.right - 1 && l.bottom > f.top + 1 && l.top < f.bottom - 1);
       const widest = Math.max(...lines.map((l) => l.right));
@@ -347,6 +347,48 @@ await check("hero headline never runs into the photo and the hero fits on screen
     ok(!r.hit, `${w}x${h}: headline overlaps the photo`);
     ok(r.widest <= w, `${w}x${h}: headline wider than the screen (${Math.round(r.widest)}px)`);
     if (!mobile) ok(r.frameBottom <= h + 1, `${w}x${h}: photo runs below the fold (${Math.round(r.frameBottom)}px)`);
+    await ctx.close();
+  }
+});
+
+await check("hero ring: 3D cards placed, turns on its own, drag turns it", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  await ctx.addInitScript(() => sessionStorage.setItem("dct:intro", "1"));
+  const p = await open(ctx, "/");
+  const read = () => p.evaluate(() => ({ is3d: document.querySelector(".ring").classList.contains("is-3d"), t: document.querySelector(".ring__spin").style.transform, r: parseFloat(getComputedStyle(document.querySelector(".ring__spin")).getPropertyValue("--r")) }));
+  const a = await read();
+  await p.waitForTimeout(600);
+  const b = await read();
+  ok(a.is3d && a.r > 50, `ring not set up in 3D (${JSON.stringify(a)})`);
+  ok(a.t !== b.t, "ring is not turning on its own");
+  const box = await p.locator("[data-ring]").boundingBox();
+  await p.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await p.mouse.down();
+  await p.mouse.move(box.x + box.width / 2 + 200, box.y + box.height / 2, { steps: 8 });
+  await p.mouse.up();
+  const url = p.url();
+  await p.waitForTimeout(300);
+  ok(p.url() === url, "dragging the ring followed a card link");
+  await ctx.close();
+});
+
+await check("assistant: answers from site content, falls back to WhatsApp", async () => {
+  for (const [w, h, btn] of [[390, 844, ".mbar [data-ask]"], [1280, 800, ".ask-float"]]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: w < 900, hasTouch: w < 900 });
+    await ctx.addInitScript(() => sessionStorage.setItem("dct:intro", "1"));
+    const p = await open(ctx, "/fabrics");
+    await p.click(btn);
+    await p.waitForSelector(".ask.is-open");
+    for (const [q, expect] of [["fabrics for gym wear", "NS Lycra"], ["where is your factory", "Kankanady"], ["what sizes do you make", "5XL"], ["do you make sarees", "WhatsApp"]]) {
+      await p.fill("#ask-q", q);
+      await p.press("#ask-q", "Enter");
+      await p.waitForTimeout(600);
+      const last = await p.evaluate(() => [...document.querySelectorAll(".ask__msg--bot")].pop().textContent);
+      ok(last.includes(expect), `${w}px "${q}": expected "${expect}" in "${last.slice(0, 120)}"`);
+    }
+    await p.keyboard.press("Escape");
+    await p.waitForTimeout(400);
+    ok(!(await p.evaluate(() => document.querySelector(".ask").classList.contains("is-open"))), "Escape did not close the assistant");
     await ctx.close();
   }
 });

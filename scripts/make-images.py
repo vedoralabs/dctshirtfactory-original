@@ -79,6 +79,26 @@ for src, box, name in CROPS:
     for w in WIDTHS:
         save(im, name, w)
 
+# Delivered work, from the owner's own Instagram posts (thumbnails for the work section).
+# These DO show client/event logos: used at the user's request (2 Nov 2026) as an exception
+# to the no-logos rule above, credited and linked to each post. Owner approval still pending
+# (OWNER-INPUTS.md, docs/content-rights-register.csv). Each is normalised to a 4:3 card:
+# (source, crop box or None, padding colour or None, output base name)
+WORK = [
+    ("instagram/hackfest-tees.jpg", None, (255, 255, 255), "work-hackfest-tees"),
+    ("instagram/hackfest-worn.jpg", (0, 364, 600, 700), (0, 0, 0), "work-hackfest-worn"),
+    ("instagram/nitte-walkathon-polo.jpg", None, (255, 255, 255), "work-nitte-polo"),
+    ("instagram/mangaluru-beach-marathon-tee.jpg", (0, 170, 600, 620), None, "work-beach-marathon"),
+    ("instagram/udupi-marathon-jersey.jpg", None, (255, 255, 255), "work-udupi-marathon"),
+]
+for src, box, padc, name in WORK:
+    im = ImageOps.exif_transpose(Image.open(SRC / src)).convert("RGB")
+    if box:
+        im = im.crop(box)
+    im = ImageOps.pad(im, (640, 480), color=padc, method=Image.LANCZOS) if padc else ImageOps.fit(im, (640, 480), Image.LANCZOS)
+    for w in (320, 640):
+        save(im, name, w, q=80)
+
 # Logo: black-on-white JPEG -> warm off-white on transparent PNG, tightly cropped
 logo = Image.open(SRC / "DC LOGO.jpeg").convert("L")
 alpha = ImageOps.invert(logo).point(lambda v: 0 if v < 40 else min(255, int((v - 40) * 1.3)))

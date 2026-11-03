@@ -286,12 +286,18 @@ export const concepts = [
 // Text only, worded as in the owner's caption. No client logos or event photos are
 // copied onto the site; the owner's posts load as official Instagram embeds on click.
 // Clients' own written OK is still recommended (see OWNER-INPUTS.md §5).
+// `thumbs`: photos from the owner's own Instagram posts of each order (they show client
+// logos; used at the user's request, owner approval pending). [image base name, alt text]
 export const clients = [
   {
     name: "Hackfest, NMAM Institute of Technology",
     place: "Nitte",
     type: "College tech event",
     work: "Official event T-shirts: custom navy and olive tees for the 50-hour hackathon.",
+    thumbs: [
+      ["work-hackfest-tees", "Hackfest event T-shirt in navy, front and back"],
+      ["work-hackfest-worn", "Hackfest T-shirts being worn, back print visible"],
+    ],
     when: "2025",
     category: "marathon-tshirt",
     sources: [
@@ -304,6 +310,7 @@ export const clients = [
     place: null,
     type: "Walkathon",
     work: "Custom jerseys and caps for the walk's “Protect Our Oceans” theme.",
+    thumbs: [["work-nitte-polo", "NITTE Walkathon 2025 polo in white, front and back"]],
     when: "2025",
     category: "marathon-tshirt",
     sources: [{ url: "https://www.instagram.com/dctshirtfactory/p/DS2qn9MkpCf/", date: "29 Dec 2025" }],
@@ -313,6 +320,7 @@ export const clients = [
     place: "Mangaluru",
     type: "Marathon",
     work: "The official marathon jersey.",
+    thumbs: [["work-beach-marathon", "Mangaluru Beach Festival Marathon jersey in red and blue"]],
     when: "Dec 2025",
     category: "marathon-tshirt",
     sources: [{ url: "https://www.instagram.com/dctshirtfactory/reel/DSnKTuNkvu3/", date: "23 Dec 2025" }],
@@ -322,6 +330,7 @@ export const clients = [
     place: "Udupi",
     type: "Marathon",
     work: "The official blue and white jerseys for the 7 December run.",
+    thumbs: [["work-udupi-marathon", "Udupi Marathon jersey in white and sky blue, front and back"]],
     when: "Dec 2025",
     category: "marathon-tshirt",
     sources: [{ url: "https://www.instagram.com/dctshirtfactory/p/DR_PKHGknNX/", date: "7 Dec 2025" }],
@@ -371,7 +380,7 @@ export const pending = [
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
   "Lead times, minimum quantities, service area and any certifications",
   "Source + permission for the 3 testimonials",
-  "Approved Instagram posts/Reels to feature",
+  "Approved Instagram posts/Reels to feature, incl. the 5 work photos now shown on Our Work (they show client logos)",
   "Clients: owner to confirm the 4 events listed from Instagram, and any older clients",
   "Real product, fabric macro, process and factory photos/video",
   "FAQ answers and benefit statements sign-off",

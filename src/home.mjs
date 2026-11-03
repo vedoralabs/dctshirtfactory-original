@@ -25,10 +25,13 @@ export function secHead({ n, label, title, id, lead = "", aside = "", row = fals
 }
 
 // The hero is also the entry sequence (see the intro classes in layout.mjs and
-// "Signature entry" in site.css): type mask-reveals, the frame opens on a knit
-// panel, the panel pulls away to show the garment, then copy and CTAs settle.
+// "Signature entry" in site.css): type mask-reveals, the garment ring rises in
+// and starts turning, then copy and CTAs settle.
 function hero() {
   const lead = categoryBySlug["gym-wears"];
+  // A 3D ring of the seven category garments, led by gym wear (main.js spins it; drag to turn).
+  // It repeats the category links below, so it is hidden from screen readers and the tab order.
+  const ring = [lead, ...categories.filter((c) => c !== lead)];
   return `
 <div class="intro" data-intro>
   <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
@@ -42,13 +45,19 @@ function hero() {
 </div>
 <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
   <div class="wrap hero__grid">
-    <figure class="hero__media">
-      <div class="hero__frame">
-        ${img(lead.heroImage, "Cycling jersey in teal and grey on a mannequin: design concept", { eager: true, sizes: "(min-width: 1000px) 40vw, 70vw", cls: "hero__img" })}
-        <span class="concept-tag">Design concept<span class="concept-tag__x"> · ${esc(lead.title)}</span></span>
-        <span class="hero__knit" aria-hidden="true"></span>
+    <div class="hero__media" data-ring aria-hidden="true">
+      <div class="ring">
+        <ul class="ring__spin" style="--n:${ring.length}">
+          ${ring
+            .map(
+              (c, i) => `<li class="ring__card" style="--i:${i}" data-t="${pad(categories.indexOf(c) + 1)} · ${esc(c.title)}"><a href="/clothing/${c.slug}" tabindex="-1">${img(c.heroImage, "", { eager: i === 0, sizes: "(min-width: 1000px) 22vw, 45vw" })}</a></li>`
+            )
+            .join("")}
+        </ul>
       </div>
-    </figure>
+      <span class="ring__floor"></span>
+      <p class="ring__cap"><span class="ring__tag">Design concepts</span><span data-ring-cap>${pad(categories.indexOf(lead) + 1)} · ${esc(lead.title)}</span></p>
+    </div>
     <div class="hero__copy">
       <p class="hero__kicker">Custom apparel manufacturing · ${site.locations.replace("&", "&amp;")}</p>
       <h1 class="hero__title" id="hero-title">
@@ -232,6 +241,15 @@ export function clientsSection({ full = false, n = "", h = "h2" } = {}) {
     const meta = [c.type, c.place, c.when].filter(Boolean).map(esc).join(" · ");
     return `
       <li class="client" data-reveal>
+        ${
+          c.thumbs?.length
+            ? `<div class="client__thumbs${c.thumbs.length > 1 ? " client__thumbs--2" : ""}">${c.thumbs
+                .map(
+                  ([base, alt]) => `<button type="button" class="client__thumb" data-lb-src="/img/${base}-640.webp" data-lb-caption="${esc(c.name)}: ${esc(alt)} (from our Instagram)" aria-label="View larger: ${esc(alt)}">${img(base, alt, { sizes: "(min-width: 900px) 320px, 90vw" })}</button>`
+                )
+                .join("")}</div>`
+            : ""
+        }
         <span class="client__n" aria-hidden="true">${pad(i + 1)}</span>
         <p class="client__meta">${meta}</p>
         <h3 class="client__name">${esc(c.name)}</h3>
@@ -263,8 +281,8 @@ export function clientsSection({ full = false, n = "", h = "h2" } = {}) {
       lead: "Colleges, walkathons, marathons and run clubs that have worn kits made by DC T-Shirt Factory.",
       aside: full ? "" : `<a class="btn btn--line" href="/work">All work ${icon.arrow}</a>`,
     })}
-    <ol class="clients__grid">${ok.map(card).join("")}</ol>
-    ${full ? `<p class="clients__note">Clients are listed as described in our own Instagram posts or confirmed by us. Logos and event photos belong to their owners and are not reproduced here.</p>` : ""}
+    <ol class="clients__grid" data-gallery="clients">${ok.map(card).join("")}</ol>
+    ${full ? `<p class="clients__note">Clients are listed as described in our own Instagram posts or confirmed by us. Photos are from our own Instagram posts of each order; client names and logos belong to their owners.</p>` : ""}
   </div>
 </section>`;
 }
