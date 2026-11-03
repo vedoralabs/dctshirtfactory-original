@@ -219,7 +219,7 @@ address { font-style: normal; }
 /* The 3D garment ring: seven cards stood round a circle, turned as one by main.js
    (auto-spin, drag to turn). The ring's height follows its box; the radius (--r) is set
    by main.js from the card width. Before that, only the lead card shows, flat. */
-.hero__media { position: relative; z-index: 0; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.hero__media { position: relative; z-index: 0; contain: size layout style; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 .ring { position: absolute; inset: 0 0 2.4rem; display: grid; place-items: center; perspective: 1000px; perspective-origin: 50% 30%; }
 .ring__spin { position: relative; height: 86%; aspect-ratio: 3 / 4; margin: 0; padding: 0; list-style: none; transform-style: preserve-3d; transform: translateZ(calc(var(--r, 0px) * -1)) rotateX(-7deg); }
 .ring__card { position: absolute; inset: 0; border-radius: var(--r-sm); overflow: hidden; background: #cfcac0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
