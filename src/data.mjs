@@ -100,6 +100,11 @@ export const fabrics = [
   { id: "hydra-170", name: "Hydra 170", texture: "jersey", tint: "#1e4a52" },
   { id: "spectra-250-300", name: "Spectra 250/300", texture: "jersey", tint: "#3f2a2a" },
   { id: "cuba-300", name: "Cuba 300", texture: "jersey", tint: "#4a4030" },
+  // From the owner's printed catalogue (Hoodies & Varsity and Sublimation T-Shirt pages)
+  { id: "loopnet", name: "Loopnet", texture: "rib", tint: "#4a2f3a" },
+  { id: "fleece", name: "Fleece", texture: "fleece", tint: "#5a4a3a" },
+  { id: "adidas-selina", name: "Adidas Selina", texture: "smooth", tint: "#24445e" },
+  { id: "pp", name: "PP", texture: "matte", tint: "#3d4a3a" },
 ];
 
 // ----- Clothing categories ----------------------------------------------------------
@@ -107,8 +112,7 @@ export const fabrics = [
 // (/products/<slug> redirects to /clothing/<slug>). Pitches and use cases follow
 // the owner's original product pages. Images are AI design concepts with no logos
 // or text (docs/content-rights-register.csv). Hoodies & Varsity Jackets and
-// Sublimation T-Shirts were on the original site; their fabric lists stay empty
-// until DCT confirms them.
+// Sublimation T-Shirts fabric lists are from the owner's printed catalogue.
 /** @type {Category[]} */
 export const categories = [
   {
@@ -202,7 +206,7 @@ export const categories = [
     pitch: "Hoodies and varsity jackets with ribbed cuffs and custom patches. Options for embroidered logos, woven labels and printed branding.",
     heroImage: "hoodie-charcoal",
     images: ["hoodie-charcoal", "varsity-cream", "hoodie-beige"],
-    fabrics: [],
+    fabrics: ["loopnet", "superpoly", "fleece", "cuba-300"],
     branding: ["embroidery", "patches", "screen", "dtf"],
     useCases: ["College & varsity teams", "Corporate winter giveaways", "Retail & fashion lines"],
     audience: ["colleges", "corporates", "sports"],
@@ -218,7 +222,7 @@ export const categories = [
     pitch: "Full-coverage sublimation printing for team kits, events and custom designs, with colour matching and batch consistency across large runs.",
     heroImage: "sublimation-wave",
     images: ["sublimation-wave", "sublimation-art", "sublimation-sleeve"],
-    fabrics: [],
+    fabrics: ["selina", "dotknit", "njs", "adidas-selina", "nirmal", "pp", "ns-lycra"],
     branding: ["sublimation"],
     useCases: ["Team kits", "Event merchandise", "Design-heavy printed apparel"],
     audience: ["sports", "events", "colleges", "schools"],
@@ -375,8 +379,7 @@ export const pending = [
   "Production domain + redirect plan (site is noindex until then)",
   "Email spelling: catalogue says dcreationstripur@, site uses dcreationstirpur@",
   "GSTIN, business hours",
-  "Fabric availability, spelling, specifications and category mappings (24 fabrics)",
-  "Fabric lists for Hoodies & Varsity Jackets and Sublimation T-Shirts (both still active?)",
+  "Fabric availability, spelling, specifications and category mappings (28 fabrics)",
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
   "Lead times, minimum quantities, service area and any certifications",
   "Source + permission for the 3 testimonials",

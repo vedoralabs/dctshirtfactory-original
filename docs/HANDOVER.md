@@ -23,7 +23,7 @@
 
 | Command | Result |
 |---|---|
-| `npm run lint` (JS syntax + data validation) | ✔ 7 categories, 24 fabrics, no broken references |
+| `npm run lint` (JS syntax + data validation) | ✔ 7 categories, 28 fabrics, no broken references |
 | `npm test` (node:test) | ✔ 8/8: exact names and order vs the brief, canonical fabrics, derived relationships, no unconfirmed properties, validator catches errors, WhatsApp URL encoding |
 | `npm run build` | ✔ 17 pages; content scan passed (46 files) |
 | `npm run test:e2e` (Playwright, Chromium) | ✔ 24/24. All 16 routes at 320, 360, 375, 390, 430, 768, 1024, 1280, 1440 and 1920 px: no console errors, no failed requests, no horizontal overflow, no broken or unsized images, one `<h1>`. Entry: first visit, repeat visit, skip button, key press, reduced motion, slow image, failed image, link mid-sequence. Menu focus trap / Escape / scroll lock / back-forward. Keyboard skip link. Redirects and 404. Every category's fabric list. Fabric filter, deep link, tap targets. Enquiry invalid / valid / encoding / honest status / prefill. Safe external links, one phone number. |

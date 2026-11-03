@@ -226,7 +226,7 @@ await check("clothing: every category page shows exactly its fabrics, linked to 
 await check("fabrics: filter by category, deep link to a fabric, tap targets ≥ 44 px", async () => {
   const ctx = await browser.newContext({ viewport: { width: 375, height: 800 }, reducedMotion: "reduce" });
   const p = await open(ctx, "/fabrics");
-  ok((await p.$$(".fcard:not([hidden])")).length === 24, "not all 24 shown");
+  ok((await p.$$(".fcard:not([hidden])")).length === data.fabrics.length, `not all ${data.fabrics.length} shown`);
   await p.click("[data-flib-filter='gym-wears']");
   ok((await p.$$(".fcard:not([hidden])")).length === 6, "Gym Wear filter count");
   ok((await p.getAttribute("[data-flib-filter='gym-wears']", "aria-pressed")) === "true", "aria-pressed");

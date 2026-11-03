@@ -5,15 +5,16 @@ import * as data from "../src/data.mjs";
 import { validate } from "../scripts/validate-data.mjs";
 import { waLink, quoteMessage } from "../src/util.mjs";
 
-// Exactly as listed in the DCT implementation brief (Nov 2026), section 06.
+// Exactly as listed in the DCT implementation brief (Nov 2026), section 06; the last two
+// categories (empty in the brief) are from the owner's printed catalogue.
 const BRIEF = {
   "School Uniform T-Shirts": ["Lacoste", "Honeycomb", "Mars", "Mars Premium", "Spun Honeycomb", "NJS", "Nirmal", "Superpoly", "Dotknit", "Airtex", "PC Matty"],
   "Marathon T-Shirts": ["Selina", "Dotknit", "Jacquard", "Lycra", "Spandex"],
   "Track Pants / Shorts": ["Superpoly", "Honeycomb", "NJS", "Spun Honeycomb", "Nirmal", "NS Lycra", "Jacquard"],
   "Corporate T-Shirts": ["Pique", "Lacoste", "Mars 200", "Airtex", "PC Matty", "Fine", "Mirror 200"],
   "Gym Wear": ["NS Lycra", "Mirror 200", "Mirror 150X", "Hydra 170", "Spectra 250/300", "Cuba 300"],
-  "Hoodies & Varsity Jackets": [],
-  "Sublimation T-Shirts": [],
+  "Hoodies & Varsity Jackets": ["Loopnet", "Superpoly", "Fleece", "Cuba 300"],
+  "Sublimation T-Shirts": ["Selina", "Dotknit", "NJS", "Adidas Selina", "Nirmal", "PP", "NS Lycra"],
 };
 
 const name = (id) => data.fabrics.find((f) => f.id === id)?.name;

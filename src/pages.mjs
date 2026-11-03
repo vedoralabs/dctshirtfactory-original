@@ -26,7 +26,7 @@ function fabricsPage() {
       aside: `<p>Every fabric DCT lists, with the clothing categories it's listed for. Filter by category, then ask about any fabric. Availability, colours and specifications are confirmed with your quotation.</p>`,
     })}
     ${fabricLibrary()}
-    <p class="concept-note">Textures are illustrative, drawn for this site. They are not photographs of the actual fabrics. Hoodies &amp; Varsity Jackets and Sublimation T-Shirts fabrics are confirmed on enquiry.</p>
+    <p class="concept-note">Textures are illustrative, drawn for this site. They are not photographs of the actual fabrics.</p>
   </div>
 </section>
 ${ctaBand(`Found your fabric? <em>Let's talk.</em>`)}`;

@@ -19,7 +19,7 @@ Under the owner's brief (16 Oct 2026), anything unverified is **left off the sit
 - [ ] Sign-off on the privacy notice at /privacy. It describes the current set-up: no storage, WhatsApp hand-off, click-to-load map.
 
 ## 3. Fabrics (updated Nov 2026: exact names from the implementation brief)
-The site now shows the 24 fabric names exactly as DCT lists them, under the category lists in the brief. Each fabric appears **once** in `src/data.mjs`, and its categories are worked out from the category lists. No descriptions, GSM, composition, performance or care details are shown. Textures are drawn illustrations, labelled as such.
+The site now shows the 28 fabric names exactly as DCT lists them: 24 from the category lists in the brief, plus Loopnet, Fleece, Adidas Selina and PP from the printed catalogue (Hoodies & Varsity and Sublimation T-Shirt pages, which also set those two categories' fabric lists). Each fabric appears **once** in `src/data.mjs`, and its categories are worked out from the category lists. No descriptions, GSM, composition, performance or care details are shown. Textures are drawn illustrations, labelled as such.
 
 - [ ] Confirm availability, spelling and category mapping for each: Lacoste, Pique, Honeycomb, Spun Honeycomb, Mars, Mars Premium, Mars 200, NJS, Nirmal, Superpoly, Dotknit, Airtex, PC Matty, Selina, Jacquard, Lycra, Spandex, NS Lycra, Fine, Mirror 200, Mirror 150X, Hydra 170, Spectra 250/300, Cuba 300
 - [ ] **Trade names:** Lacoste and Lycra are also registered trademarks. The site uses them as DCT does, as fabric trade names (approved by Vedora Labs, Nov 2026). The October brief had asked for generic names, so please confirm DCT is comfortable showing them.
