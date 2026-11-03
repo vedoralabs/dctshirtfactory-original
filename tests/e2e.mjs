@@ -386,6 +386,9 @@ await check("assistant: answers from site content, falls back to WhatsApp", asyn
       const last = await p.evaluate(() => [...document.querySelectorAll(".ask__msg--bot")].pop().textContent);
       ok(last.includes(expect), `${w}px "${q}": expected "${expect}" in "${last.slice(0, 120)}"`);
     }
+    // a long chat must not squash the suggestion chips under the input
+    const [chips, chip, form] = await p.evaluate(() => [".ask__chips", ".ask__chip", ".ask__form"].map((s) => { const r = document.querySelector(s).getBoundingClientRect(); return { top: r.top, bottom: r.bottom }; }));
+    ok(chip.bottom <= chips.bottom + 1 && chips.bottom <= form.top + 1, `${w}px: suggestion chips clipped (chip ${Math.round(chip.bottom)}, row ${Math.round(chips.bottom)}, input ${Math.round(form.top)})`);
     await p.keyboard.press("Escape");
     await p.waitForTimeout(400);
     ok(!(await p.evaluate(() => document.querySelector(".ask").classList.contains("is-open"))), "Escape did not close the assistant");
