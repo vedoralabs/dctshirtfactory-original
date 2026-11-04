@@ -10,7 +10,8 @@
     "lint": "node --check public/js/main.js && node scripts/validate-data.mjs",
     "test": "node --test tests/unit.test.mjs",
     "test:e2e": "node tests/e2e.mjs",
-    "serve": "node tests/server.mjs"
+    "serve": "node tests/server.mjs",
+    "check:live": "node scripts/check-live.mjs"
   },
   "engines": {
     "node": ">=18"

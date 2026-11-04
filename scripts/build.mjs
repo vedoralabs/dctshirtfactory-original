@@ -157,8 +157,7 @@ ${urls.map((u) => `  <url><loc>${data.site.url}${u}</loc><lastmod>${today}</last
 </urlset>
 `
 );
-// Until the production domain is confirmed, every page is noindex and robots stays open
-// so crawlers can see that. Flip `site.indexable` in src/data.mjs at go-live.
+// robots stays open; `site.indexable` in src/data.mjs decides noindex per page.
 write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${data.site.url}/sitemap.xml\n`);
 write(
   "site.webmanifest",

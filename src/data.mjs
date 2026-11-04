@@ -16,9 +16,10 @@
 export const site = {
   name: "D Creations",
   altName: "DC T-Shirt Factory", // as printed in the owner's catalogue
-  // Intended production domain. Not yet pointed at this build, so pages are noindex.
+  // Production domain, live since 4 Nov 2026 (Apache server, see docs/DEPLOY.md).
+  // Keep indexable true: false adds noindex to every page and drops the site from Google.
   url: "https://dctshirtfactory.co.in",
-  indexable: false,
+  indexable: true,
   whatsapp: "918136867309",
   phoneDisplay: "+91 81368 67309",
   phoneHref: "+918136867309",
@@ -377,7 +378,7 @@ export const pending = [
   "Public name styling: D Creations / DC T-Shirt Factory / DCT Shirt Factory",
   "Logo as SVG or high-resolution transparent file",
   "Quote destination: WhatsApp only, or also email/CRM? (currently WhatsApp)",
-  "Production domain + redirect plan (site is noindex until then)",
+  "Production server: upload with dist/.htaccess and verify (docs/DEPLOY.md)",
   "Email spelling: catalogue says dcreationstripur@, site uses dcreationstirpur@",
   "GSTIN, business hours",
   "Fabric availability, spelling, specifications and category mappings (27 fabrics)",

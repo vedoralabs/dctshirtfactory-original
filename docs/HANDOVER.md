@@ -2,7 +2,7 @@
 
 **Live:** https://dctshirtfactory.vercel.app (Vercel project `dctshirtfactory`, production deploy `dpl_AyM4BXjfwxJtjckiM93ynQwpExJS`)
 **Branch:** `redesign/cinematic`
-**Real domain:** dctshirtfactory.co.in is **not** connected, and every page is `noindex` until it is.
+**Real domain:** dctshirtfactory.co.in is live on the owner's Apache server (since 4 Nov 2026) and indexable. dctshirtfactory.vercel.app stays as the preview copy (sent `X-Robots-Tag: noindex`). Deploy steps: `docs/DEPLOY.md`.
 
 ## What was implemented
 
@@ -64,4 +64,4 @@ Release screenshots (mobile 375 px and desktop 1440 px for home, clothing, a cat
 See `OWNER-INPUTS.md` (also printed by every build). Key items: public name styling, SVG logo, fabric availability and mapping for all 24 names (and comfort with showing **Lacoste/Lycra**, which are trademarks), whether the two legacy categories stay, lead times / MOQ / certifications, real product / process / fabric photos, client confirmations, enquiry destination, production domain.
 
 ## Deploying
-`npx vercel deploy --prod` from the repo root (CLI deploy; no Git integration). To go live on the real domain: set `site.indexable = true`, point dctshirtfactory.co.in at the Vercel project, rebuild, then check PageSpeed Insights and Search Console.
+`npx vercel deploy --prod` from the repo root (CLI deploy; no Git integration). That updates the preview copy only. The real domain is updated by uploading `dist/` (with its `.htaccess`) to the Apache server: follow `docs/DEPLOY.md`.

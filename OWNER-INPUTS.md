@@ -11,7 +11,7 @@ Under the owner's brief (16 Oct 2026), anything unverified is **left off the sit
 - [x] Addresses from the catalogue, now on the contact page and footer: 1st Floor, Jean Complex, Kankanady, Mangalore 575002, and 8/29J, A.V.P Layout, Gandhi Nagar PO, Chettipalayam, Tiruppur 641603
 - [ ] Business hours
 - [ ] Which steps are in-house vs outsourced, and what happens in Mangalore vs Tiruppur (the site now just says "Mangalore & Tiruppur", as the original site did)
-- [ ] Production domain. dctshirtfactory.co.in still serves the old site. All pages are **noindex** until the domain is pointed here (`site.indexable` in `src/data.mjs`).
+- [x] Production domain. dctshirtfactory.co.in serves this build from the owner's Apache server (4 Nov 2026). Deploy steps and checks: `docs/DEPLOY.md`.
 
 ## 2. Quote handling
 - [ ] Destination: WhatsApp only (current: the enquiry form builds a message and opens WhatsApp; nothing is stored or emailed), or also email/CRM? An email/CRM route needs a small backend with server-side validation and spam protection.
