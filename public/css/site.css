@@ -700,6 +700,8 @@ address { font-style: normal; }
 /* long category labels wrap on phones; a trailing rule would be left hanging at the far edge */
 @media (max-width: 599px) { .cat__copy .eyebrow::after { display: none; } }
 .cat__title { font-size: clamp(2.8rem, 1.4rem + 6vw, 7rem); line-height: 0.9; margin-bottom: var(--s-5); }
+.cat__where { display: flex; align-items: center; gap: 0.5rem; margin-top: var(--s-4); font-size: var(--fs-sm); color: var(--c-muted); }
+.cat__where .ico { flex: none; color: var(--c-accent); }
 .cat__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-5); margin-top: var(--s-6); }
 .cat__wa { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; font-weight: 600; color: var(--c-text); }
 .cat__wa .ico { color: var(--c-wa); }
@@ -845,7 +847,7 @@ html:not(.js) [data-enq] { display: none; }
 .btn { transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro), scale 160ms var(--ease-out); }
 .mbar a, .mbar button, .seg, .wa-float, .ask-float { transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro), scale 160ms var(--ease-out); }
 .wa-float, .ask-float { transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro), scale 160ms var(--ease-out), opacity 300ms var(--ease-out), translate 300ms var(--ease-out), visibility 300ms; }
-.nw { white-space: nowrap; }
+dc-nw { white-space: nowrap; }
 .btn:active, .mbar a:active, .mbar button:active, .wa-float:active, .ask-float:active, .seg:active { scale: 0.96; transition-duration: 60ms; }
 /* The bottom bar and the WhatsApp button slide up once the page (or the intro) is ready. */
 .mbar, .wa-float, .ask-float { animation: barUp 650ms var(--ease-out) 250ms both; }

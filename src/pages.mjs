@@ -90,7 +90,7 @@ export const pages = [
   {
     path: "/clothing",
     name: "Clothing",
-    title: "Custom Clothing Manufacturer: Uniforms, Jerseys, Polos | D Creations",
+    title: "Custom Clothing Manufacturer in Mangalore & Tiruppur | D Creations",
     description: "School uniform T-shirts, marathon T-shirts, track pants, corporate T-shirts, gym wear, hoodies and sublimation T-shirts, made to order in Mangalore & Tiruppur.",
     crumbs: false,
     body: () => clothingIndex(),
@@ -120,7 +120,7 @@ export const pages = [
     path: "/about",
     name: "About",
     title: "About D Creations (DC T-Shirt Factory) | Mangalore & Tiruppur",
-    description: "D Creations makes custom T-shirts and apparel: school uniforms, sportswear, corporate polos, hoodies and sublimation jerseys. Small runs and bulk orders welcome.",
+    description: "D Creations (DC T-Shirt Factory) makes custom T-shirts and apparel in Mangalore & Tiruppur: school uniforms, sportswear, corporate polos and hoodies, shipped across India.",
     body: () => aboutStory({ h: "h1" }) + units() + why({ n: "" }) + instagram() + ctaBand(),
   },
   {

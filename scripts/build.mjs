@@ -5,7 +5,7 @@ import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import * as data from "../src/data.mjs";
-import { page, orgSchema, breadcrumbSchema } from "../src/layout.mjs";
+import { page, orgSchema, breadcrumbSchema, faqSchema } from "../src/layout.mjs";
 import { home } from "../src/home.mjs";
 import { categoryPage, categorySchema } from "../src/clothing.mjs";
 import { pages, pageBody } from "../src/pages.mjs";
@@ -43,7 +43,7 @@ cpSync(new URL("public/", ROOT), DIST, { recursive: true });
 rmSync(new URL("img/manifest.json", DIST), { force: true });
 
 // Names like "T-Shirts" must not break after the hyphen ("T-" / "SHIRTS"). Wrap them in a
-// no-wrap span in visible text only (not in tags, <title>, <option>, scripts or styles).
+// no-wrap tag in visible text only (not in tags, <title>, <option>, scripts or styles).
 const SKIP = /^<(title|option|script|style|textarea)\b/i;
 const keepHyphens = (html) => {
   let skip = null;
@@ -53,7 +53,12 @@ const keepHyphens = (html) => {
       else if (!skip && SKIP.test(part) && !part.endsWith("/>")) skip = part.match(SKIP)[1];
       return part;
     }
-    return skip ? part : part.replace(/\b([A-Za-z]{1,3}-[A-Za-z]+)\b/g, '<span class="nw">$1</span>');
+    if (skip) return part;
+    // The outer tag keeps the run as one item inside flex/grid parents (crumbs, buttons,
+    // eyebrows), whose whitespace would otherwise collapse ("UniformT-Shirts"). Custom tags,
+    // not spans, so existing `.x span` rules don't restyle them.
+    const out = part.replace(/\b([A-Za-z]{1,3}-[A-Za-z]+)\b/g, "<dc-nw>$1</dc-nw>");
+    return out === part ? part : `<dc-t>${out}</dc-t>`;
   }).join("");
 };
 const write = (rel, html) => writeFileSync(new URL(rel, DIST), rel.endsWith(".html") ? keepHyphens(html) : html);
@@ -75,13 +80,13 @@ const heroPreload = `<link rel="preload" as="image" href="/img/${hero}-960.webp"
 write(
   "index.html",
   page({
-    title: "Custom T-Shirt & Apparel Manufacturer in Mangalore | D Creations",
+    title: "T-Shirt & Uniform Manufacturer in Mangalore, India | D Creations",
     description:
-      "D Creations manufactures custom school uniform T-shirts, marathon T-shirts, corporate T-shirts, track pants, gym wear, hoodies and sublimation tees in Mangalore & Tiruppur. Request a quote.",
+      "DC T-Shirt Factory makes custom school uniform, marathon and corporate T-shirts, track pants, gym wear and hoodies in Mangalore & Tiruppur, shipped across India.",
     path: "/",
     home: true,
     preload: heroPreload,
-    jsonLd: [orgSchema(), { "@context": "https://schema.org", "@type": "WebSite", name: "D Creations", url: data.site.url }],
+    jsonLd: [orgSchema(), { "@context": "https://schema.org", "@type": "WebSite", name: "D Creations", alternateName: data.site.altName, url: data.site.url, inLanguage: "en-IN", publisher: { "@id": `${data.site.url}/#business` } }],
     body: home(),
     data: enquiryData(),
   })
@@ -110,7 +115,7 @@ for (const pg of pages) {
       description: pg.description,
       path: pg.path,
       data: pg.data ? enquiryData() : undefined,
-      jsonLd: [orgSchema(), crumbs([pg.name, pg.path])],
+      jsonLd: [orgSchema(), crumbs([pg.name, pg.path]), ...(pg.path === "/faq" ? [faqSchema()] : [])],
       body: pageBody(pg),
     })
   );

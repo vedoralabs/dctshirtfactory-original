@@ -17,7 +17,7 @@
 | 08 Enquiry | Short form with the brief's fields. Client-side validation with per-field messages, an error summary, a busy state and a recoverable "didn't open" state. Clearly labelled as a WhatsApp handoff that never claims it was sent. Contextual prefill from `?category=` / `?fabric=` (old `?product=` too). One WhatsApp number, from `src/data.mjs`. |
 | 09 Mobile / a11y | Tested at 320–1920 px. 44 px targets, focus-visible rings, skip link, focus-trapped mobile menu with Escape, labelled form controls, reduced motion respected. |
 | 10 Engineering | Same static generator kept (no framework change). New modules: `clothing.mjs`, `fabrics.mjs`, `enquiry.mjs`. JSDoc-typed data and `scripts/validate-data.mjs`, which the build runs. |
-| 11 SEO | Unique titles/descriptions, canonical, OG image in the new identity, sitemap, robots, Product/Breadcrumb/LocalBusiness schema with only confirmed facts. Redirects: `/products/:slug` → `/clothing/:slug`, `/quote` → `/contact` (query kept), `/clients` → `/work`. |
+| 11 SEO | Unique titles/descriptions, canonical, OG image in the new identity, sitemap, robots, Service (per category, no price needed)/Breadcrumb/FAQPage/LocalBusiness schema (Mangalore + Tiruppur unit) with only confirmed facts, geo meta, location-led titles and descriptions. Redirects: `/products/:slug` → `/clothing/:slug`, `/quote` → `/contact` (query kept), `/clients` → `/work`. |
 
 ## Test commands and results (1 Nov 2026)
 

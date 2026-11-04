@@ -75,6 +75,7 @@ export function categoryPage(c) {
         <p class="eyebrow"><span class="eyebrow__n">${pad(categories.indexOf(c) + 1)}</span>Custom ${esc(c.title.toLowerCase())}</p>
         <h1 class="display cat__title" id="cat-title" data-split>${esc(c.title)}</h1>
         <p class="lead">${esc(c.pitch)}</p>
+        <p class="cat__where">${icon.pin} Made to order in ${esc(site.locations)}, shipped across India.</p>
         <div class="cat__ctas">
           <a class="btn btn--accent btn--lg" href="${quote}">Request a quote ${icon.arrow}</a>
           <a class="cat__wa" href="${waLink(quoteMessage({ category: c.title }))}" target="_blank" rel="noopener">${icon.whatsapp} Or ask on WhatsApp</a>
@@ -199,13 +200,14 @@ ${ctaBand(`Let's make your ${esc(c.title.toLowerCase())}. <em>Request a quote.</
 export function categorySchema(c) {
   return {
     "@context": "https://schema.org",
-    "@type": "Product",
+    // Service, not Product: Google requires a price on Product markup, and we publish none.
+    "@type": "Service",
     name: `Custom ${c.title}`,
+    serviceType: `Custom ${c.title} manufacturing`,
     description: c.description,
     image: c.images.map((b) => `${site.url}/img/${b}-960.webp`),
-    brand: { "@type": "Brand", name: "D Creations" },
-    manufacturer: { "@id": `${site.url}/#business` },
-    category: "Apparel & Accessories > Clothing",
+    provider: { "@id": `${site.url}/#business` },
+    areaServed: { "@type": "Country", name: "India" },
     url: `${site.url}/clothing/${c.slug}`,
   };
 }

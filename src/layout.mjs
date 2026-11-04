@@ -1,4 +1,4 @@
-import { site, categories, addresses } from "./data.mjs";
+import { site, categories, addresses, printMethods, faqs } from "./data.mjs";
 import { esc, waLink, icon, imgSize } from "./util.mjs";
 
 export const NAV = [
@@ -33,6 +33,10 @@ function head({ title, description, path, ogImage = "/img/og-image.jpg", jsonLd 
 ${site.indexable ? "" : `<meta name="robots" content="noindex">
 `}<link rel="canonical" href="${url}">
 <meta name="theme-color" content="#0e0f10">
+<meta name="geo.region" content="IN-KA">
+<meta name="geo.placename" content="${site.locality}">
+<meta name="geo.position" content="${site.geo.lat};${site.geo.lng}">
+<meta name="ICBM" content="${site.geo.lat}, ${site.geo.lng}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D Creations">
 <meta property="og:locale" content="en_IN">
@@ -159,8 +163,18 @@ export const orgSchema = () => {
     sameAs: [site.instagram, site.mapsUrl],
     geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
     hasMap: site.mapsUrl,
-    areaServed: { "@type": "Country", name: "India" },
+    areaServed: [{ "@type": "Country", name: "India" }, { "@type": "State", name: "Karnataka" }, { "@type": "State", name: "Tamil Nadu" }],
     address: { "@type": "PostalAddress", addressLocality: site.locality, addressRegion: site.region, addressCountry: "IN" },
+    knowsAbout: [...categories.map((c) => `Custom ${c.title}`), ...printMethods.map((m) => m.name)],
+    // The Tiruppur unit, as printed in the owner's catalogue (address only).
+    department: addresses
+      .filter((a) => a.city !== site.locality)
+      .map((a) => ({
+        "@type": "LocalBusiness",
+        name: `${a.name}, ${a.city}`,
+        parentOrganization: { "@id": `${site.url}/#business` },
+        address: { "@type": "PostalAddress", streetAddress: `${a.lines[0]}, ${a.lines[1].split(",")[0]}`,addressLocality: a.city, addressRegion: "Tamil Nadu", postalCode: a.lines[1].match(/\d{6}/)[0], addressCountry: "IN" },
+      })),
   };
   // Only confirmed facts. No prices, ratings, reviews or opening hours.
   if (site.street) o.address.streetAddress = site.street;
@@ -168,6 +182,12 @@ export const orgSchema = () => {
   if (site.email) o.email = site.email;
   return o;
 };
+
+export const faqSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+});
 
 export const breadcrumbSchema = (trail) => ({
   "@context": "https://schema.org",
