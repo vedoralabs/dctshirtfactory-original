@@ -14,7 +14,7 @@ const BRIEF = {
   "Corporate T-Shirts": ["Pique", "Lacoste", "Mars 200", "Airtex", "PC Matty", "Fine", "Mirror 200"],
   "Gym Wear": ["NS Lycra", "Mirror 200", "Mirror 150X", "Hydra 170", "Spectra 250/300", "Cuba 300"],
   "Hoodies & Varsity Jackets": ["Loopnet", "Superpoly", "Fleece", "Cuba 300"],
-  "Sublimation T-Shirts": ["Selina", "Dotknit", "NJS", "Adidas Selina", "Nirmal", "PP", "NS Lycra"],
+  "Sublimation T-Shirts": ["Selina", "Dotknit", "NJS", "Nirmal", "PP", "NS Lycra"],
 };
 
 const name = (id) => data.fabrics.find((f) => f.id === id)?.name;

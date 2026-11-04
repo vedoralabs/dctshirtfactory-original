@@ -103,7 +103,6 @@ export const fabrics = [
   // From the owner's printed catalogue (Hoodies & Varsity and Sublimation T-Shirt pages)
   { id: "loopnet", name: "Loopnet", texture: "rib", tint: "#4a2f3a" },
   { id: "fleece", name: "Fleece", texture: "fleece", tint: "#5a4a3a" },
-  { id: "adidas-selina", name: "Adidas Selina", texture: "smooth", tint: "#24445e" },
   { id: "pp", name: "PP", texture: "matte", tint: "#3d4a3a" },
 ];
 
@@ -222,7 +221,7 @@ export const categories = [
     pitch: "Full-coverage sublimation printing for team kits, events and custom designs, with colour matching and batch consistency across large runs.",
     heroImage: "sublimation-wave",
     images: ["sublimation-wave", "sublimation-art", "sublimation-sleeve"],
-    fabrics: ["selina", "dotknit", "njs", "adidas-selina", "nirmal", "pp", "ns-lycra"],
+    fabrics: ["selina", "dotknit", "njs", "nirmal", "pp", "ns-lycra"],
     branding: ["sublimation"],
     useCases: ["Team kits", "Event merchandise", "Design-heavy printed apparel"],
     audience: ["sports", "events", "colleges", "schools"],
@@ -379,7 +378,7 @@ export const pending = [
   "Production domain + redirect plan (site is noindex until then)",
   "Email spelling: catalogue says dcreationstripur@, site uses dcreationstirpur@",
   "GSTIN, business hours",
-  "Fabric availability, spelling, specifications and category mappings (28 fabrics)",
+  "Fabric availability, spelling, specifications and category mappings (27 fabrics)",
   "Customisation methods actually offered (screen, DTF, sublimation, embroidery, patches)",
   "Lead times, minimum quantities, service area and any certifications",
   "Source + permission for the 3 testimonials",
