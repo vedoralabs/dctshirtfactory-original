@@ -1,0 +1,18 @@
+{
+  "name": "dctshirtfactory",
+  "private": true,
+  "type": "module",
+  "description": "D Creations (dctshirtfactory.co.in) website — static, generated from src/data.mjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:strict": "node scripts/build.mjs --strict",
+    "images": "python scripts/make-images.py",
+    "lint": "node --check public/js/main.js && node scripts/validate-data.mjs",
+    "test": "node --test tests/unit.test.mjs",
+    "test:e2e": "node tests/e2e.mjs",
+    "serve": "node tests/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

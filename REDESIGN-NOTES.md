@@ -1,0 +1,70 @@
+# Redesign notes
+
+> **Update, Nov 2026 (DCT implementation brief).** The current state is described in `README.md`, `docs/MOTION.md` and `docs/HANDOVER.md`. In short:
+> - New identity: graphite, warm off-white, electric lime, with signal orange used sparingly. Sharp geometry and oversized section numbers.
+> - The homepage opens with a CSS-only, skippable entry sequence.
+> - New IA: Clothing (archive + 7 category pages at `/clothing/<slug>`), Fabrics (24-fabric library), Manufacturing, Our Work, About, Contact (form + channels).
+> - Category and fabric names are exact, from the brief, in one normalized data source with validation.
+> - The 6-step quote wizard became a short enquiry form with field-level validation and an honest WhatsApp handoff.
+> - Lenis smooth scrolling and the film grain were removed. GSAP stays for the desktop pinned process and parallax only.
+> - Unit and browser test suites were added.
+>
+> Everything below describes earlier versions.
+
+# Redesign notes
+
+> **Update, 16 Oct 2026 (owner brief "DCT_Website_Brief.pdf").** The brief overrides parts of the first redesign below. Under its rules:
+> - all prices, price tiers and Offer schema are removed;
+> - fabric names are generic (no Lacoste or Lycra);
+> - unverified facts are removed rather than shown as placeholders (stats, GSTIN, MOQ, turnaround, GSM, Google rating, star ratings, "verified customer");
+> - images with logos or text were dropped, and the remaining images are labelled "Design concept";
+> - "Our Work" became a concept **Gallery**, and real work is shown via Instagram;
+> - the client-logo marquee became a static "We make for" sector row, and the client section is permission-gated (hidden until approved);
+> - the quote flow follows the brief's template, has a consent checkbox, a no-JavaScript WhatsApp form and an honest "not sent until you press Send" status;
+> - the map and Instagram embeds load only on click; there's a new /privacy page; the site is noindex until the domain is confirmed;
+> - every build runs a prohibited-content scan.
+>
+> Open items: `OWNER-INPUTS.md`. Mentions of prices, MOQ, stats or preview mode further down describe the **first version** only.
+
+## How each pain point was solved (first version)
+
+| # | Pain point | Solution |
+|---|---|---|
+| 1 | Placeholder hero image | Full-screen cinematic hero: a slow cross-fading Ken Burns sequence of four graded frames behind a dark gradient, with film grain over it. The headline is "We don't just print tees. We build your team's identity.", its words rise in one by one, and there are two CTAs plus a trust line. A labelled `<video>` slot is ready for real footage (see SHOT-LIST §1). |
+| 2 | Carousel duplicated every category | The infinite carousel and its duplicated set are gone. There's now a 7-card **bento grid**, one card per category. On desktop the overlay lifts on hover and reveals a teaser and "View details →". Each card shows its starting price. |
+| 3 | Product pages lacked buying info | One template drives all 7 pages. Each has breadcrumbs, a gallery with hover-zoom and a lightbox, and chips for price-from, MOQ and sizes. The specs table covers MOQ, price, fabrics (linked to the Fabric Guide), GSM, sizes from kids to 5XL, colours, branding methods and turnaround. Pages also have use cases, branding option cards, the 4 steps, a mini FAQ, related products and a **"Customise this on WhatsApp"** CTA prefilled with the product name. "Build a detailed quote" opens the quote builder with that product already picked. |
+| 4 | Fabric names meant nothing | Interactive **Fabric Guide**: 11 keyboard-accessible tabs. Each shows a texture swatch (SVG for now, with a slot for a real macro photo), how it feels, GSM, a breathability meter, a price tier, what it's best for, and an "Ask for a swatch" WhatsApp button. Product pages link straight to a fabric with `/#fabric-<name>`. |
+| 5 | Weak trust | Animated stats counter, a "Trusted by" marquee (with a slot for client logos), a Google rating badge linking to the Maps profile, a Behind the Scenes photo/video strip, the "Made in Mangalore & Tiruppur" story with two hub cards, and the GST-registered mention in that story and in the footer. All 4 real testimonials are in a slider. |
+| 6 | Only one contact channel | Floating WhatsApp button on desktop, and a sticky **Call / WhatsApp / Get Quote** bar on mobile. The Contact section has WhatsApp, click-to-call, email, Instagram, the written address, business hours and a lazy-loaded map. The header has "Get Quote" and the mobile menu has WhatsApp and Call. |
+| 7 | No FAQ | Accordion FAQ with 8 questions: MOQ, delivery time, sample and cost, payment terms, design help, bulk discounts, pan-India shipping and re-orders. Each product page adds 3 product-specific questions. |
+| 8 | Thin footer, no year | The full footer has brand and blurb, GST, socials, quick links, all 7 categories, full contact details and maps, an auto-updating © year (set at build time and refreshed in the browser), and a "Website by Vedora Labs" credit. |
+
+## Site structure (updated 2026-10-16)
+The homepage tells the story: hero, audiences, products, why us, stats, process, reviews and a final CTA. The deep sections now have their own pages, each with a short teaser on the homepage:
+
+| Page | Contents | Homepage teaser |
+|---|---|---|
+| `/fabrics` | Interactive guide, plus a side-by-side comparison (cards on phones) | 11 swatch tiles that open the matching fabric |
+| `/work` | Filterable portfolio + lightbox | 4 photos |
+| `/about` | Behind the scenes, the two-hub story, stats, why us | Two-hubs band |
+| `/quote` | 6-step WhatsApp quote builder (`?product=` pre-selects) | Step 1 product tiles that open the builder at step 2 |
+| `/faq` | General FAQ plus every product's FAQs | Top 4 questions |
+| `/contact` | All channels, hours, map | Final CTA band and footer |
+
+Result: the homepage HTML went from 122 KB to 75 KB and from ~1,600 to ~980 elements. The main gain is SEO and shareable links (for example sending `/quote` on WhatsApp). Raw speed changes little, because the homepage was already scoring 99 on mobile.
+
+## Beyond the brief
+- **Smart Quote Builder:** six steps (product, fabric filtered to that product, quantity, branding, deadline, details). It auto-advances on single-choice steps, previews the message live, and sends one neat WhatsApp message.
+- **"How We Work":** a pinned horizontal-scroll timeline on desktop, which becomes a stacked list on mobile.
+- **Portfolio:** filterable by category, with no gaps in the grid, and a lightbox with arrow keys and Esc.
+- **Honest preview mode:** unconfirmed facts are visibly marked and kept out of the schema.org data (see README).
+
+## Performance and accessibility choices
+- Static HTML, with no framework. Images are WebP at 480 and 960 px plus a hero frame at about 1430 px, all with width and height set and lazy loading. The first hero frame is preloaded.
+- GSAP, ScrollTrigger and Lenis (around 130 KB) load only after the page has loaded, and only when the visitor allows motion. Basic reveals use an IntersectionObserver and CSS.
+- `prefers-reduced-motion` turns off grain, Ken Burns, the marquee, parallax, pinning and smooth scroll.
+- There's a skip link, visible focus rings, ARIA tabs with arrow keys, a native `<dialog>` lightbox, `<details>` for the FAQ, 44–62 px touch targets, and no horizontal scroll at 360 px.
+- SEO: every page has its own title and meta description with the target keywords, a canonical URL and Open Graph image. Structured data covers ClothingStore/LocalBusiness, Product and BreadcrumbList. There's also a sitemap.xml, robots.txt and a noindex 404 page.
+
+## Things to confirm with D Creations
+Every `tbc()` value in `src/data.mjs` (the build lists them all), plus some of the copy: the hub descriptions for Mangalore and Tiruppur, the "11+ fabrics" claim, the "free mock-up" promise, and the reply-time line in the quote builder.
